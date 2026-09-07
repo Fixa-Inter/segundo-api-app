@@ -20,7 +20,7 @@ public class CustomUserDetails extends User {
                 email,
                 password,
                 List.of( new SimpleGrantedAuthority(String.format(
-                        "ROLE_%s", tipoAcesso.getNome().toUpperCase())
+                        "ROLE_%s", tipoAcesso.name())
                 ))
         );
     }
