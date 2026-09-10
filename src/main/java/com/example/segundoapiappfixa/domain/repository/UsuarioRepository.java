@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.domain.repository;
 
-import com.example.segundoapiappfixa.infrastructure.database.entity.Usuario;
+import com.example.segundoapiappfixa.domain.model.Usuario;
 
 public interface UsuarioRepository {
 
