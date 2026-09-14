@@ -11,10 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Foto {
     private Long id;
-    private Problema problemaId;
-    private Ocorrencia ocorrenciaId;
-    private OrdemServico ordemServicoId;
-    private Usuario UsuarioId;
+    private Problema problema;
+    private Ocorrencia ocorrencia;
+    private OrdemServico ordemServico;
+    private Usuario usuario;
     private String url;
     private Boolean estaAtivo;
 }

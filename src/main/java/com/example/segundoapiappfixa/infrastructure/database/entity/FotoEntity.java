@@ -20,19 +20,19 @@ public class FotoEntity {
 
     @ManyToOne
     @JoinColumn(name = "problema_id")
-    private ProblemaEntity problemaId;
+    private ProblemaEntity problema;
 
     @ManyToOne
     @JoinColumn(name = "ocorrencia_id")
-    private OcorrenciaEntity ocorrenciaId;
+    private OcorrenciaEntity ocorrencia;
 
     @ManyToOne
     @JoinColumn(name = "ordem_servico_id")
-    private OrdemServicoEntity ordemServicoId;
+    private OrdemServicoEntity ordemServico;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private UsuarioEntity UsuarioId;
+    private UsuarioEntity usuario;
 
     @Column(name = "url")
     private String url;

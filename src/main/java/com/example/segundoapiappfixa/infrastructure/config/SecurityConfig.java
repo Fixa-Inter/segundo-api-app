@@ -55,17 +55,19 @@ public class SecurityConfig{
 
                         // Permissão de Acesso para CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/error").permitAll()
 
                         // Endpoints de Autenticação
                         .requestMatchers(
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/refresh"
                         ).permitAll()
+                        .requestMatchers("/api/v1/auth/logout").authenticated()
 
                         // GET
                         .requestMatchers(
                                 HttpMethod.GET,
-                                "/api/v1/solicitacoes/usuario/**",
+                                "/api/v1/solicitacoes/minhas",
                                 "/api/v1/solicitacoes/selecionar/**",
                                 "/api/v1/eventos/**"
                         ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
@@ -80,7 +82,7 @@ public class SecurityConfig{
                         // POST
                         .requestMatchers(
                                 HttpMethod.POST,
-                                "/api/v1/solicitacoes/**"
+                                "/api/v1/solicitacoes"
                         ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
 
                         .requestMatchers(
@@ -99,8 +101,6 @@ public class SecurityConfig{
                                 HttpMethod.DELETE,
                                 "/api/v1/ocorrencias/**"
                         ).hasAnyRole("GESTOR", "TECNICO")
-
-                        .requestMatchers("/api/v1/auth/logout").authenticated()
 
                         .requestMatchers(
                                 "/api/v1/**"

@@ -20,6 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Usuario usuario = repository.findByEmail(email);
 
         return new CustomUserDetails(
+                usuario.getId(),
                 usuario.getEmail(),
                 usuario.getSenhaHash(),
                 usuario.getTipoAcesso()

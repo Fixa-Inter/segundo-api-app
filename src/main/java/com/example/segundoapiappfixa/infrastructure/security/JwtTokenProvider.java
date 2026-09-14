@@ -18,10 +18,11 @@ public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
 
-    public String generateAccessToken(String email, String role, Date issuedAt) {
+    public String generateAccessToken(Long id, String email, String role, Date issuedAt) {
 
         return Jwts.builder()
                 .subject(email)
+                .claim("userId", id)
                 .claim("role", role)
                 .issuedAt(issuedAt)
                 .expiration(getExpirationDate(issuedAt))
@@ -56,6 +57,11 @@ public class JwtTokenProvider {
 
     public String getRoleFromToken(String token) {
         return getClaims(token).get("role", String.class);
+    }
+
+    public Long getIdFromtToken(String token) {
+        Number userId = getClaims(token).get("userId", Number.class);
+        return userId != null ? userId.longValue() : null;
     }
 
     private Claims getClaims(String token) {

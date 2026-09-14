@@ -2,6 +2,8 @@ package com.example.segundoapiappfixa.auth.service;
 
 import com.example.segundoapiappfixa.auth.dto.LoginRequestDTO;
 import com.example.segundoapiappfixa.auth.dto.LoginResponseDTO;
+import com.example.segundoapiappfixa.domain.model.Usuario;
+import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +19,7 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UsuarioRepository usuarioRepository;
 
     public LoginResponseDTO login(LoginRequestDTO dto) {
 
@@ -31,6 +34,8 @@ public class AuthService {
                         )
                 );
 
+        Usuario usuario = usuarioRepository.findByEmail(email);
+
         String role = authentication
                 .getAuthorities()
                 .iterator()
@@ -39,6 +44,7 @@ public class AuthService {
                 .replace("ROLE_", "");
 
         String token = jwtTokenProvider.generateAccessToken(
+                usuario.getId(),
                 authentication.getName(),
                 role,
                 new Date()

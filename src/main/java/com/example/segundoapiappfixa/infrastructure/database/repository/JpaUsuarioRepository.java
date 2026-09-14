@@ -9,4 +9,6 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Long>
 
     UsuarioEntity findUsuarioByEmail(String email);
 
+    UsuarioEntity findUsuarioEntitiesById(Long id);
+
 }

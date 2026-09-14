@@ -20,7 +20,15 @@ public class UsuarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "gerente_id")
+    private UsuarioEntity gerente;
+
+    @ManyToOne
+    @JoinColumn(name = "endereco_id")
+    private EnderecoEntity endereco;
 
     @Column(name = "nome_completo")
     private String nomeCompleto;
@@ -42,4 +50,7 @@ public class UsuarioEntity {
 
     @Column(name = "esta_ativo")
     private Boolean estaAtivo;
+
+    @Column(name = "primeiro_acesso")
+    private Boolean primeiroAcesso;
 }

@@ -14,7 +14,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Usuario {
-    private Integer id;
+    private Long id;
+    private Usuario gerente;
+    private Endereco endereco;
     private String nomeCompleto;
     private String email;
     private TipoAcesso tipoAcesso;
@@ -22,4 +24,5 @@ public class Usuario {
     private LocalDate dataNascimento;
     private LocalDateTime dataCriacao;
     private Boolean estaAtivo;
+    private Boolean primeiroAcesso;
 }

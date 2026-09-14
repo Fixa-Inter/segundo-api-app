@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.infrastructure.security;
 
+import com.example.segundoapiappfixa.auth.dto.AuthenticatedUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 @RequiredArgsConstructor
@@ -31,18 +33,27 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
 
+            Long id = jwtTokenProvider.getIdFromtToken(token);
             String email = jwtTokenProvider.getEmailFromToken(token);
             String role = jwtTokenProvider.getRoleFromToken(token);
+            if (role != null) {
+                role = role.replaceFirst("^ROLE_", "").toUpperCase(Locale.ROOT);
+            }
+
+            AuthenticatedUser authenticatedUser = new AuthenticatedUser(id, email);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    email,
+                    authenticatedUser,
                     null,
-                    List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                    role == null || role.isBlank()
+                            ? List.of()
+                            : List.of(new SimpleGrantedAuthority("ROLE_" + role))
             );
 
             SecurityContextHolder
                     .getContext()
                     .setAuthentication(authentication);
+
         }
 
         filterChain.doFilter(request, response);

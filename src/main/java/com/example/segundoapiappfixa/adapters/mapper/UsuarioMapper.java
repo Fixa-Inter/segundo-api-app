@@ -1,4 +1,4 @@
-package com.example.segundoapiappfixa.infrastructure.database.mapper;
+package com.example.segundoapiappfixa.adapters.mapper;
 
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.infrastructure.database.entity.UsuarioEntity;
