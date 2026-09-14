@@ -1,13 +1,14 @@
 package com.example.segundoapiappfixa.infrastructure.database.repository;
 
-import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.database.entity.Usuario;
+import com.example.segundoapiappfixa.infrastructure.database.entity.UsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JpaUsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
-    Usuario findUsuarioByEmail(String email);
+    UsuarioEntity findUsuarioByEmail(String email);
+
+    UsuarioEntity findUsuarioEntitiesById(Long id);
 
 }

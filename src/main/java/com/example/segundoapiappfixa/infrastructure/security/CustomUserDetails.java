@@ -6,12 +6,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
-import java.util.Locale;
 
 @Getter
 public class CustomUserDetails extends User {
 
+    private Long id;
+
     public CustomUserDetails(
+            Long id,
             String email,
             String password,
             TipoAcesso tipoAcesso
@@ -23,5 +25,7 @@ public class CustomUserDetails extends User {
                         "ROLE_%s", tipoAcesso.name())
                 ))
         );
+
+        this.id = id;
     }
 }

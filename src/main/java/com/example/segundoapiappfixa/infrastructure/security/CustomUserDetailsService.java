@@ -1,8 +1,6 @@
 package com.example.segundoapiappfixa.infrastructure.security;
 
-import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.database.entity.Usuario;
-import com.example.segundoapiappfixa.infrastructure.database.repository.JpaUsuarioRepository;
+import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.infrastructure.database.repository.impl.UsuarioRepositoryImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Usuario usuario = repository.findByEmail(email);
 
         return new CustomUserDetails(
+                usuario.getId(),
                 usuario.getEmail(),
                 usuario.getSenhaHash(),
                 usuario.getTipoAcesso()
