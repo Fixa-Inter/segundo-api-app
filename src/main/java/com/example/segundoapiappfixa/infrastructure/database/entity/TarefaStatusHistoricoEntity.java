@@ -29,5 +29,5 @@ public class TarefaStatusHistoricoEntity {
     private StatusOrdemServicoEntity statusOrdemServico;
 
     @Column(name = "data_atualizacao")
-    private LocalDateTime data_atualizacao;
+    private LocalDateTime dataAtualizacao;
 }

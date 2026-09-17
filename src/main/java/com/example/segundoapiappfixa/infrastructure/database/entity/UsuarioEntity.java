@@ -23,10 +23,6 @@ public class UsuarioEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "gerente_id")
-    private UsuarioEntity gerente;
-
-    @ManyToOne
     @JoinColumn(name = "endereco_id")
     private EnderecoEntity endereco;
 
@@ -41,6 +37,9 @@ public class UsuarioEntity {
 
     @Column(name = "senha_hash")
     private String senhaHash;
+
+    @Column(name = "cargo")
+    private String cargo;
 
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;

@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface EnderecoMapper {
 
-    Endereco toModel(EnderecoEntity entity);
     EnderecoEntity toEntity(Endereco model);
+    Endereco toModel(EnderecoEntity entity);
 
 }

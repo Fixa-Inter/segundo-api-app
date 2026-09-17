@@ -15,5 +15,5 @@ public class OrdemServicoStatusHistorico {
     private Long id;
     private OrdemServico ordemServico;
     private StatusOrdemServico statusOrdemServico;
-    private LocalDateTime data_atualizacao;
+    private LocalDateTime dataAtualizacao;
 }

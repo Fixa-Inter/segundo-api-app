@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,9 +15,8 @@ import java.time.LocalDate;
 public class Instituicao {
     private Long id;
     private String nome;
-    private String cnpj;
     private TipoInstituicao tipoInstituicao;
     private String dominioEmail;
-    private LocalDate dataCriacao;
+    private LocalDateTime dataCriacao;
     private Boolean estaAtivo;
 }

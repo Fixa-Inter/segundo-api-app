@@ -1,9 +1,9 @@
 package com.example.segundoapiappfixa.adapters.controller;
 
-import com.example.segundoapiappfixa.adapters.dto.input.ProblemaAtualizarStatusDTO;
-import com.example.segundoapiappfixa.adapters.dto.input.ProblemaCriarInputDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.ProblemaDetalhesOutputDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.ProblemaOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
+import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaDetalhesOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
 import com.example.segundoapiappfixa.application.usecase.Problema.AtualizarStatus;
 import com.example.segundoapiappfixa.application.usecase.Problema.CriarProblema;
 import com.example.segundoapiappfixa.application.usecase.Problema.ListarDetalhesProblema;
@@ -56,7 +56,9 @@ public class ProblemaController {
     @GetMapping("/selecionar/{problemaId}")
     public ResponseEntity<ProblemaDetalhesOutputDTO> listarDetalhesPeloId(
             @PathVariable
-            Long problemaId, Authentication authentication
+            Long problemaId,
+
+            Authentication authentication
     ) {
         boolean isGestor = authentication
                 .getAuthorities()
@@ -72,7 +74,8 @@ public class ProblemaController {
 
     @PostMapping
     public ResponseEntity<ProblemaDetalhesOutputDTO> criarProblema(
-            @Valid @RequestBody ProblemaCriarInputDTO input,
+            @Valid @RequestBody
+            ProblemaCriarInputDTO input,
 
             Authentication authentication
     ) {
@@ -85,7 +88,8 @@ public class ProblemaController {
 
     @PatchMapping("/status")
     public ResponseEntity<ProblemaDetalhesOutputDTO> atualizarStatus(
-            @Valid @RequestBody ProblemaAtualizarStatusDTO input,
+            @Valid @RequestBody
+            ProblemaAtualizarStatusDTO input,
 
             Authentication authentication
     ) {

@@ -45,4 +45,7 @@ public class EventoEntity {
 
     @Column(name = "data_hora_fim")
     private LocalDateTime dataHoraFim;
+
+    @Column(name = "data_criacao")
+    private LocalDateTime dataCriacao;
 }

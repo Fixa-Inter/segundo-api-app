@@ -21,4 +21,5 @@ public class Evento {
     private String observacao;
     private LocalDateTime dataHoraInicio;
     private LocalDateTime dataHoraFim;
+    private LocalDateTime dataCriacao;
 }

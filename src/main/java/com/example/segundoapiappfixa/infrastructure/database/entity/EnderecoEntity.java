@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity(name = "Endereco")
 @Getter
 @Setter
@@ -21,6 +23,9 @@ public class EnderecoEntity {
     @ManyToOne
     @JoinColumn(name = "instituicao_id")
     private InstituicaoEntity instituicao;
+
+    @Column(name = "cnpj")
+    private String cnpj;
 
     @Column(name = "logradouro")
     private String logradouro;
@@ -40,11 +45,11 @@ public class EnderecoEntity {
     @Column(name = "estado")
     private String estado;
 
-    @Column(name = "pais")
-    private String pais;
-
     @Column(name = "cep")
     private String cep;
+
+    @Column(name = "data_criacao")
+    private LocalDateTime dataCriacao;
 
     @Column(name = "esta_ativo")
     private Boolean estaAtivo;

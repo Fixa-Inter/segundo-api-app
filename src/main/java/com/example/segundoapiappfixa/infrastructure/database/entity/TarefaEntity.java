@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity(name = "Tarefa")
 @Getter
 @Setter
@@ -31,4 +33,7 @@ public class TarefaEntity {
 
     @Column(name = "descricao")
     private String descricao;
+
+    @Column(name = "data_criacao")
+    private LocalDateTime dataCriacao;
 }
