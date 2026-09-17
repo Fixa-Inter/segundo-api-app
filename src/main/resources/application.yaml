@@ -18,7 +18,7 @@ spring:
     open-in-view: false
 
   messages:
-    basename: messages/messages
+    basename: messages
     encoding: UTF-8
     fallback-to-system-locale: false
 

@@ -65,28 +65,28 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     ResponseEntity<?> unreadable(HttpMessageNotReadableException e) {
-        return response(HttpStatus.BAD_REQUEST, "{exception.request.invalid}");
+        return response(HttpStatus.BAD_REQUEST, "exception.request.invalid");
     }
 
     @ExceptionHandler({ConstraintViolationException.class, ConversionFailedException.class,
             IllegalArgumentException.class})
     ResponseEntity<?> invalidInput(Exception e) {
-        return response(HttpStatus.BAD_REQUEST, "{exception.request.invalid}");
+        return response(HttpStatus.BAD_REQUEST, "exception.request.invalid");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<?> integrity(DataIntegrityViolationException e) {
-        return response(HttpStatus.CONFLICT, "{exception.database.integrity}");
+        return response(HttpStatus.CONFLICT, "exception.database.integrity");
     }
 
     @ExceptionHandler(OptimisticLockingFailureException.class)
     ResponseEntity<?> optimisticLock(OptimisticLockingFailureException e) {
-        return response(HttpStatus.CONFLICT, "{exception.database.concurrent}");
+        return response(HttpStatus.CONFLICT, "exception.database.concurrent");
     }
 
     @ExceptionHandler({CannotAcquireLockException.class, PessimisticLockingFailureException.class})
     ResponseEntity<?> databaseLock(Exception e) {
-        return response(HttpStatus.LOCKED, "{exception.database.lock}`");
+        return response(HttpStatus.LOCKED, "exception.database.lock");
     }
 
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
@@ -96,13 +96,13 @@ public class GlobalHandlerException {
 
     @ExceptionHandler({JpaSystemException.class, TransactionSystemException.class})
     ResponseEntity<?> persistence(Exception e) {
-        return response(HttpStatus.INTERNAL_SERVER_ERROR, "{exception.database.failure}");
+        return response(HttpStatus.INTERNAL_SERVER_ERROR, "exception.database.failure");
     }
 
     @ExceptionHandler({EntityNotFoundException.class, NoSuchElementException.class,
             EmptyResultDataAccessException.class})
     ResponseEntity<?> notFound(Exception e) {
-        return response(HttpStatus.NOT_FOUND, "{exception.entity.notFound}");
+        return response(HttpStatus.NOT_FOUND, "exception.entity.notFound");
     }
 
     @ExceptionHandler(Exception.class)

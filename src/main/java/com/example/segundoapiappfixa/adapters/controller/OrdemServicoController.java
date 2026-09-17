@@ -2,7 +2,6 @@ package com.example.segundoapiappfixa.adapters.controller;
 
 import com.example.segundoapiappfixa.adapters.dto.output.OrdemServico.OrdemServicoDetalhesOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.OrdemServico.OrdemServicoOutputDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
 import com.example.segundoapiappfixa.adapters.mapper.OrdemServicoMapper;
 import com.example.segundoapiappfixa.application.usecase.OrdemServico.DeletarOrdemServico;
 import com.example.segundoapiappfixa.application.usecase.OrdemServico.ListarOrdensServico;
@@ -54,8 +53,15 @@ public class OrdemServicoController {
             Authentication authentication
     ) {
 
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
+
+        boolean isGestor = authentication
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
+
         return ResponseEntity.ok(
-                deletarOrdemServico.deletarOrdemServico(ordemServicoId)
+                deletarOrdemServico.deletarOrdemServico(ordemServicoId, isGestor, authenticatedUser.id())
         );
 
     }
