@@ -24,6 +24,4 @@ public class StatusOrdemServicoEntity {
     @Column(name = "descricao")
     private String descricao;
 
-    @Column(name = "esta_ativo")
-    private Boolean estaAtivo;
 }

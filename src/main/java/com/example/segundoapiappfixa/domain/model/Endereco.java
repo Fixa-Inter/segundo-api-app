@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,13 +14,14 @@ import lombok.Setter;
 public class Endereco {
     private Long id;
     private Instituicao instituicao;
+    private String cnpj;
     private String logradouro;
     private String numero;
     private String complemento;
     private String bairro;
     private String cidade;
     private String estado;
-    private String pais;
     private String cep;
+    private LocalDateTime dataCriacao;
     private Boolean estaAtivo;
 }

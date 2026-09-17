@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface FotoMapper {
 
-    Foto toModel(FotoEntity entity);
     FotoEntity toEntity(Foto model);
+    Foto toModel(FotoEntity entity);
+
 }

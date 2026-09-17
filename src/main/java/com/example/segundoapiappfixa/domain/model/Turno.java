@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Turno {
     private Long id;
-    private LocalEndereco localEndereco;
+    private Endereco endereco;
     private String nome;
     private Integer horaInicio;
     private Integer horaFim;

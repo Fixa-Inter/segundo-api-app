@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity(name = "Foto")
 @Getter
 @Setter
@@ -39,4 +41,7 @@ public class FotoEntity {
 
     @Column(name = "esta_ativo")
     private Boolean estaAtivo;
+
+    @Column(name = "data_criacao")
+    private LocalDateTime dataCriacao;
 }

@@ -16,6 +16,6 @@ public interface ProblemaRepository {
 
     Problema save(Problema problema);
 
-    Problema updateStatus(Problema problema, StatusProblema statusProblema);
+    Problema updateStatus(Problema problema, StatusProblema statusProblema, String motivoRecusa);
 
 }

@@ -43,6 +43,6 @@ public class OrdemServicoEntity {
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
 
-    @Column(name = "data_previsao")
-    private LocalDateTime dataPrevisao;
+    @Column(name = "data_prevista")
+    private LocalDateTime dataPrevista;
 }

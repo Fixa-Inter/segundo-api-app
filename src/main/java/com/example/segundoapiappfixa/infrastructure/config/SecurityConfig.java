@@ -76,6 +76,8 @@ public class SecurityConfig{
                                 "/api/v1/tecnicos/selecionar/**",
                                 "/api/v1/tecnicos/tarefas/**",
                                 "/api/v1/tecnicos/ocorrencias/**",
+                                "/api/v1/os/minhas",
+                                "/api/v1/tarefas/minhas",
                                 "/api/v1/equipamentos/**"
                         ).hasAnyRole("GESTOR", "TECNICO")
 

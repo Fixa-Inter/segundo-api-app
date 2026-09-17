@@ -15,5 +15,5 @@ public class TarefaStatusHistorico {
     private Long id;
     private Tarefa tarefa;
     private StatusOrdemServico statusOrdemServico;
-    private LocalDateTime data_atualizacao;
+    private LocalDateTime dataAtualizacao;
 }

@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity(name = "Instituicao")
 @Getter
@@ -24,9 +24,6 @@ public class InstituicaoEntity {
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "cnpj")
-    private String cnpj;
-
     @Column(name = "tipo_instituicao")
     private TipoInstituicao tipoInstituicao;
 
@@ -34,7 +31,7 @@ public class InstituicaoEntity {
     private String dominioEmail;
 
     @Column(name = "data_criacao")
-    private LocalDate dataCriacao;
+    private LocalDateTime dataCriacao;
 
     @Column(name = "esta_ativo")
     private Boolean estaAtivo;

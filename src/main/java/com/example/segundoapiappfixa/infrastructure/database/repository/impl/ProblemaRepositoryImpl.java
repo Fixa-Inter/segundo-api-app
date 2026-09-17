@@ -54,8 +54,9 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
     }
 
     @Override
-    public Problema updateStatus(Problema problema, StatusProblema statusProblema) {
+    public Problema updateStatus(Problema problema, StatusProblema statusProblema, String motivoRecusa) {
         problema.setStatus(statusProblema);
+        problema.setMotivoRecusa(motivoRecusa);
 
         ProblemaEntity problemaEntity = problemaMapper.toEntity(problema);
         ProblemaEntity problemaPersistido = problemaRepositiory.save(problemaEntity);

@@ -13,5 +13,4 @@ public class StatusOrdemServico {
     private Long id;
     private String nome;
     private String descricao;
-    private Boolean estaAtivo;
 }

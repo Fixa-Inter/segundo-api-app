@@ -20,6 +20,7 @@ public class Problema {
     private String titulo;
     private String descricaoProblema;
     private String descricaoLocal;
+    private String motivoRecusa;
     private LocalDateTime dataCriacao;
     private StatusProblema status;
 }

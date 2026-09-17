@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
-import com.example.segundoapiappfixa.adapters.dto.output.ProblemaDetalhesOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaDetalhesOutputDTO;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Foto;
 import com.example.segundoapiappfixa.domain.model.Problema;

@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.entity;
 
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
+import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,9 @@ public class OcorrenciaEntity {
 
     @Column(name = "categoria_problema")
     public CategoriaProblema categoriaProblema;
+
+    @Column(name = "prioridade")
+    public Prioridade prioridade;
 
     @Column(name = "titulo")
     private String titulo;
