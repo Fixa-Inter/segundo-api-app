@@ -60,15 +60,17 @@ public class ProblemaController {
 
             Authentication authentication
     ) {
+
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
+
         boolean isGestor = authentication
                 .getAuthorities()
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
 
-        if (!isGestor) throw new com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException("exception.gestor.required");
-
         return ResponseEntity.ok(
-                listarDetalhesProblema.listarDetalhesPeloId(problemaId)
+                listarDetalhesProblema.listarDetalhesPeloId(
+                        problemaId, authenticatedUser.id(), isGestor)
         );
     }
 

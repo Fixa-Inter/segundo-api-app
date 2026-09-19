@@ -10,6 +10,9 @@ import com.example.segundoapiappfixa.domain.model.Tarefa;
 import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
+import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
+import com.example.segundoapiappfixa.domain.model.Usuario;
+import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,13 +26,33 @@ public class DeletarOrdemServico {
     private final OrdemServicoRepository ordemServicoRepository;
     private final TarefaRepository tarefaRepository;
     private final FotoRepository fotoRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @Transactional
-    public OrdemServicoDetalhesOutputDTO deletarOrdemServico(Long id) {
-        OrdemServico ordemServico = ordemServicoRepository.findById(id)
+    public OrdemServicoDetalhesOutputDTO deletarOrdemServico(
+            Long ordemServicoId,
+            Boolean isGestor,
+            Long usuarioId
+    ) {
+
+        OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Ordem de serviço não encontrada: " + id
+                        "Ordem de serviço não encontrada: " + ordemServicoId
                 ));
+
+        if (!isGestor) throw new RegraProblemaException("exception.gestor.required");
+
+        Usuario usuario = usuarioRepository.findById(usuarioId);
+
+        if (
+                usuario == null ||
+                ordemServico == null ||
+                !usuario.getEndereco().getId()
+                        .equals(ordemServico.getProblema().getLocalEndereco().getEndereco().getId())
+
+        ) {
+            throw new RegraProblemaException("exception.access.denied");
+        }
 
         Problema problema = ordemServico.getProblema();
         Long quantidadeTarefas = tarefaRepository.countByOrdemServicoId(ordemServico.getId());
@@ -59,7 +82,7 @@ public class DeletarOrdemServico {
                 quantidadeTarefas.intValue()
         );
 
-        ordemServicoRepository.delete(id);
+        ordemServicoRepository.delete(ordemServicoId);
         return response;
     }
 }
