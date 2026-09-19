@@ -10,6 +10,7 @@ import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.OrdemServicoNaoEncontradaException;
+import com.example.segundoapiappfixa.infrastructure.exception.ProblemaNaoEncontradoException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class ListarOrdensServico {
 
         List<OrdemServico> ordensServico = ordemServicoRepository.findAllByProblemaIds(problemasIds);
 
-        if (ordensServico.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.ProblemaNaoEncontradoException();
+        if (ordensServico.isEmpty()) throw new ProblemaNaoEncontradoException();
 
         return ordensServico;
     }
