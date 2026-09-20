@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
-import com.example.segundoapiappfixa.adapters.dto.input.ProblemaCriarInputDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.ProblemaDetalhesOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaDetalhesOutputDTO;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.model.*;
@@ -21,13 +21,11 @@ public class CriarProblema {
     private final UsuarioRepository usuarioRepository;
 
     public ProblemaDetalhesOutputDTO criar(ProblemaCriarInputDTO dto, Long usuarioId) {
-        LocalEndereco localEndereco = localEnderecoRepository.
-                findById(dto.localEnderecoID());
+        LocalEndereco localEndereco = localEnderecoRepository.findById(dto.localEnderecoID()).orElse(null);
 
-        CategoriaEquipamento categoriaEquipamento = categoriaEquipamentoRepository.
-                findById(dto.categoriaEquipamentoId());
+        CategoriaEquipamento categoriaEquipamento = categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId()).orElse(null);
 
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         // Cadastro do Problema
         Problema problema = new Problema(
@@ -38,6 +36,7 @@ public class CriarProblema {
                 dto.titulo(),
                 dto.descricaoProblema(),
                 dto.descricaoLocal(),
+                null,
                 LocalDateTime.now(),
                 StatusProblema.PENDENTE
         );
@@ -53,7 +52,8 @@ public class CriarProblema {
                     null,
                     null,
                     url,
-                    true
+                    true,
+                    LocalDateTime.now()
             );
 
             fotoRepository.save(foto);

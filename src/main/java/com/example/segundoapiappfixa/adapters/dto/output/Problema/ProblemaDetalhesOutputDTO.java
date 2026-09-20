@@ -1,4 +1,4 @@
-package com.example.segundoapiappfixa.adapters.dto.output;
+package com.example.segundoapiappfixa.adapters.dto.output.Problema;
 
 import java.util.List;
 

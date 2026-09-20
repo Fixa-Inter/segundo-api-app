@@ -1,14 +1,16 @@
 package com.example.segundoapiappfixa.adapters.controller;
 
-import com.example.segundoapiappfixa.adapters.dto.input.ProblemaAtualizarStatusDTO;
-import com.example.segundoapiappfixa.adapters.dto.input.ProblemaCriarInputDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.ProblemaDetalhesOutputDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.ProblemaOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
+import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaDetalhesOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
 import com.example.segundoapiappfixa.application.usecase.Problema.AtualizarStatus;
 import com.example.segundoapiappfixa.application.usecase.Problema.CriarProblema;
 import com.example.segundoapiappfixa.application.usecase.Problema.ListarDetalhesProblema;
 import com.example.segundoapiappfixa.application.usecase.Problema.ListarProblemas;
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
+import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
+import com.example.segundoapiappfixa.adapters.mapper.dynamic.ProblemaDynamicMapper;
 import com.example.segundoapiappfixa.auth.dto.AuthenticatedUser;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import lombok.RequiredArgsConstructor;
@@ -30,49 +32,61 @@ public class ProblemaController {
     private final CriarProblema cadastrarProblema;
     private final AtualizarStatus atualizarStatus;
     private final ProblemaMapper problemaMapper;
+    private final ProblemaDynamicMapper problemaDynamicMapper;
 
     @GetMapping
     public ResponseEntity<List<ProblemaOutputDTO>> listar(
+            @RequestParam(required = false)
+            String campos,
+
             Authentication authentication
     ) {
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                toOutputDTO(listarProblemas.listarTodosProblemas(authenticatedUser.id()))
+                mask(toOutputDTO(listarProblemas.listarTodosProblemas(authenticatedUser.id())), campos)
         );
     }
 
     @GetMapping("/minhas")
     public ResponseEntity<List<ProblemaOutputDTO>> listarProblemasPeloUsuario(
+            @RequestParam(required = false)
+            String campos,
+
             Authentication authentication
     ) {
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                toOutputDTO(listarProblemas.listarProblemasPeloUsuario(authenticatedUser.id()))
+                mask(toOutputDTO(listarProblemas.listarProblemasPeloUsuario(authenticatedUser.id())), campos)
         );
     }
 
     @GetMapping("/selecionar/{problemaId}")
     public ResponseEntity<ProblemaDetalhesOutputDTO> listarDetalhesPeloId(
             @PathVariable
-            Long problemaId, Authentication authentication
+            Long problemaId,
+
+            Authentication authentication
     ) {
+
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
+
         boolean isGestor = authentication
                 .getAuthorities()
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
 
-        if (!isGestor) throw new com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException("exception.gestor.required");
-
         return ResponseEntity.ok(
-                listarDetalhesProblema.listarDetalhesPeloId(problemaId)
+                listarDetalhesProblema.listarDetalhesPeloId(
+                        problemaId, authenticatedUser.id(), isGestor)
         );
     }
 
     @PostMapping
     public ResponseEntity<ProblemaDetalhesOutputDTO> criarProblema(
-            @Valid @RequestBody ProblemaCriarInputDTO input,
+            @Valid @RequestBody
+            ProblemaCriarInputDTO input,
 
             Authentication authentication
     ) {
@@ -85,7 +99,8 @@ public class ProblemaController {
 
     @PatchMapping("/status")
     public ResponseEntity<ProblemaDetalhesOutputDTO> atualizarStatus(
-            @Valid @RequestBody ProblemaAtualizarStatusDTO input,
+            @Valid @RequestBody
+            ProblemaAtualizarStatusDTO input,
 
             Authentication authentication
     ) {
@@ -99,5 +114,17 @@ public class ProblemaController {
 
     private List<ProblemaOutputDTO> toOutputDTO(List<Problema> problemas) {
         return problemas.stream().map(problemaMapper::toOutputDTO).toList();
+    }
+
+    private List<ProblemaOutputDTO> mask(List<ProblemaOutputDTO> dtos, String campos) {
+        if (dtos.isEmpty()) return List.of();
+
+        List<String> available = DynamicFieldFilter.availableFields(dtos.getFirst());
+        List<String> selected = DynamicFieldFilter.selectedFields(campos, available);
+
+        return dtos
+                .stream()
+                .map(dto -> problemaDynamicMapper.mask(dto, selected))
+                .toList();
     }
 }

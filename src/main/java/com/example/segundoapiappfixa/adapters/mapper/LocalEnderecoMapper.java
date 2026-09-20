@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface LocalEnderecoMapper {
 
-    LocalEndereco toModel(LocalEnderecoEntity entity);
     LocalEnderecoEntity toEntity(LocalEndereco model);
+    LocalEndereco toModel(LocalEnderecoEntity entity);
 
 }

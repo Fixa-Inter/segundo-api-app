@@ -6,6 +6,7 @@ import com.example.segundoapiappfixa.infrastructure.database.entity.UsuarioEntit
 import com.example.segundoapiappfixa.adapters.mapper.UsuarioMapper;
 import com.example.segundoapiappfixa.infrastructure.database.repository.JpaUsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,14 +17,15 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     private final UsuarioMapper mapper;
 
     @Override
-    public Usuario findByEmail(String email) {
+    public Optional<Usuario> findByEmail(String email) {
         UsuarioEntity entity = repository.findUsuarioByEmail(email);
-        return mapper.toModel(entity);
+        return Optional.ofNullable(entity).map(mapper::toModel);
     }
 
     @Override
-    public Usuario findById(Long id) {
-        UsuarioEntity usuarioEntity = repository.findUsuarioEntitiesById(id);
-        return mapper.toModel(usuarioEntity);
+    public Optional<Usuario> findById(Long id) {
+        return repository
+                .findById(id)
+                .map(mapper::toModel);
     }
 }

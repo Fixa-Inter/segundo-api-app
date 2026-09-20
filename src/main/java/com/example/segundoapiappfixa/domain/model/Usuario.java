@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Usuario {
     private Long id;
-    private Usuario gerente;
     private Endereco endereco;
     private String nomeCompleto;
     private String email;
     private TipoAcesso tipoAcesso;
     private String senhaHash;
+    private String cargo;
     private LocalDate dataNascimento;
     private LocalDateTime dataCriacao;
     private Boolean estaAtivo;

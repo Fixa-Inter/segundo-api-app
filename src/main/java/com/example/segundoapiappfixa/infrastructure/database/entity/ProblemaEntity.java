@@ -42,6 +42,9 @@ public class ProblemaEntity {
     @Column(name = "descricao_local")
     private String descricaoLocal;
 
+    @Column(name = "motivo_recusa")
+    private String motivoRecusa;
+
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
 

@@ -21,5 +21,5 @@ public class OrdemServico {
     private CategoriaProblema categoriaProblema;
     private Prioridade prioridade;
     private LocalDateTime dataCriacao;
-    private LocalDateTime dataPrevisao;
+    private LocalDateTime dataPrevista;
 }

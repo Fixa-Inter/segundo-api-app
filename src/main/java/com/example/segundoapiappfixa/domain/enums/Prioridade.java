@@ -8,9 +8,9 @@ import lombok.Getter;
 @AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Prioridade {
-    ALTA("Alta", 1),
-    MEDIA("Média", 2),
-    BAIXA("Baixa", 3);
+    ALTA("Alta", 0),
+    MEDIA("Média", 1),
+    BAIXA("Baixa", 2);
 
     private String nome;
     private int id;

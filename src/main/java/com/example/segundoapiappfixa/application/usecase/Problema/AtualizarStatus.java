@@ -1,7 +1,8 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
-import com.example.segundoapiappfixa.adapters.dto.input.ProblemaAtualizarStatusDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.ProblemaDetalhesOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaDetalhesOutputDTO;
+import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.infrastructure.exception.ProblemaNaoEncontradoException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
@@ -27,11 +28,16 @@ public class AtualizarStatus {
         Problema problema = problemaRepository.findById(dto.problemaId())
                 .orElseThrow(ProblemaNaoEncontradoException::new);
 
-        if (problema.getStatus() != com.example.segundoapiappfixa.domain.enums.StatusProblema.PENDENTE
-                || dto.statusProblema() == com.example.segundoapiappfixa.domain.enums.StatusProblema.PENDENTE)
+        if (problema.getStatus() != StatusProblema.PENDENTE || dto.statusProblema() == StatusProblema.PENDENTE)
             throw new RegraProblemaException("exception.status.transition");
 
-        problemaRepository.updateStatus(problema, dto.statusProblema());
+        if (dto.statusProblema() == StatusProblema.APROVADO && dto.motivoRecusa() != null) {
+            throw new RegraProblemaException("exception.recusa.transition");
+        }
+
+        problema.setStatus(dto.statusProblema());
+        problema.setMotivoRecusa(dto.motivoRecusa());
+        problemaRepository.save(problema);
 
         List<String> urlFotos = fotoRepository
                 .findAllByProblemaId(dto.problemaId())

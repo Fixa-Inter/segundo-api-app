@@ -1,4 +1,4 @@
-package com.example.segundoapiappfixa.adapters.dto.input;
+package com.example.segundoapiappfixa.adapters.dto.input.Problema;
 
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +8,8 @@ public record ProblemaAtualizarStatusDTO(
         Long problemaId,
 
         @NotNull(message = "{validation.status.required}")
-        StatusProblema statusProblema
+        StatusProblema statusProblema,
+
+        String motivoRecusa
 ) {
 }
