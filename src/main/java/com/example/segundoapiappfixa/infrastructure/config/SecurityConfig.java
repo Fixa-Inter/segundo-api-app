@@ -71,11 +71,13 @@ public class SecurityConfig{
                                 "/api/v1/solicitacoes/selecionar/**",
                                 "/api/v1/eventos/**"
                         ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
+
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/v1/os/minhas",
                                 "/api/v1/tarefas/**",
-                                "/api/v1/equipamentos/**"
+                                "/api/v1/equipamentos/**",
+                                "/api/v1/ocorrencias/**"
                         ).hasAnyRole("GESTOR", "TECNICO")
 
                         // POST
