@@ -30,7 +30,7 @@ public class ListarTarefas {
         OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
                 .orElseThrow(OrdemServicoNaoEncontradaException::new);
 
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (
                 usuario == null ||

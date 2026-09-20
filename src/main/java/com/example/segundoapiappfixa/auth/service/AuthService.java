@@ -34,7 +34,7 @@ public class AuthService {
                         )
                 );
 
-        Usuario usuario = usuarioRepository.findByEmail(email);
+        Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
 
         String role = authentication
                 .getAuthorities()

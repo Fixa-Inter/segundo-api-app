@@ -25,7 +25,7 @@ public class ListarOrdensServico {
     private final OrdemServicoRepository ordemServicoRepository;
 
     public List<OrdemServico> listarOrdensServico(Long usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || usuario.getEndereco() == null || usuario.getEndereco().getId() == null) {
             throw new IllegalArgumentException();

@@ -9,6 +9,8 @@ import com.example.segundoapiappfixa.application.usecase.Problema.CriarProblema;
 import com.example.segundoapiappfixa.application.usecase.Problema.ListarDetalhesProblema;
 import com.example.segundoapiappfixa.application.usecase.Problema.ListarProblemas;
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
+import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
+import com.example.segundoapiappfixa.adapters.mapper.dynamic.ProblemaDynamicMapper;
 import com.example.segundoapiappfixa.auth.dto.AuthenticatedUser;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import lombok.RequiredArgsConstructor;
@@ -30,26 +32,33 @@ public class ProblemaController {
     private final CriarProblema cadastrarProblema;
     private final AtualizarStatus atualizarStatus;
     private final ProblemaMapper problemaMapper;
+    private final ProblemaDynamicMapper problemaDynamicMapper;
 
     @GetMapping
     public ResponseEntity<List<ProblemaOutputDTO>> listar(
+            @RequestParam(required = false)
+            String campos,
+
             Authentication authentication
     ) {
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                toOutputDTO(listarProblemas.listarTodosProblemas(authenticatedUser.id()))
+                mask(toOutputDTO(listarProblemas.listarTodosProblemas(authenticatedUser.id())), campos)
         );
     }
 
     @GetMapping("/minhas")
     public ResponseEntity<List<ProblemaOutputDTO>> listarProblemasPeloUsuario(
+            @RequestParam(required = false)
+            String campos,
+
             Authentication authentication
     ) {
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                toOutputDTO(listarProblemas.listarProblemasPeloUsuario(authenticatedUser.id()))
+                mask(toOutputDTO(listarProblemas.listarProblemasPeloUsuario(authenticatedUser.id())), campos)
         );
     }
 
@@ -105,5 +114,17 @@ public class ProblemaController {
 
     private List<ProblemaOutputDTO> toOutputDTO(List<Problema> problemas) {
         return problemas.stream().map(problemaMapper::toOutputDTO).toList();
+    }
+
+    private List<ProblemaOutputDTO> mask(List<ProblemaOutputDTO> dtos, String campos) {
+        if (dtos.isEmpty()) return List.of();
+
+        List<String> available = DynamicFieldFilter.availableFields(dtos.getFirst());
+        List<String> selected = DynamicFieldFilter.selectedFields(campos, available);
+
+        return dtos
+                .stream()
+                .map(dto -> problemaDynamicMapper.mask(dto, selected))
+                .toList();
     }
 }

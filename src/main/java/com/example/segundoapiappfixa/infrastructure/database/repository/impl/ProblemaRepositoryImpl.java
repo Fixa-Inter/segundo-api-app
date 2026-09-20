@@ -1,7 +1,6 @@
 package com.example.segundoapiappfixa.infrastructure.database.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
-import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.entity.ProblemaEntity;
@@ -52,17 +51,5 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
         ProblemaEntity problemaPersistido = problemaRepositiory.save(problemaEntity);
         return problemaMapper.toModel(problemaPersistido);
     }
-
-    @Override
-    public Problema updateStatus(Problema problema, StatusProblema statusProblema, String motivoRecusa) {
-        problema.setStatus(statusProblema);
-        problema.setMotivoRecusa(motivoRecusa);
-
-        ProblemaEntity problemaEntity = problemaMapper.toEntity(problema);
-        ProblemaEntity problemaPersistido = problemaRepositiory.save(problemaEntity);
-
-        return problemaMapper.toModel(problemaPersistido);
-    }
-
 
 }

@@ -27,7 +27,7 @@ public class ListarDetalhesProblema {
         Problema problema = problemaRepository.findById(id)
                 .orElseThrow(ProblemaNaoEncontradoException::new);
 
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || problema == null) {
             throw new RegraProblemaException("exception.endereco.required");

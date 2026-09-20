@@ -41,7 +41,7 @@ public class DeletarOrdemServico {
 
         if (!isGestor) throw new RegraProblemaException("exception.gestor.required");
 
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (
                 usuario == null ||

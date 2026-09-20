@@ -1,8 +1,9 @@
 package com.example.segundoapiappfixa.domain.repository;
 
 import com.example.segundoapiappfixa.domain.model.CategoriaEquipamento;
+import java.util.Optional;
 
 public interface CategoriaEquipamentoRepository {
 
-    CategoriaEquipamento findById(Long id);
+    Optional<CategoriaEquipamento> findById(Long id);
 }

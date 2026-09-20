@@ -1,11 +1,12 @@
 package com.example.segundoapiappfixa.domain.repository;
 
 import com.example.segundoapiappfixa.domain.model.Usuario;
+import java.util.Optional;
 
 public interface UsuarioRepository {
 
-    Usuario findByEmail(String email);
+    Optional<Usuario> findByEmail(String email);
 
-    Usuario findById(Long id);
+    Optional<Usuario> findById(Long id);
 
 }

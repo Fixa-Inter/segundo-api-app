@@ -27,7 +27,7 @@ public class ListarProblemas {
     }
 
     public List<Problema> listarTodosProblemas(Long usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || usuario.getEndereco() == null || usuario.getEndereco().getId() == null) {
             throw new IllegalArgumentException();
