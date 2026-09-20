@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.domain.repository;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TarefaRepository {
 
@@ -14,7 +15,7 @@ public interface TarefaRepository {
 
     Tarefa update(Long id, Tarefa tarefa);
 
-    Tarefa findById(Long id);
+    Optional<Tarefa> findById(Long id);
 
-    Tarefa deleteById(Long id);
+    Optional<Tarefa> deleteById(Long id);
 }

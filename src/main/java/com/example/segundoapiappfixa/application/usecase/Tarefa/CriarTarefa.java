@@ -37,7 +37,7 @@ public class CriarTarefa {
             Long usuarioId
     ) {
 
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || usuario.getEndereco() == null) {
             throw new RegraProblemaException("exception.endereco.required");

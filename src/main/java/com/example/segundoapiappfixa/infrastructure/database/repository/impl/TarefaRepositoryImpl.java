@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,11 +25,10 @@ public class TarefaRepositoryImpl implements TarefaRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Tarefa findById(Long id) {
-        return tarefaMapper.toModel(
-                jpaTarefaRepository.findById(id)
-                        .orElseThrow()
-        );
+    public Optional<Tarefa> findById(Long id) {
+        return jpaTarefaRepository
+                .findById(id)
+                .map(tarefaMapper::toModel);
     }
 
     @Override
@@ -67,9 +67,11 @@ public class TarefaRepositoryImpl implements TarefaRepository {
     }
 
     public Tarefa update(Long id, Tarefa tarefa) {
+        TarefaEntity tarefaEntity = jpaTarefaRepository
+                .findById(id)
+                .orElse(null);
 
-        TarefaEntity tarefaEntity = jpaTarefaRepository.findById(id)
-                .orElseThrow();
+        if (tarefaEntity == null) return null;
 
         if (tarefa.getTitulo() != null && !tarefaEntity.getTitulo().equals(tarefa.getTitulo())) {
             tarefaEntity.setTitulo(tarefa.getTitulo());
@@ -84,12 +86,12 @@ public class TarefaRepositoryImpl implements TarefaRepository {
 
     }
 
-    public Tarefa deleteById(Long id) {
-        TarefaEntity tarefaEntity = jpaTarefaRepository.findById(id)
-                .orElseThrow();
+    public Optional<Tarefa> deleteById(Long id) {
+        TarefaEntity tarefaEntity = jpaTarefaRepository.findById(id).orElse(null);
+        if (tarefaEntity == null) return Optional.empty();
 
         jpaTarefaRepository.deleteById(id);
-        return tarefaMapper.toModel(tarefaEntity);
+        return Optional.of(tarefaMapper.toModel(tarefaEntity));
     }
 
     public Long countByOrdemServicoId(Long id) {

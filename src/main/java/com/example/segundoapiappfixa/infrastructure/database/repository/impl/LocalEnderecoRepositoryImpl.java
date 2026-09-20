@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,10 +28,9 @@ public class LocalEnderecoRepositoryImpl implements LocalEnderecoRepository {
     }
 
     @Override
-    public LocalEndereco findById(Long id) {
-        LocalEnderecoEntity localEnderecoEntity = localEnderecoRepository.findById(id)
-                .orElseThrow();
-
-        return localEnderecoMapper.toModel(localEnderecoEntity);
+    public Optional<LocalEndereco> findById(Long id) {
+        return localEnderecoRepository
+                .findById(id)
+                .map(localEnderecoMapper::toModel);
     }
 }

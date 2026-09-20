@@ -23,11 +23,11 @@ public class DeletarTarefa {
             Boolean isGestor,
             Long usuarioId
     ) {
-        Tarefa tarefa = tarefaRepository.findById(tarefaId);
+        Tarefa tarefa = tarefaRepository.findById(tarefaId).orElse(null);
 
         if (!isGestor) throw new RegraProblemaException("exception.gestor.required");
 
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (
                 usuario == null ||
@@ -39,6 +39,7 @@ public class DeletarTarefa {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        return tarefaRepository.deleteById(tarefaId);
+        return tarefaRepository.deleteById(tarefaId)
+                .orElseThrow(TarefaNaoEncontradaException::new);
     }
 }

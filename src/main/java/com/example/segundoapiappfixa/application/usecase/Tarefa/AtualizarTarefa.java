@@ -20,13 +20,13 @@ public class AtualizarTarefa {
             TarefaAtualizarInputDTO tarefaAtualizarInputDTO,
             Long usuarioId
     ) {
-        Tarefa tarefa = tarefaRepository.findById(tarefaAtualizarInputDTO.id());
+        Tarefa tarefa = tarefaRepository.findById(tarefaAtualizarInputDTO.id()).orElse(null);
 
         if (tarefa == null) {
             throw new RegraProblemaException("exception.tarefa.required");
         }
 
-        Usuario usuario = usuarioRepository.findById(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || tarefa == null) {
             throw new RegraProblemaException("exception.endereco.required");

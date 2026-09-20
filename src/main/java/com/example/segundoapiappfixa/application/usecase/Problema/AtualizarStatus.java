@@ -35,7 +35,9 @@ public class AtualizarStatus {
             throw new RegraProblemaException("exception.recusa.transition");
         }
 
-        problemaRepository.updateStatus(problema, dto.statusProblema(), dto.motivoRecusa());
+        problema.setStatus(dto.statusProblema());
+        problema.setMotivoRecusa(dto.motivoRecusa());
+        problemaRepository.save(problema);
 
         List<String> urlFotos = fotoRepository
                 .findAllByProblemaId(dto.problemaId())

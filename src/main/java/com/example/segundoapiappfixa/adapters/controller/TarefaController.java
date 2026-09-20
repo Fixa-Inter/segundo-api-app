@@ -2,9 +2,10 @@ package com.example.segundoapiappfixa.adapters.controller;
 
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaCriarInputDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.OrdemServico.OrdemServicoDetalhesOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Tarefa.TarefaOutputDTO;
 import com.example.segundoapiappfixa.adapters.mapper.TarefaMapper;
+import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
+import com.example.segundoapiappfixa.adapters.mapper.dynamic.TarefaDynamicMapper;
 import com.example.segundoapiappfixa.application.usecase.Tarefa.AtualizarTarefa;
 import com.example.segundoapiappfixa.application.usecase.Tarefa.CriarTarefa;
 import com.example.segundoapiappfixa.application.usecase.Tarefa.DeletarTarefa;
@@ -31,11 +32,15 @@ public class TarefaController {
     private final AtualizarTarefa atualizarTarefa;
     private final DeletarTarefa deletarTarefa;
     private final TarefaMapper tarefaMapper;
+    private final TarefaDynamicMapper tarefaDynamicMapper;
 
     @GetMapping("/{ordemServicoId}")
     public ResponseEntity<List<TarefaOutputDTO>> listar(
             @PathVariable
             Long ordemServicoId,
+
+            @RequestParam(required = false)
+            String campos,
 
             Authentication authentication
     ) {
@@ -47,10 +52,10 @@ public class TarefaController {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
 
         return ResponseEntity.ok(
-                toOutputDTO(listarTarefas.listarTarefasPelaOrdemServico(
+                mask(toOutputDTO(listarTarefas.listarTarefasPelaOrdemServico(
                         ordemServicoId, isGestor, authenticatedUser.id()
-                ))
-        );
+                )), campos
+        ));
     }
 
     @PostMapping()
@@ -60,14 +65,15 @@ public class TarefaController {
             @NotEmpty(message = "{validation.tarefa.lista.required}")
             List<@Valid TarefaCriarInputDTO> tarefaCriarInputDTOS,
 
+            @RequestParam(required = false) String campos,
+
             Authentication authentication
     ) {
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(
-                        toOutputDTO(criarTarefa.criarTarefas(
+                .body(toOutputDTO(criarTarefa.criarTarefas(
                                 tarefaCriarInputDTOS,
                                 authenticatedUser.id()
                         ))
@@ -79,6 +85,8 @@ public class TarefaController {
             @RequestBody
             @Valid
             TarefaAtualizarInputDTO atualizarInputDTO,
+
+            @RequestParam(required = false) String campos,
 
             Authentication authentication
     ) {
@@ -97,6 +105,8 @@ public class TarefaController {
             @PathVariable
             Long tarefaId,
 
+            @RequestParam(required = false) String campos,
+
             Authentication authentication
     ) {
 
@@ -108,14 +118,24 @@ public class TarefaController {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
 
         return ResponseEntity.ok(
-                tarefaMapper.toOutputDTO(
-                        deletarTarefa.deletarTarefa(tarefaId, isGestor, authenticatedUser.id())
-                )
+                tarefaMapper.toOutputDTO(deletarTarefa.deletarTarefa(tarefaId, isGestor, authenticatedUser.id()))
         );
 
     }
 
     private List<TarefaOutputDTO> toOutputDTO(List<Tarefa> tarefas) {
         return tarefas.stream().map(tarefaMapper::toOutputDTO).toList();
+    }
+
+    private List<TarefaOutputDTO> mask(List<TarefaOutputDTO> dtos, String campos) {
+        if (dtos.isEmpty()) return List.of();
+
+        List<String> available = DynamicFieldFilter.availableFields(dtos.getFirst());
+        List<String> selected = DynamicFieldFilter.selectedFields(campos, available);
+
+        return dtos
+                .stream()
+                .map(dto -> tarefaDynamicMapper.mask(dto, selected))
+                .toList();
     }
 }
