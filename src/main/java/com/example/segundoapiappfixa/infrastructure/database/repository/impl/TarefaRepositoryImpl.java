@@ -66,24 +66,11 @@ public class TarefaRepositoryImpl implements TarefaRepository {
                 .toList();
     }
 
-    public Tarefa update(Long id, Tarefa tarefa) {
-        TarefaEntity tarefaEntity = jpaTarefaRepository
-                .findById(id)
-                .orElse(null);
+    public Tarefa save(Tarefa tarefa) {
+        TarefaEntity tarefaEntity = tarefaMapper.toEntity(tarefa);
 
-        if (tarefaEntity == null) return null;
-
-        if (tarefa.getTitulo() != null && !tarefaEntity.getTitulo().equals(tarefa.getTitulo())) {
-            tarefaEntity.setTitulo(tarefa.getTitulo());
-        }
-
-        if (tarefa.getDescricao() != null && !tarefaEntity.getDescricao().equals(tarefa.getDescricao())) {
-            tarefaEntity.setDescricao(tarefa.getDescricao());
-        }
-
-        TarefaEntity tarefaUpdated = jpaTarefaRepository.save(tarefaEntity);
-        return tarefaMapper.toModel(tarefaUpdated);
-
+        TarefaEntity problemaPersistido = jpaTarefaRepository.save(tarefaEntity);
+        return tarefaMapper.toModel(problemaPersistido);
     }
 
     public Optional<Tarefa> deleteById(Long id) {

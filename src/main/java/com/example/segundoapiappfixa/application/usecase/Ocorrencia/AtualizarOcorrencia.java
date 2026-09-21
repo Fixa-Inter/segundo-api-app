@@ -8,7 +8,7 @@ import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.OcorrenciaNaoEncontradaException;
+import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +23,7 @@ public class AtualizarOcorrencia {
 
         Long id = dto.id();
         Ocorrencia atual = ocorrenciaRepository.findById(id)
-                .orElseThrow(OcorrenciaNaoEncontradaException::new);
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ocorrencia.notFound"));
 
         if (atual.getUsuario() == null || !usuarioId.equals(atual.getUsuario().getId())) {
             throw new RegraProblemaException("exception.access.denied");

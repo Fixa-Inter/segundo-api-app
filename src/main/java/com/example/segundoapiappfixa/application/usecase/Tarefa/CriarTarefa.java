@@ -11,9 +11,8 @@ import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.StatusOrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.OrdemServicoNaoEncontradaException;
+import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
-import com.example.segundoapiappfixa.infrastructure.exception.StatusOrdemServicoNaoEncontradoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +46,7 @@ public class CriarTarefa {
                 .stream()
                 .map(tarefaCriarInputDTO -> {
                     OrdemServico ordemServico = ordemServicoRepository.findById(tarefaCriarInputDTO.ordemServicoId())
-                            .orElseThrow(OrdemServicoNaoEncontradaException::new);
+                            .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
 
                     if (!usuario.getEndereco().getId().equals(
                             ordemServico.getProblema().getLocalEndereco().getEndereco().getId())) {
@@ -59,7 +58,7 @@ public class CriarTarefa {
                             ordemServico,
 
                             statusOrdemServicoRepository.findById(tarefaCriarInputDTO.statusOrdemServicoId())
-                                    .orElseThrow(StatusOrdemServicoNaoEncontradoException::new),
+                                    .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.statusOrdemServico.notFound")),
 
                             tarefaCriarInputDTO.titulo(),
                             tarefaCriarInputDTO.descricao(),

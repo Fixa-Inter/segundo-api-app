@@ -13,7 +13,7 @@ public interface TarefaRepository {
 
     Long countByOrdemServicoId(Long id);
 
-    Tarefa update(Long id, Tarefa tarefa);
+    Tarefa save(Tarefa tarefa);
 
     Optional<Tarefa> findById(Long id);
 

@@ -21,6 +21,10 @@ public class ModeloEquipamentoEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    public UsuarioEntity usuario;
+
+    @ManyToOne
     @JoinColumn(name = "marca_equipamento_id")
     public MarcaEquipamentoEntity marcaEquipamento;
 

@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.adapters.exception;
 
-import com.example.segundoapiappfixa.infrastructure.exception.ProblemaNaoEncontradoException;
+import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -42,8 +42,8 @@ public class GlobalHandlerException {
         return ResponseEntity.status(status).body(Map.of("message", text(key)));
     }
 
-    @ExceptionHandler(ProblemaNaoEncontradoException.class)
-    ResponseEntity<?> notFound(ProblemaNaoEncontradoException e) {
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    ResponseEntity<?> notFound(EntidadeNaoEncontradaException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(Map.of("message", text(e.getMessage())));

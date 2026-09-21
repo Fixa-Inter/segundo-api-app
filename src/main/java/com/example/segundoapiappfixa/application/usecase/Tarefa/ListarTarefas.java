@@ -7,7 +7,7 @@ import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.OrdemServicoNaoEncontradaException;
+import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +28,7 @@ public class ListarTarefas {
             Long usuarioId
     ) {
         OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
-                .orElseThrow(OrdemServicoNaoEncontradaException::new);
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
 
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 

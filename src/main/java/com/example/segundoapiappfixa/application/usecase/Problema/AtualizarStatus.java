@@ -3,7 +3,7 @@ package com.example.segundoapiappfixa.application.usecase.Problema;
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaDetalhesOutputDTO;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
-import com.example.segundoapiappfixa.infrastructure.exception.ProblemaNaoEncontradoException;
+import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Foto;
@@ -26,7 +26,7 @@ public class AtualizarStatus {
         if (!isGestor) throw new RegraProblemaException("exception.gestor.required");
 
         Problema problema = problemaRepository.findById(dto.problemaId())
-                .orElseThrow(ProblemaNaoEncontradoException::new);
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.problema.notFound"));
 
         if (problema.getStatus() != StatusProblema.PENDENTE || dto.statusProblema() == StatusProblema.PENDENTE)
             throw new RegraProblemaException("exception.status.transition");
