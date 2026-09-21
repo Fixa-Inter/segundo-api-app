@@ -1,0 +1,48 @@
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "usuario13@plataforma.com",
+  "senha": "Senha123"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token)
+%}
+
+###
+
+GET http://localhost:8080/api/v1/equipamentos/categorias
+Authorization: Bearer {{auth_token}}
+
+###
+
+GET http://localhost:8080/api/v1/perfil
+Authorization: Bearer {{auth_token}}
+
+###
+
+POST http://localhost:8080/api/v1/equipamentos/categorias
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "nome": "Categoria Teste",
+  "descricao": "Uma categoria apenas para fazer testes"
+}
+
+###
+
+PATCH http://localhost:8080/api/v1/equipamentos/categorias
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "id": 11,
+  "estaAtivo": false
+}
+
+###
+
+DELETE http://localhost:8080/api/v1/equipamentos/categorias/11
+Authorization: Bearer {{auth_token}}

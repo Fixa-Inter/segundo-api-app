@@ -6,6 +6,7 @@ import com.example.segundoapiappfixa.domain.model.Tarefa;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
+import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
@@ -20,28 +21,20 @@ public class AtualizarTarefa {
             TarefaAtualizarInputDTO tarefaAtualizarInputDTO,
             Long usuarioId
     ) {
-        Tarefa tarefa = tarefaRepository.findById(tarefaAtualizarInputDTO.id()).orElse(null);
+        Tarefa tarefa = tarefaRepository.findById(tarefaAtualizarInputDTO.id())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.tarefa.notFound"));
 
-        if (tarefa == null) {
-            throw new RegraProblemaException("exception.tarefa.required");
-        }
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
-
-        if (usuario == null || tarefa == null) {
-            throw new RegraProblemaException("exception.endereco.required");
-        }
-
-        boolean mesmoEndereco = usuario.getEndereco().getId()
-                .equals(tarefa.getOrdemServico().getProblema().getLocalEndereco().getEndereco().getId());
-
-        if (!mesmoEndereco) {
+        if (!usuario.getEndereco().getId()
+                .equals(tarefa.getOrdemServico().getProblema().getLocalEndereco().getEndereco().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        tarefa.setTitulo(tarefaAtualizarInputDTO.titulo());
-        tarefa.setDescricao(tarefaAtualizarInputDTO.descricao());
+        if (tarefaAtualizarInputDTO.titulo() != null) tarefa.setTitulo(tarefaAtualizarInputDTO.titulo());
+        if (tarefaAtualizarInputDTO.descricao() != null) tarefa.setDescricao(tarefaAtualizarInputDTO.descricao());
 
-        return tarefaRepository.update(tarefa.getId(), tarefa);
+        return tarefaRepository.save(tarefa);
     }
 }

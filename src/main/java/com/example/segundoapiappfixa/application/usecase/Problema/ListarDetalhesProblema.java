@@ -8,7 +8,7 @@ import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.domain.model.Usuario;
-import com.example.segundoapiappfixa.infrastructure.exception.ProblemaNaoEncontradoException;
+import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +25,7 @@ public class ListarDetalhesProblema {
     public ProblemaDetalhesOutputDTO listarDetalhesPeloId(Long id, Long usuarioId, boolean isGestor) {
 
         Problema problema = problemaRepository.findById(id)
-                .orElseThrow(ProblemaNaoEncontradoException::new);
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.problema.notFound"));
 
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
