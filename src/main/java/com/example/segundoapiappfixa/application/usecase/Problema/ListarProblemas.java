@@ -21,7 +21,7 @@ public class ListarProblemas {
     public List<Problema> listarProblemasPeloUsuario(Long usuarioId) {
         List<Problema> problemas = problemaRepository.findAllByUsuarioId(usuarioId);
 
-        if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.ProblemaNaoEncontradoException();
+        if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
 
         return problemas;
     }
@@ -41,7 +41,7 @@ public class ListarProblemas {
 
         List<Problema> problemas = problemaRepository.findAllByLocalEnderecoIds(localEnderecoIds);
 
-        if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.ProblemaNaoEncontradoException();
+        if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
 
         return problemas;
     }

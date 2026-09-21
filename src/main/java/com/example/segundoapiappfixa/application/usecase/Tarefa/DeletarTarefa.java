@@ -6,9 +6,8 @@ import com.example.segundoapiappfixa.domain.model.Tarefa;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.OrdemServicoNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
-import com.example.segundoapiappfixa.infrastructure.exception.TarefaNaoEncontradaException;
+import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
 
 @UseCase
@@ -40,6 +39,6 @@ public class DeletarTarefa {
         }
 
         return tarefaRepository.deleteById(tarefaId)
-                .orElseThrow(TarefaNaoEncontradaException::new);
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.tarefa.notFound"));
     }
 }

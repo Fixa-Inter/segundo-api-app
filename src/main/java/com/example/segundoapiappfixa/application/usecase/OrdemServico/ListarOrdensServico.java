@@ -9,8 +9,7 @@ import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.OrdemServicoNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.ProblemaNaoEncontradoException;
+import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -45,7 +44,7 @@ public class ListarOrdensServico {
 
         List<OrdemServico> ordensServico = ordemServicoRepository.findAllByProblemaIds(problemasIds);
 
-        if (ordensServico.isEmpty()) throw new ProblemaNaoEncontradoException();
+        if (ordensServico.isEmpty()) throw new EntidadeNaoEncontradaException("exception.ordemServico.notFound");
 
         return ordensServico;
     }
@@ -53,7 +52,7 @@ public class ListarOrdensServico {
     public List<OrdemServico> listarOrdensServicoPeloUsuario(Long usuarioId) {
 
         List<OrdemServico> ordensServico = ordemServicoRepository.findByUsuarioId(usuarioId);
-        if (ordensServico.isEmpty()) throw new OrdemServicoNaoEncontradaException();
+        if (ordensServico.isEmpty()) throw new EntidadeNaoEncontradaException("exception.ordemServico.notFound");
 
         return ordensServico;
     }

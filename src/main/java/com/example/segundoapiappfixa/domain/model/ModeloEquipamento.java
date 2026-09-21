@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ModeloEquipamento {
     private Long id;
+    private Usuario usuario;
     private MarcaEquipamento marcaEquipamento;
     private CategoriaEquipamento categoriaEquipamento;
     private String nome;

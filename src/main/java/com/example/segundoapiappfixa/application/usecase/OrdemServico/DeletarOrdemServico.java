@@ -12,7 +12,7 @@ import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.domain.model.Usuario;
-import com.example.segundoapiappfixa.infrastructure.exception.OrdemServicoNaoEncontradaException;
+import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +37,7 @@ public class DeletarOrdemServico {
     ) {
 
         OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
-                .orElseThrow(OrdemServicoNaoEncontradaException::new);
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
 
         if (!isGestor) throw new RegraProblemaException("exception.gestor.required");
 
