@@ -20,12 +20,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
 
+    // Dependências
     private final JpaOcorrenciaRepository jpaRepository;
     private final OcorrenciaMapper mapper;
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public List<Ocorrencia> findAllByUsuarioId(Long usuarioId) {
         return jpaRepository
@@ -35,6 +37,7 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
                 .toList();
     }
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public Optional<Ocorrencia> findById(Long id) {
         return jpaRepository
@@ -42,12 +45,14 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
                 .map(mapper::toModel);
     }
 
+    // Método de salvar no banco de dados
     @Override
     public Ocorrencia save(Ocorrencia ocorrencia) {
         OcorrenciaEntity entity = toEntityWithReferences(ocorrencia);
         return mapper.toModel(jpaRepository.save(entity));
     }
 
+    // Método de atualizar dados dentro do banco de dados
     @Override
     public Ocorrencia update(Long id, Ocorrencia ocorrencia) {
         OcorrenciaEntity entity = jpaRepository.findById(id).orElse(null);
@@ -74,6 +79,7 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
         return mapper.toModel(jpaRepository.save(entity));
     }
 
+    // Método de deletar dados persistidos no banco de dados
     @Override
     public Optional<Ocorrencia> deleteById(Long id) {
         OcorrenciaEntity entity = jpaRepository.findById(id).orElse(null);

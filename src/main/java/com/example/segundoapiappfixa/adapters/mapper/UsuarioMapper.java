@@ -9,8 +9,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
 
-    Usuario toModel(UsuarioEntity entity);
     UsuarioEntity toEntity(Usuario model);
+    Usuario toModel(UsuarioEntity entity);
 
     @Mapping(source = "tipoAcesso.nome", target = "tipoAcesso")
     @Mapping(source = "endereco.cnpj", target = "cnpjEndereco")

@@ -13,9 +13,11 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class MarcaEquipamentoRepositoryImpl implements MarcaEquipamentoRepository {
+    // Dependências
     private final JpaMarcaEquipamentoRepository repository;
     private final MarcaEquipamentoMapper mapper;
 
+    // Método de listar os registros persistidos no banco de dados
     public List<MarcaEquipamento> findAll() {
         return repository
                 .findAll()
@@ -24,6 +26,7 @@ public class MarcaEquipamentoRepositoryImpl implements MarcaEquipamentoRepositor
                 .toList();
     }
 
+    // Método de listar os registros persistidos no banco de dados
     public Optional<MarcaEquipamento> findById(Long id) {
         return repository
                 .findById(id)
@@ -38,10 +41,12 @@ public class MarcaEquipamentoRepositoryImpl implements MarcaEquipamentoRepositor
         return repository.existsByNomeIgnoreCaseAndIdNot(nome, id);
     }
 
+    // Método de salvar no banco de dados
     public MarcaEquipamento save(MarcaEquipamento model) {
         return mapper.toModel(repository.save(mapper.toEntity(model)));
     }
 
+    // Método de deletar dados persistidos no banco de dados
     public Optional<MarcaEquipamento> deleteById(Long id) {
 
         Optional<MarcaEquipamentoEntity> entity = repository.findById(id);

@@ -10,8 +10,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ProblemaMapper {
 
-    Problema toModel(ProblemaEntity entity);
     ProblemaEntity toEntity(Problema problema);
+    Problema toModel(ProblemaEntity entity);
 
     @Mapping(source = "usuario.nomeCompleto", target = "nomeUsuario")
     ProblemaOutputDTO toOutputDTO(Problema problema);

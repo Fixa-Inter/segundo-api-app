@@ -6,11 +6,7 @@ import com.example.segundoapiappfixa.infrastructure.database.entity.OcorrenciaEn
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {
-        UsuarioMapper.class,
-        LocalEnderecoMapper.class,
-        EquipamentoMapper.class
-})
+@Mapper(componentModel = "spring")
 public interface OcorrenciaMapper {
 
     OcorrenciaEntity toEntity(Ocorrencia ocorrencia);

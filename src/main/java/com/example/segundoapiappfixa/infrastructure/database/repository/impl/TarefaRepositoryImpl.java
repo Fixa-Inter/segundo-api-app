@@ -19,18 +19,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TarefaRepositoryImpl implements TarefaRepository {
 
+    // Dependências
     private final JpaTarefaRepository jpaTarefaRepository;
     private final TarefaMapper tarefaMapper;
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    // Método de listar os registros persistidos no banco de dados
     public Optional<Tarefa> findById(Long id) {
         return jpaTarefaRepository
                 .findById(id)
                 .map(tarefaMapper::toModel);
     }
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public List<Tarefa> findAllByOrdemServicoId(Long id) {
         List<TarefaEntity> tarefaEntities = jpaTarefaRepository.findAllByOrdemServico_Id(id);
@@ -40,6 +43,7 @@ public class TarefaRepositoryImpl implements TarefaRepository {
                 .toList();
     }
 
+    // Método de salvar no banco de dados
     public List<Tarefa> saveAll(List<Tarefa> tarefas) {
         List<TarefaEntity> tarefaEntities = tarefas
                 .stream()
@@ -66,6 +70,7 @@ public class TarefaRepositoryImpl implements TarefaRepository {
                 .toList();
     }
 
+    // Método de salvar no banco de dados
     public Tarefa save(Tarefa tarefa) {
         TarefaEntity tarefaEntity = tarefaMapper.toEntity(tarefa);
 
@@ -73,6 +78,7 @@ public class TarefaRepositoryImpl implements TarefaRepository {
         return tarefaMapper.toModel(problemaPersistido);
     }
 
+    // Método de deletar dados persistidos no banco de dados
     public Optional<Tarefa> deleteById(Long id) {
         TarefaEntity tarefaEntity = jpaTarefaRepository.findById(id).orElse(null);
         if (tarefaEntity == null) return Optional.empty();
@@ -81,6 +87,7 @@ public class TarefaRepositoryImpl implements TarefaRepository {
         return Optional.of(tarefaMapper.toModel(tarefaEntity));
     }
 
+    // Método de listar os registros persistidos no banco de dados
     public Long countByOrdemServicoId(Long id) {
         return jpaTarefaRepository.countByOrdemServico_Id(id);
     }

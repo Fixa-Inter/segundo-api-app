@@ -4,28 +4,28 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record OcorrenciaCadastrarInputDTO (
-        @NotNull(message = "validation.usuario.required")
+        @NotNull(message = "{validation.usuario.required}")
         Long usuarioId,
 
-        @NotNull(message = "validation.local.required")
+        @NotNull(message = "{validation.local.required}")
         Long localEnderecoId,
 
-        @NotNull(message = "validation.equipamento.required")
+        @NotNull(message = "{validation.equipamento.required}")
         Long equipamentoId,
 
-        @NotNull(message = "validation.categoria.required")
+        @NotNull(message = "{validation.categoria.required}")
         Long categoriaProblemaId,
 
-        @NotBlank(message = "validation.titulo.required")
+        @NotBlank(message = "{validation.titulo.required}")
         String titulo,
 
-        @NotBlank(message = "validation.descricao.required")
+        @NotBlank(message = "{validation.descricao.required}")
         String descricaoOcorrencia,
 
-        @NotBlank(message = "validation.descricaoLocal.required")
+        @NotBlank(message = "{validation.descricaoLocal.required}")
         String descricaoLocal,
 
-        @NotNull(message = "validation.prioridade.required")
+        @NotNull(message = "{validation.prioridade.required}")
         Long prioridade
 ) {
 }

@@ -13,13 +13,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EquipamentoRepositoryImpl implements EquipamentoRepository {
 
-    private final JpaEquipamentoRepository jpaEquipamentoRepository;
-    private final EquipamentoMapper equipamentoMapper;
+    // Dependências
+    private final JpaEquipamentoRepository repository;
+    private final EquipamentoMapper mapper;
 
+    // Método de listar os registros persistidos no banco de dados
     public Optional<Equipamento> findById(Long id) {
-        return jpaEquipamentoRepository
+        return repository
                 .findById(id)
-                .map(equipamentoMapper::toModel);
+                .map(mapper::toModel);
     }
 
 }

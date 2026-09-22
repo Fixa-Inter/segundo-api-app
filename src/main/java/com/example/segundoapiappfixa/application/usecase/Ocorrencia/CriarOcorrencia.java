@@ -23,7 +23,7 @@ public class CriarOcorrencia {
     private final LocalEnderecoRepository localEnderecoRepository;
     private final EquipamentoRepository equipamentoRepository;
 
-    public Ocorrencia criar(OcorrenciaCadastrarInputDTO dto, Long usuarioId) {
+    public Ocorrencia cadastrar(OcorrenciaCadastrarInputDTO dto, Long usuarioId) {
 
         if (dto == null) {
             throw new RegraProblemaException("exception.ocorrencia.required");

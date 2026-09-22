@@ -14,9 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FotoProblemaRepositoryImpl implements FotoRepository {
 
+    // Dependências
     private final JpaFotoRepository repository;
     private final FotoMapper mapper;
 
+    // Método de salvar no banco de dados
     @Override
     public List<Foto> findAllByProblemaId(Long problemaId) {
         return repository.
@@ -26,6 +28,7 @@ public class FotoProblemaRepositoryImpl implements FotoRepository {
                 .toList();
     }
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public Foto save(Foto foto) {
         FotoEntity fotoEntity = mapper.toEntity(foto);

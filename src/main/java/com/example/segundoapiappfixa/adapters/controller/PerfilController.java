@@ -1,13 +1,11 @@
 package com.example.segundoapiappfixa.adapters.controller;
 
-import com.example.segundoapiappfixa.adapters.dto.output.CategoriaEquipamento.CategoriaEquipamentoOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Usuario.UsuarioOutputDTO;
 import com.example.segundoapiappfixa.adapters.mapper.UsuarioMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.UsuarioDynamicMapper;
 import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
 import com.example.segundoapiappfixa.application.usecase.Perfil.DetalhesPerfil;
-import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,10 +21,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PerfilController {
 
+    // UseCases
     private final DetalhesPerfil detalhesPerfil;
-    private final UsuarioMapper usuarioMapper;
-    private final UsuarioDynamicMapper usuarioDynamicMapper;
 
+    // Mappers
+    private final UsuarioMapper mapper;
+    private final UsuarioDynamicMapper dynamicMapper;
+
+    // GET
     @GetMapping
     public ResponseEntity<UsuarioOutputDTO> detalhesPerfil(
             @RequestParam(required = false)
@@ -35,20 +37,21 @@ public class PerfilController {
             Authentication authentication
     ) {
          return ResponseEntity.ok(mask(
-                 usuarioMapper.toOutputDTO(
+                 mapper.toOutputDTO(
                          detalhesPerfil.detalhesPerfil(ControllerUtils.usuarioId(authentication))
                  ),
                  campos
          ));
     }
 
+    // Aplicação do Mapper Dinâmico
     private UsuarioOutputDTO mask(UsuarioOutputDTO dto, String campos) {
         if (dto == null) return null;
 
         List<String> available = DynamicFieldFilter.availableFields(dto);
         List<String> selected = DynamicFieldFilter.selectedFields(campos, available);
 
-        return usuarioDynamicMapper.mask(dto, selected);
+        return dynamicMapper.mask(dto, selected);
     }
 
 }
