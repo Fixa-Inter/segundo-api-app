@@ -6,7 +6,10 @@ import com.example.segundoapiappfixa.adapters.dto.output.MarcaEquipamento.MarcaE
 import com.example.segundoapiappfixa.adapters.mapper.MarcaEquipamentoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.MarcaEquipamentoDynamicMapper;
-import com.example.segundoapiappfixa.application.usecase.MarcaEquipamento.*;
+import com.example.segundoapiappfixa.application.usecase.MarcaEquipamento.AtualizarMarcaEquipamento;
+import com.example.segundoapiappfixa.application.usecase.MarcaEquipamento.CadastrarMarcaEquipamento;
+import com.example.segundoapiappfixa.application.usecase.MarcaEquipamento.DeletarMarcaEquipamento;
+import com.example.segundoapiappfixa.application.usecase.MarcaEquipamento.ListarMarcasEquipamento;
 import com.example.segundoapiappfixa.domain.model.MarcaEquipamento;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +24,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MarcaEquipamentoController {
 
+    // UseCases
     private final ListarMarcasEquipamento listarMarcasEquipamento;
     private final CadastrarMarcaEquipamento cadastrarMarcaEquipamento;
     private final AtualizarMarcaEquipamento atualizarMarcaEquipamento;
     private final DeletarMarcaEquipamento deletarMarcaEquipamento;
 
+    // Mappers
     private final MarcaEquipamentoMapper mapper;
     private final MarcaEquipamentoDynamicMapper dynamicMapper;
 
+
+    // GET
     @GetMapping
     public ResponseEntity<List<MarcaEquipamentoOutputDTO>> listar(
             @RequestParam(required = false)
@@ -41,7 +48,7 @@ public class MarcaEquipamentoController {
     }
 
     @GetMapping("/{marcaEquipamentoId}")
-    public ResponseEntity<MarcaEquipamentoOutputDTO> listarPeloId(
+    public ResponseEntity<MarcaEquipamentoOutputDTO> listarDetalhes(
             @PathVariable
             Long marcaEquipamentoId,
 
@@ -54,6 +61,7 @@ public class MarcaEquipamentoController {
         ));
     }
 
+    // POST
     @PostMapping
     public ResponseEntity<MarcaEquipamentoOutputDTO> cadastrar(
             @Valid
@@ -66,6 +74,7 @@ public class MarcaEquipamentoController {
         );
     }
 
+    // PATCH
     @PatchMapping
     public ResponseEntity<MarcaEquipamentoOutputDTO> atualizar(
             @Valid
@@ -76,6 +85,7 @@ public class MarcaEquipamentoController {
         );
     }
 
+    // DELETE
     @DeleteMapping("/{marcaEquipamentoId}")
     public ResponseEntity<MarcaEquipamentoOutputDTO> deletar(
             @PathVariable
@@ -86,6 +96,7 @@ public class MarcaEquipamentoController {
         );
     }
 
+    // Mapper par DTO de saída em Lote
     private List<MarcaEquipamentoOutputDTO> toOutputDTO(List<MarcaEquipamento> marcasEquipamento) {
         return marcasEquipamento
                 .stream()
@@ -93,6 +104,7 @@ public class MarcaEquipamentoController {
                 .toList();
     }
 
+    // Aplicação do Mapper Dinâmico
     private List<MarcaEquipamentoOutputDTO> mask(
             List<MarcaEquipamentoOutputDTO> dtos,
             String campos

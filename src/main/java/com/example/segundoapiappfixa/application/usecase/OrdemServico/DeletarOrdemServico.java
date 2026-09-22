@@ -6,7 +6,6 @@ import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Foto;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Problema;
-import com.example.segundoapiappfixa.domain.model.Tarefa;
 import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import jakarta.persistence.EntityNotFoundException;
 
 @UseCase
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class DeletarOrdemServico {
     private final UsuarioRepository usuarioRepository;
 
     @Transactional
-    public OrdemServicoDetalhesOutputDTO deletarOrdemServico(
+    public OrdemServicoDetalhesOutputDTO deletar(
             Long ordemServicoId,
             Boolean isGestor,
             Long usuarioId

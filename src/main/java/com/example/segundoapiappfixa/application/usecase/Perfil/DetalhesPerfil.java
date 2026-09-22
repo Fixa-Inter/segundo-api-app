@@ -18,7 +18,7 @@ public class DetalhesPerfil {
 
         Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
         if (usuario.isEmpty()) {
-            throw new EntidadeNaoEncontradaException("validation.usuario.required");
+            throw new EntidadeNaoEncontradaException("exception.usuario.required");
         }
 
         return usuario.get();

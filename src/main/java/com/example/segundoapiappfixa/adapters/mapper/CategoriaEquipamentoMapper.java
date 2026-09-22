@@ -13,6 +13,5 @@ public interface CategoriaEquipamentoMapper {
     CategoriaEquipamento toModel(CategoriaEquipamentoEntity entity);
 
     @Mapping(source = "usuario.nomeCompleto", target = "nomeUsuario")
-    @Mapping(target = "dataCriacao", expression = "java(categoriaEquipamento.getDataCriacao() == null ? null : categoriaEquipamento.getDataCriacao().toLocalDate())")
     CategoriaEquipamentoOutputDTO toOutputDTO(CategoriaEquipamento categoriaEquipamento);
 }

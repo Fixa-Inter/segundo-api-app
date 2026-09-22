@@ -86,17 +86,17 @@ public class GlobalHandlerException {
 
     @ExceptionHandler({CannotAcquireLockException.class, PessimisticLockingFailureException.class})
     ResponseEntity<?> databaseLock(Exception e) {
-        return response(HttpStatus.LOCKED, e.getMessage());
+        return response(HttpStatus.LOCKED, "exception.database.lock");
     }
 
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
     ResponseEntity<?> invalidDataAccess(InvalidDataAccessApiUsageException e) {
-        return response(HttpStatus.BAD_REQUEST, e.getMessage());
+        return response(HttpStatus.BAD_REQUEST, "exception.database.invalidUsage");
     }
 
     @ExceptionHandler({JpaSystemException.class, TransactionSystemException.class})
     ResponseEntity<?> persistence(Exception e) {
-        return response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        return response(HttpStatus.INTERNAL_SERVER_ERROR, "exception.database.failure");
     }
 
     @ExceptionHandler({EntityNotFoundException.class, NoSuchElementException.class,
@@ -107,6 +107,6 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<?> generic(Exception e) {
-        return response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        return response(HttpStatus.INTERNAL_SERVER_ERROR, "exception.internal");
     }
 }

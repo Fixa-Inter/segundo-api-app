@@ -13,15 +13,18 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class UsuarioRepositoryImpl implements UsuarioRepository {
 
+    // Dependências
     private final JpaUsuarioRepository repository;
     private final UsuarioMapper mapper;
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public Optional<Usuario> findByEmail(String email) {
         UsuarioEntity entity = repository.findUsuarioByEmail(email);
         return Optional.ofNullable(entity).map(mapper::toModel);
     }
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public Optional<Usuario> findById(Long id) {
         return repository

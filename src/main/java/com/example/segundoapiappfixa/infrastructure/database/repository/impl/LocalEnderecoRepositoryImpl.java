@@ -15,9 +15,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LocalEnderecoRepositoryImpl implements LocalEnderecoRepository {
 
+    // Dependências
     private final JpaLocalEnderecoRepository localEnderecoRepository;
     private final LocalEnderecoMapper localEnderecoMapper;
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public List<LocalEndereco> findAllByEnderecoId(Long enderecoId) {
         List<LocalEnderecoEntity> localEnderecoEntities = localEnderecoRepository.findAllByEndereco_Id(enderecoId);
@@ -27,6 +29,7 @@ public class LocalEnderecoRepositoryImpl implements LocalEnderecoRepository {
                 .toList();
     }
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public Optional<LocalEndereco> findById(Long id) {
         return localEnderecoRepository

@@ -6,7 +6,7 @@ import com.example.segundoapiappfixa.infrastructure.database.entity.ModeloEquipa
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {MarcaEquipamentoMapper.class, CategoriaEquipamentoMapper.class})
+@Mapper(componentModel = "spring")
 public interface ModeloEquipamentoMapper {
     ModeloEquipamentoEntity toEntity(ModeloEquipamento model);
     ModeloEquipamento toModel(ModeloEquipamentoEntity entity);

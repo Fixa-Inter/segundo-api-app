@@ -15,10 +15,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProblemaRepositoryImpl implements ProblemaRepository {
 
+    // Dependências
     private final JpaProblemaRepositiory problemaRepositiory;
     private final ProblemaMapper problemaMapper;
 
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public List<Problema> findAllByUsuarioId(Long usuarioId) {
         List<ProblemaEntity> problemas = problemaRepositiory.findAllByUsuario_Id(usuarioId);
@@ -28,6 +30,7 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
                 .toList();
     }
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public List<Problema> findAllByLocalEnderecoIds(List<Long> localEnderecoIds) {
         if (localEnderecoIds.isEmpty()) {
@@ -39,11 +42,13 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
                 .toList();
     }
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public Optional<Problema> findById(Long problemaId) {
         return problemaRepositiory.findById(problemaId).map(problemaMapper::toModel);
     }
 
+    // Método de salvar no banco de dados
     @Override
     public Problema save(Problema problema) {
         ProblemaEntity problemaEntity = problemaMapper.toEntity(problema);

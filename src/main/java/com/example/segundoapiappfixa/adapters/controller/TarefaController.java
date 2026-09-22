@@ -27,13 +27,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TarefaController {
 
+    // UseCases
     private final ListarTarefas listarTarefas;
     private final CriarTarefa criarTarefa;
     private final AtualizarTarefa atualizarTarefa;
     private final DeletarTarefa deletarTarefa;
-    private final TarefaMapper tarefaMapper;
-    private final TarefaDynamicMapper tarefaDynamicMapper;
 
+
+    // Mappers
+    private final TarefaMapper mapper;
+    private final TarefaDynamicMapper dynamicMapper;
+
+    // GET
     @GetMapping("/{ordemServicoId}")
     public ResponseEntity<List<TarefaOutputDTO>> listar(
             @PathVariable
@@ -58,6 +63,7 @@ public class TarefaController {
         ));
     }
 
+    // POST
     @PostMapping()
     public ResponseEntity<List<TarefaOutputDTO>> cadastrar(
             @RequestBody
@@ -80,6 +86,7 @@ public class TarefaController {
                 );
     }
 
+    // PATCH
     @PatchMapping
     public ResponseEntity<TarefaOutputDTO> atualizar(
             @RequestBody
@@ -93,13 +100,14 @@ public class TarefaController {
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                tarefaMapper.toOutputDTO(atualizarTarefa.atualizar(
+                        mapper.toOutputDTO(atualizarTarefa.atualizar(
                         atualizarInputDTO,
                         authenticatedUser.id()
                 ))
         );
     }
 
+    // DELETE
     @DeleteMapping("/{tarefaId}")
     public ResponseEntity<TarefaOutputDTO> deletar(
             @PathVariable
@@ -118,15 +126,17 @@ public class TarefaController {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
 
         return ResponseEntity.ok(
-                tarefaMapper.toOutputDTO(deletarTarefa.deletarTarefa(tarefaId, isGestor, authenticatedUser.id()))
+                mapper.toOutputDTO(deletarTarefa.deletarTarefa(tarefaId, isGestor, authenticatedUser.id()))
         );
 
     }
 
+    // Mapper para DTO de saída em lote
     private List<TarefaOutputDTO> toOutputDTO(List<Tarefa> tarefas) {
-        return tarefas.stream().map(tarefaMapper::toOutputDTO).toList();
+        return tarefas.stream().map(mapper::toOutputDTO).toList();
     }
 
+    // Aplicação do Mapper Dinâmico
     private List<TarefaOutputDTO> mask(List<TarefaOutputDTO> dtos, String campos) {
         if (dtos.isEmpty()) return List.of();
 
@@ -135,7 +145,7 @@ public class TarefaController {
 
         return dtos
                 .stream()
-                .map(dto -> tarefaDynamicMapper.mask(dto, selected))
+                .map(dto -> dynamicMapper.mask(dto, selected))
                 .toList();
     }
 }

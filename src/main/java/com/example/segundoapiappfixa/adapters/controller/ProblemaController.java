@@ -6,7 +6,6 @@ import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaDetalh
 import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
 import com.example.segundoapiappfixa.application.usecase.Problema.AtualizarStatus;
 import com.example.segundoapiappfixa.application.usecase.Problema.CriarProblema;
-import com.example.segundoapiappfixa.application.usecase.Problema.ListarDetalhesProblema;
 import com.example.segundoapiappfixa.application.usecase.Problema.ListarProblemas;
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
@@ -27,13 +26,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProblemaController {
 
+    // UseCases
     private final ListarProblemas listarProblemas;
-    private final ListarDetalhesProblema listarDetalhesProblema;
     private final CriarProblema cadastrarProblema;
     private final AtualizarStatus atualizarStatus;
-    private final ProblemaMapper problemaMapper;
-    private final ProblemaDynamicMapper problemaDynamicMapper;
 
+    // Mappers
+    private final ProblemaMapper mapper;
+    private final ProblemaDynamicMapper dynamicMapper;
+
+    // GET
     @GetMapping
     public ResponseEntity<List<ProblemaOutputDTO>> listar(
             @RequestParam(required = false)
@@ -44,12 +46,12 @@ public class ProblemaController {
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                mask(toOutputDTO(listarProblemas.listarTodosProblemas(authenticatedUser.id())), campos)
+                mask(toOutputDTO(listarProblemas.listar(authenticatedUser.id())), campos)
         );
     }
 
     @GetMapping("/minhas")
-    public ResponseEntity<List<ProblemaOutputDTO>> listarProblemasPeloUsuario(
+    public ResponseEntity<List<ProblemaOutputDTO>> listarMinhas(
             @RequestParam(required = false)
             String campos,
 
@@ -58,12 +60,12 @@ public class ProblemaController {
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                mask(toOutputDTO(listarProblemas.listarProblemasPeloUsuario(authenticatedUser.id())), campos)
+                mask(toOutputDTO(listarProblemas.listarMinhas(authenticatedUser.id())), campos)
         );
     }
 
     @GetMapping("/selecionar/{problemaId}")
-    public ResponseEntity<ProblemaDetalhesOutputDTO> listarDetalhesPeloId(
+    public ResponseEntity<ProblemaDetalhesOutputDTO> listarDetalhes(
             @PathVariable
             Long problemaId,
 
@@ -78,13 +80,14 @@ public class ProblemaController {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
 
         return ResponseEntity.ok(
-                listarDetalhesProblema.listarDetalhesPeloId(
+                listarProblemas.listar(
                         problemaId, authenticatedUser.id(), isGestor)
         );
     }
 
+    // POST
     @PostMapping
-    public ResponseEntity<ProblemaDetalhesOutputDTO> criarProblema(
+    public ResponseEntity<ProblemaDetalhesOutputDTO> cadastrar(
             @Valid @RequestBody
             ProblemaCriarInputDTO input,
 
@@ -94,11 +97,12 @@ public class ProblemaController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(cadastrarProblema.criar(input, authenticatedUser.id()));
+                .body(cadastrarProblema.cadastrar(input, authenticatedUser.id()));
     }
 
+    // PATCH
     @PatchMapping("/status")
-    public ResponseEntity<ProblemaDetalhesOutputDTO> atualizarStatus(
+    public ResponseEntity<ProblemaDetalhesOutputDTO> atualizaStatus(
             @Valid @RequestBody
             ProblemaAtualizarStatusDTO input,
 
@@ -112,10 +116,12 @@ public class ProblemaController {
     }
 
 
+    // Mapper para DTO de saída em lote
     private List<ProblemaOutputDTO> toOutputDTO(List<Problema> problemas) {
-        return problemas.stream().map(problemaMapper::toOutputDTO).toList();
+        return problemas.stream().map(mapper::toOutputDTO).toList();
     }
 
+    // Aplicação do Mapper Dinâmico
     private List<ProblemaOutputDTO> mask(List<ProblemaOutputDTO> dtos, String campos) {
         if (dtos.isEmpty()) return List.of();
 
@@ -124,7 +130,7 @@ public class ProblemaController {
 
         return dtos
                 .stream()
-                .map(dto -> problemaDynamicMapper.mask(dto, selected))
+                .map(dto -> dynamicMapper.mask(dto, selected))
                 .toList();
     }
 }
