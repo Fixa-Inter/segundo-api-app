@@ -130,7 +130,7 @@ public class EquipamentoController {
         return equipamentos
                 .stream()
                 .map(mapper::toOutputDTO)
-                .toList();
+                    .toList();
     }
 
     // Aplicação do Mapper Dinâmico
