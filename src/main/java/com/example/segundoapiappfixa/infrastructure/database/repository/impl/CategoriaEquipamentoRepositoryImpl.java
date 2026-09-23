@@ -8,6 +8,7 @@ import com.example.segundoapiappfixa.infrastructure.database.entity.UsuarioEntit
 import com.example.segundoapiappfixa.infrastructure.database.repository.JpaCategoriaEquipamentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
 public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoRepository {
 

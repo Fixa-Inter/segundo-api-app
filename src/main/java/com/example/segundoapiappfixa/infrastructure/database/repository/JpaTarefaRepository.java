@@ -12,6 +12,7 @@ public interface JpaTarefaRepository extends JpaRepository<TarefaEntity, Long> {
 
     List<TarefaEntity> findAllByOrdemServico_Id(Long id);
 
+
     Long countByOrdemServico_Id(Long ordemServicoId);
 
 }

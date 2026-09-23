@@ -9,6 +9,7 @@ public interface TarefaRepository {
 
     List<Tarefa> findAllByOrdemServicoId(Long id);
 
+
     List<Tarefa> saveAll(List<Tarefa> tarefas);
 
     Long countByOrdemServicoId(Long id);

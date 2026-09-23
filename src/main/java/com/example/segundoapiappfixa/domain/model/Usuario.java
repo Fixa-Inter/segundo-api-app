@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,4 +26,5 @@ public class Usuario {
     private LocalDateTime dataCriacao;
     private Boolean estaAtivo;
     private Boolean primeiroAcesso;
+    private List<Turno> turnos;
 }
