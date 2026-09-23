@@ -20,13 +20,13 @@ public class TurnoUsuarioEntity {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "turno_id")
-    public TurnoEntity turno;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "turno_id", nullable = false)
+    private TurnoEntity turno;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    public UsuarioEntity usuario;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private UsuarioEntity usuario;
 
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;

@@ -9,6 +9,7 @@ import com.example.segundoapiappfixa.infrastructure.database.entity.TarefaEntity
 import com.example.segundoapiappfixa.infrastructure.database.repository.JpaTarefaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
 public class TarefaRepositoryImpl implements TarefaRepository {
 

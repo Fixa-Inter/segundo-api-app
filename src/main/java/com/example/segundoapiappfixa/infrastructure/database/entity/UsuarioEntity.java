@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "Usuario")
 @Getter
@@ -52,4 +53,7 @@ public class UsuarioEntity {
 
     @Column(name = "primeiro_acesso")
     private Boolean primeiroAcesso;
+
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<TurnoUsuarioEntity> turnos;
 }

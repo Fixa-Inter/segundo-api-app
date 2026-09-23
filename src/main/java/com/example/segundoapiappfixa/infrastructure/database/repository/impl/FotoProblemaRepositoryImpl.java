@@ -7,10 +7,12 @@ import com.example.segundoapiappfixa.infrastructure.database.entity.FotoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.repository.JpaFotoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
 public class FotoProblemaRepositoryImpl implements FotoRepository {
 

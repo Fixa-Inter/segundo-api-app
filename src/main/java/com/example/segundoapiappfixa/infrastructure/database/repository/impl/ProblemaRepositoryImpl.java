@@ -7,11 +7,13 @@ import com.example.segundoapiappfixa.infrastructure.database.entity.ProblemaEnti
 import com.example.segundoapiappfixa.infrastructure.database.repository.JpaProblemaRepositiory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
 public class ProblemaRepositoryImpl implements ProblemaRepository {
 

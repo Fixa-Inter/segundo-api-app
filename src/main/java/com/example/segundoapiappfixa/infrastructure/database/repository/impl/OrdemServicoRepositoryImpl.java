@@ -7,11 +7,13 @@ import com.example.segundoapiappfixa.infrastructure.database.entity.OrdemServico
 import com.example.segundoapiappfixa.infrastructure.database.repository.JpaOrdemServicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
 public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
 
