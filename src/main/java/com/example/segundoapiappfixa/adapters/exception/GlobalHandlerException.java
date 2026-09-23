@@ -86,12 +86,12 @@ public class GlobalHandlerException {
 
     @ExceptionHandler({CannotAcquireLockException.class, PessimisticLockingFailureException.class})
     ResponseEntity<?> databaseLock(Exception e) {
-        return response(HttpStatus.LOCKED, e.getMessage());
+        return response(HttpStatus.LOCKED, "exception.database.lock");
     }
 
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
     ResponseEntity<?> invalidDataAccess(InvalidDataAccessApiUsageException e) {
-        return response(HttpStatus.BAD_REQUEST, e.getMessage());
+        return response(HttpStatus.BAD_REQUEST, "exception.database.invalidUsage");
     }
 
     @ExceptionHandler({JpaSystemException.class, TransactionSystemException.class})

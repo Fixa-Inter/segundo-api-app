@@ -7,17 +7,21 @@ import com.example.segundoapiappfixa.infrastructure.database.entity.OrdemServico
 import com.example.segundoapiappfixa.infrastructure.database.repository.JpaOrdemServicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
 public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
 
+    // Dependências
     private final JpaOrdemServicoRepository jpaOrdemServicoRepository;
     private final OrdemServicoMapper ordemServicoMapper;
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public List<OrdemServico> findAllByProblemaIds(List<Long> problemaIds) {
         if (problemaIds.isEmpty()) {
@@ -29,17 +33,20 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
                 .toList();
     }
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public Optional<OrdemServico> findById(Long id) {
         return jpaOrdemServicoRepository.findById(id)
                 .map(ordemServicoMapper::toModel);
     }
 
+    // Método de deletar dados persistidos no banco de dados
     @Override
     public void delete(Long id) {
         jpaOrdemServicoRepository.deleteById(id);
     }
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public List<OrdemServico> findByUsuarioId(Long usuarioId) {
         return jpaOrdemServicoRepository

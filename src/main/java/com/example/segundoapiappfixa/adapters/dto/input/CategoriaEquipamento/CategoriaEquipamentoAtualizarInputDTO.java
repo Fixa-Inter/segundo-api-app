@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record CategoriaEquipamentoAtualizarInputDTO(
-        @NotNull(message = "validation.categoriaEquipamento.required")
+        @NotNull(message = "{validation.categoriaEquipamento.required}")
         Long id,
 
         String nome,

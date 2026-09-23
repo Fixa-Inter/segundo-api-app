@@ -8,6 +8,7 @@ import com.example.segundoapiappfixa.infrastructure.database.entity.UsuarioEntit
 import com.example.segundoapiappfixa.infrastructure.database.repository.JpaCategoriaEquipamentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,15 +16,18 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
 public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoRepository {
 
-    private final JpaCategoriaEquipamentoRepository categoriaEquipamentoRepository;
+    // Dependências
+    private final JpaCategoriaEquipamentoRepository repository;
     private final CategoriaEquipamentoMapper mapper;
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    // Método de salvar no banco de dados
     @Override
     public CategoriaEquipamento save(CategoriaEquipamento categoriaEquipamento) {
         CategoriaEquipamentoEntity entity = mapper.toEntity(categoriaEquipamento);
@@ -33,29 +37,32 @@ public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoR
                 categoriaEquipamento.getUsuario().getId()
         );
 
-        return mapper.toModel(categoriaEquipamentoRepository.save(entity));
+        return mapper.toModel(repository.save(entity));
     }
 
+    // Método de listar os registros persistidos no banco de dados
     public Optional<CategoriaEquipamento> findById(Long id) {
-        return categoriaEquipamentoRepository
+        return repository
                 .findById(id)
                 .map(mapper::toModel);
     }
 
+    // Método de deletar dados persistidos no banco de dados
     @Override
     public Optional<CategoriaEquipamento> deleteById(Long id) {
-        CategoriaEquipamentoEntity entity = categoriaEquipamentoRepository
+        CategoriaEquipamentoEntity entity = repository
                 .findById(id)
                 .orElse(null);
 
         if (entity == null) return Optional.empty();
 
-        categoriaEquipamentoRepository.deleteById(id);
+        repository.deleteById(id);
         return Optional.of(mapper.toModel(entity));
     }
 
+    // Método de listar os registros persistidos no banco de dados
     public List<CategoriaEquipamento> findByEnderecoId(Long usuarioEnderecoId) {
-        List<CategoriaEquipamentoEntity> categoriasEquipamentos = categoriaEquipamentoRepository
+        List<CategoriaEquipamentoEntity> categoriasEquipamentos = repository
                 .findAllByUsuario_Endereco_Id(usuarioEnderecoId);
 
         return categoriasEquipamentos

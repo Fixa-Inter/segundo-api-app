@@ -26,13 +26,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoriaEquipamentoController {
 
+    // UseCases
     private final ListarCategoriasEquipamento listarCategoriasEquipamento;
     private final CadastrarCategoriaEquipamento cadastrarCategoriaEquipamento;
     private final AtualizarCategoriaEquipamento atualizarCategoriaEquipamento;
     private final DeletarCategoriaEquipamento deletarCategoriaEquipamento;
-    private final CategoriaEquipamentoMapper categoriaEquipamentoMapper;
-    private final CategoriaEquipamentoDynamicMapper categoriaEquipamentoDynamicMapper;
 
+    // Mappers
+    private final CategoriaEquipamentoMapper mapper;
+    private final CategoriaEquipamentoDynamicMapper dynamicMapper;
+
+    // GET
     @GetMapping
     public ResponseEntity<List<CategoriaEquipamentoOutputDTO>> listar(
             @RequestParam(required = false)
@@ -41,7 +45,7 @@ public class CategoriaEquipamentoController {
             Authentication authentication
     ) {
         return ResponseEntity.ok(mask(
-                toOutputDTO(listarCategoriasEquipamento.listarCategoriasEquipamento(
+                toOutputDTO(listarCategoriasEquipamento.listar(
                         ControllerUtils.usuarioId(authentication)
                 )),
 
@@ -49,6 +53,27 @@ public class CategoriaEquipamentoController {
         ));
     }
 
+    @GetMapping("/{categoriaEquipamentoId}")
+    public ResponseEntity<CategoriaEquipamentoOutputDTO> listarDetalhes(
+            @PathVariable
+            Long categoriaEquipamentoId,
+
+            @RequestParam(required = false)
+            String campos,
+
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(mask(
+                mapper.toOutputDTO(listarCategoriasEquipamento.listar(
+                        categoriaEquipamentoId,
+                        ControllerUtils.usuarioId(authentication)
+                )),
+
+                campos
+        ));
+    }
+
+    // POST
     @PostMapping
     public ResponseEntity<CategoriaEquipamentoOutputDTO> cadastrar(
             @Valid
@@ -59,11 +84,12 @@ public class CategoriaEquipamentoController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(categoriaEquipamentoMapper.toOutputDTO(
+                .body(mapper.toOutputDTO(
                         cadastrarCategoriaEquipamento.cadastrar(dto,ControllerUtils.usuarioId(authentication))
                 ));
     }
 
+    // PATCH
     @PatchMapping
     public ResponseEntity<CategoriaEquipamentoOutputDTO> atualizar(
             @Valid
@@ -72,11 +98,12 @@ public class CategoriaEquipamentoController {
 
             Authentication authentication
     ) {
-        return ResponseEntity.ok(categoriaEquipamentoMapper.toOutputDTO(
+        return ResponseEntity.ok(mapper.toOutputDTO(
                         atualizarCategoriaEquipamento.atualizar(dto,ControllerUtils.usuarioId(authentication))
                 ));
     }
 
+    // DELETE
     @DeleteMapping("/{categoriaId}")
     public ResponseEntity<CategoriaEquipamentoOutputDTO> deletar(
             @PathVariable
@@ -84,7 +111,7 @@ public class CategoriaEquipamentoController {
 
             Authentication authentication
     ) {
-        return ResponseEntity.ok(categoriaEquipamentoMapper.toOutputDTO(
+        return ResponseEntity.ok(mapper.toOutputDTO(
                 deletarCategoriaEquipamento.deletar(
                         categoriaId,
                         ControllerUtils.usuarioId(authentication)
@@ -93,8 +120,17 @@ public class CategoriaEquipamentoController {
     }
 
 
+    // Mapper par DTO de saída em Lote
     private List<CategoriaEquipamentoOutputDTO> toOutputDTO(List<CategoriaEquipamento> categoriasEquipamento) {
-        return categoriasEquipamento.stream().map(categoriaEquipamentoMapper::toOutputDTO).toList();
+        return categoriasEquipamento.stream().map(mapper::toOutputDTO).toList();
+    }
+
+    // Aplicação do Mapper Dinâmico
+    private CategoriaEquipamentoOutputDTO mask(CategoriaEquipamentoOutputDTO dto, String campos) {
+        List<String> available = DynamicFieldFilter.availableFields(dto);
+        List<String> selected = DynamicFieldFilter.selectedFields(campos, available);
+
+        return dynamicMapper.mask(dto, selected);
     }
 
     private List<CategoriaEquipamentoOutputDTO> mask(List<CategoriaEquipamentoOutputDTO> dtos, String campos) {
@@ -105,7 +141,7 @@ public class CategoriaEquipamentoController {
 
         return dtos
                 .stream()
-                .map(dto -> categoriaEquipamentoDynamicMapper.mask(dto, selected))
+                .map(dto -> dynamicMapper.mask(dto, selected))
                 .toList();
     }
 

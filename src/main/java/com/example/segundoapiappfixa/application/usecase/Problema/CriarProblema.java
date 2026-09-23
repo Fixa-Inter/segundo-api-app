@@ -20,7 +20,7 @@ public class CriarProblema {
     private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public ProblemaDetalhesOutputDTO criar(ProblemaCriarInputDTO dto, Long usuarioId) {
+    public ProblemaDetalhesOutputDTO cadastrar(ProblemaCriarInputDTO dto, Long usuarioId) {
         LocalEndereco localEndereco = localEnderecoRepository.findById(dto.localEnderecoID()).orElse(null);
 
         CategoriaEquipamento categoriaEquipamento = categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId()).orElse(null);

@@ -23,11 +23,11 @@ public class ListarOrdensServico {
     private final ProblemaRepository problemaRepository;
     private final OrdemServicoRepository ordemServicoRepository;
 
-    public List<OrdemServico> listarOrdensServico(Long usuarioId) {
+    public List<OrdemServico> listar(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || usuario.getEndereco() == null || usuario.getEndereco().getId() == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("exception.request.invalid");
         }
 
         List<Long> localEnderecoIds = localEnderecoRepository
@@ -49,7 +49,7 @@ public class ListarOrdensServico {
         return ordensServico;
     }
 
-    public List<OrdemServico> listarOrdensServicoPeloUsuario(Long usuarioId) {
+    public List<OrdemServico> listarMinhas(Long usuarioId) {
 
         List<OrdemServico> ordensServico = ordemServicoRepository.findByUsuarioId(usuarioId);
         if (ordensServico.isEmpty()) throw new EntidadeNaoEncontradaException("exception.ordemServico.notFound");

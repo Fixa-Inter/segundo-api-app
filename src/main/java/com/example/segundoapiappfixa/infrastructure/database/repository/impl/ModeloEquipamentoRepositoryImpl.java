@@ -10,18 +10,22 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 @RequiredArgsConstructor
 public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoRepository {
+    // Dependências
     private final JpaModeloEquipamentoRepository repository;
     private final ModeloEquipamentoMapper mapper;
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    // Método de listar os registros persistidos no banco de dados
     public List<ModeloEquipamento> findByEnderecoId(Long enderecoId) {
         return repository
                 .findAllByUsuario_Endereco_Id(enderecoId)
@@ -30,12 +34,14 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
                 .toList();
     }
 
+    // Método de listar os registros persistidos no banco de dados
     public Optional<ModeloEquipamento> findById(Long id) {
         return repository
                 .findById(id)
                 .map(mapper::toModel);
     }
 
+    // Método de salvar no banco de dados
     public ModeloEquipamento save(ModeloEquipamento model) {
         ModeloEquipamentoEntity entity = mapper.toEntity(model);
 
@@ -47,6 +53,7 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
         return mapper.toModel(repository.save(entity));
     }
 
+    // Método de deletar dados persistidos no banco de dados
     public Optional<ModeloEquipamento> deleteById(Long id) {
         Optional<ModeloEquipamentoEntity> entity = repository.findById(id);
 

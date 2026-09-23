@@ -21,35 +21,40 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrdemServicoController {
 
-    private final OrdemServicoMapper ordemServicoMapper;
+    // UseCases
     private final ListarOrdensServico listarOrdensServico;
     private final DeletarOrdemServico deletarOrdemServico;
-    private final OrdemServicoDynamicMapper ordemServicoDynamicMapper;
 
+    // Mappers
+    private final OrdemServicoMapper mapper;
+    private final OrdemServicoDynamicMapper dynamicMapper;
+
+    // GET
     @GetMapping
-    public ResponseEntity<List<OrdemServicoOutputDTO>> listarOrdensServico(
+    public ResponseEntity<List<OrdemServicoOutputDTO>> listar(
             @RequestParam(required = false) String campos,
             Authentication authentication
     ) {
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                mask(toOutputDTO(listarOrdensServico.listarOrdensServico(authenticatedUser.id())), campos)
+                mask(toOutputDTO(listarOrdensServico.listar(authenticatedUser.id())), campos)
         );
     }
 
     @GetMapping("/minhas")
-    public ResponseEntity<List<OrdemServicoOutputDTO>> listarOrdensServicoPeloUsuario(
+    public ResponseEntity<List<OrdemServicoOutputDTO>> listarMinhas(
             @RequestParam(required = false) String campos,
             Authentication authentication
     ) {
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(
-                mask(toOutputDTO(listarOrdensServico.listarOrdensServicoPeloUsuario(authenticatedUser.id())), campos)
+                mask(toOutputDTO(listarOrdensServico.listarMinhas(authenticatedUser.id())), campos)
         );
     }
 
+    // DELETE
     @DeleteMapping("/{ordemServicoId}")
     public ResponseEntity<OrdemServicoDetalhesOutputDTO> deletarOrdemServico(
             @PathVariable
@@ -66,7 +71,7 @@ public class OrdemServicoController {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
 
         return ResponseEntity.ok(
-                deletarOrdemServico.deletarOrdemServico(
+                deletarOrdemServico.deletar(
                         ordemServicoId,
                         isGestor,
                         authenticatedUser.id()
@@ -75,10 +80,12 @@ public class OrdemServicoController {
 
     }
 
+    // Mapper para DTO de saída em lote
     private List<OrdemServicoOutputDTO> toOutputDTO(List<OrdemServico> ordemServicos) {
-        return ordemServicos.stream().map(ordemServicoMapper::toOutputDTO).toList();
+        return ordemServicos.stream().map(mapper::toOutputDTO).toList();
     }
 
+    // Aplicação do Mapper Dinâmico
     private List<OrdemServicoOutputDTO> mask(List<OrdemServicoOutputDTO> dtos, String campos) {
         if (dtos.isEmpty()) return List.of();
 
@@ -87,7 +94,7 @@ public class OrdemServicoController {
 
         return dtos
                 .stream()
-                .map(dto -> ordemServicoDynamicMapper.mask(dto, selected))
+                .map(dto -> dynamicMapper.mask(dto, selected))
                 .toList();
     }
 }

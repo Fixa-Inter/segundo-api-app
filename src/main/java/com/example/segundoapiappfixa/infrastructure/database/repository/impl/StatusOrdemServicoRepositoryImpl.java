@@ -13,13 +13,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StatusOrdemServicoRepositoryImpl implements StatusOrdemServicoRepository {
 
-    private final JpaStatusOrdemServicoRepository jpaStatusOrdemServicoRepository;
-    private final StatusOrdemServicoMapper statusOrdemServicoMapper;
+    // Dependências
+    private final JpaStatusOrdemServicoRepository repository;
+    private final StatusOrdemServicoMapper mapper;
 
+    // Método de listar os registros persistidos no banco de dados
     @Override
     public Optional<StatusOrdemServico> findById(Long id) {
-        return jpaStatusOrdemServicoRepository.findById(id)
-                .map(statusOrdemServicoMapper::toModel);
+        return repository.findById(id)
+                .map(mapper::toModel);
 
     }
 }

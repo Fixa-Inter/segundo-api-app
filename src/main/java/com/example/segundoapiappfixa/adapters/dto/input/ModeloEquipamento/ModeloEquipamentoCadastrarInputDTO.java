@@ -4,19 +4,19 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record ModeloEquipamentoCadastrarInputDTO (
-        @NotNull()
+        @NotNull(message = "{validation.modeloEquipamento.required}")
         Long id,
 
-        @NotNull()
+        @NotNull(message = "{validation.marcaEquipamento.required}")
         Long marcaEquipamentoId,
 
-        @NotNull(message = "validation.categoria.required")
+        @NotNull(message = "{validation.categoriaEquipamento.required}")
         Long categoriaEquipamentoId,
 
-        @NotBlank()
+        @NotBlank(message = "{validation.nome.required}")
         String nome,
 
-        @NotBlank()
+        @NotBlank(message = "{validation.descricao.required}")
         String descricao
 ) {
 }
