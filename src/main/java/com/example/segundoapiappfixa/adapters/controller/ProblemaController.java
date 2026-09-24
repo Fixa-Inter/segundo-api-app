@@ -2,8 +2,8 @@ package com.example.segundoapiappfixa.adapters.controller;
 
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaDetalhesOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
+import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
 import com.example.segundoapiappfixa.application.usecase.Problema.AtualizarStatus;
 import com.example.segundoapiappfixa.application.usecase.Problema.CriarProblema;
 import com.example.segundoapiappfixa.application.usecase.Problema.ListarProblemas;
@@ -43,10 +43,10 @@ public class ProblemaController {
 
             Authentication authentication
     ) {
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
-
         return ResponseEntity.ok(
-                mask(toOutputDTO(listarProblemas.listar(authenticatedUser.id())), campos)
+                mask(toOutputDTO(listarProblemas.listar(
+                        ControllerUtils.usuarioId(authentication)
+                )), campos)
         );
     }
 
@@ -57,62 +57,59 @@ public class ProblemaController {
 
             Authentication authentication
     ) {
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
-
         return ResponseEntity.ok(
-                mask(toOutputDTO(listarProblemas.listarMinhas(authenticatedUser.id())), campos)
+                mask(toOutputDTO(listarProblemas.listarMinhas(
+                        ControllerUtils.usuarioId(authentication)
+                )), campos)
         );
     }
 
     @GetMapping("/selecionar/{problemaId}")
-    public ResponseEntity<ProblemaDetalhesOutputDTO> listarDetalhes(
+    public ResponseEntity<ProblemaOutputDTO> listarDetalhes(
             @PathVariable
             Long problemaId,
 
+            @RequestParam(required = false)
+            String campos,
+
             Authentication authentication
     ) {
-
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
-
-        boolean isGestor = authentication
-                .getAuthorities()
-                .stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
-
-        return ResponseEntity.ok(
+        ProblemaOutputDTO dto = mapper.toOutputDTO(
                 listarProblemas.listar(
-                        problemaId, authenticatedUser.id(), isGestor)
+                        problemaId,
+                        ControllerUtils.usuarioId(authentication),
+                        ControllerUtils.isGestor(authentication)
+                )
         );
+
+        return ResponseEntity.ok(mask(dto, campos));
     }
 
     // POST
     @PostMapping
-    public ResponseEntity<ProblemaDetalhesOutputDTO> cadastrar(
+    public ResponseEntity<ProblemaOutputDTO> cadastrar(
             @Valid @RequestBody
             ProblemaCriarInputDTO input,
 
             Authentication authentication
     ) {
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(cadastrarProblema.cadastrar(input, authenticatedUser.id()));
+                .body(mapper.toOutputDTO(cadastrarProblema.cadastrar(
+                        input,
+                        ControllerUtils.usuarioId(authentication)
+                )));
     }
 
     // PATCH
     @PatchMapping("/status")
-    public ResponseEntity<ProblemaDetalhesOutputDTO> atualizaStatus(
+    public ResponseEntity<ProblemaOutputDTO> atualizaStatus(
             @Valid @RequestBody
             ProblemaAtualizarStatusDTO input,
 
             Authentication authentication
     ) {
-        boolean isGestor = authentication.getAuthorities()
-                .stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_GESTOR"));
-
-        return ResponseEntity.ok(atualizarStatus.atualizar(input, isGestor));
+        return ResponseEntity.ok(mapper.toOutputDTO(atualizarStatus.atualizar(input)));
     }
 
 
@@ -132,5 +129,12 @@ public class ProblemaController {
                 .stream()
                 .map(dto -> dynamicMapper.mask(dto, selected))
                 .toList();
+    }
+
+    private ProblemaOutputDTO mask(ProblemaOutputDTO dto, String campos) {
+        List<String> available = DynamicFieldFilter.availableFields(dto);
+        List<String> selected = DynamicFieldFilter.selectedFields(campos, available);
+
+        return dynamicMapper.mask(dto, selected);
     }
 }

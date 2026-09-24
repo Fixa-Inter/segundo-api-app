@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +24,5 @@ public class Problema {
     private String motivoRecusa;
     private LocalDateTime dataCriacao;
     private StatusProblema status;
+    private List<Foto> fotos;
 }

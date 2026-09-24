@@ -9,7 +9,12 @@ import java.time.LocalDate;
 public record OrdemServicoOutputDTO (
         Long id,
         String titulo,
-        LocalDate dataCriacao,
+        String descricao,
+        String categoriaProblema,
+        String categoriaEquipamento,
+        String prioridade,
+        LocalDate dataPrevista,
         String nomeUsuario,
-        TipoAcesso tipoAcesso
+        String tipoAcesso,
+        LocalDate dataCriacao
 ) { }

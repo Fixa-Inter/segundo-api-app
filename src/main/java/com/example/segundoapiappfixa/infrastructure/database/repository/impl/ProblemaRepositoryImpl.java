@@ -18,17 +18,17 @@ import java.util.Optional;
 public class ProblemaRepositoryImpl implements ProblemaRepository {
 
     // Dependências
-    private final JpaProblemaRepositiory problemaRepositiory;
-    private final ProblemaMapper problemaMapper;
+    private final JpaProblemaRepositiory repository;
+    private final ProblemaMapper mapper;
 
 
     // Método de listar os registros persistidos no banco de dados
     @Override
     public List<Problema> findAllByUsuarioId(Long usuarioId) {
-        List<ProblemaEntity> problemas = problemaRepositiory.findAllByUsuario_Id(usuarioId);
+        List<ProblemaEntity> problemas = repository.findAllByUsuario_Id(usuarioId);
 
         return problemas.stream()
-                .map(problemaMapper::toModel)
+                .map(mapper::toModel)
                 .toList();
     }
 
@@ -39,24 +39,24 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
             return List.of();
         }
 
-        return problemaRepositiory.findAllByLocalEndereco_IdIn(localEnderecoIds).stream()
-                .map(problemaMapper::toModel)
+        return repository.findAllByLocalEndereco_IdIn(localEnderecoIds).stream()
+                .map(mapper::toModel)
                 .toList();
     }
 
     // Método de listar os registros persistidos no banco de dados
     @Override
     public Optional<Problema> findById(Long problemaId) {
-        return problemaRepositiory.findById(problemaId).map(problemaMapper::toModel);
+        return repository.findById(problemaId).map(mapper::toModel);
     }
 
     // Método de salvar no banco de dados
     @Override
     public Problema save(Problema problema) {
-        ProblemaEntity problemaEntity = problemaMapper.toEntity(problema);
+        ProblemaEntity problemaEntity = mapper.toEntity(problema);
 
-        ProblemaEntity problemaPersistido = problemaRepositiory.save(problemaEntity);
-        return problemaMapper.toModel(problemaPersistido);
+        ProblemaEntity problemaPersistido = repository.save(problemaEntity);
+        return mapper.toModel(problemaPersistido);
     }
 
 }

@@ -9,6 +9,8 @@ public interface OcorrenciaRepository {
 
     List<Ocorrencia> findAllByUsuarioId(Long usuarioId);
 
+    List<Ocorrencia> findAllByLocalEnderecoIds(List<Long> localEnderecoIds);
+
     Optional<Ocorrencia> findById(Long id);
 
     Ocorrencia save(Ocorrencia ocorrencia);

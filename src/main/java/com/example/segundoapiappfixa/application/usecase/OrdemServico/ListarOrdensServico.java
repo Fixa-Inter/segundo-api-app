@@ -57,4 +57,28 @@ public class ListarOrdensServico {
         return ordensServico;
     }
 
+    public OrdemServico listar(Long ordemServicoId, Long usuarioId, boolean isGestor) {
+        OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.notFound"));
+
+
+        boolean mesmoEndereco = usuario.getEndereco().getId().equals(
+                ordemServico.getProblema().getLocalEndereco().getEndereco().getId()
+        );
+
+        boolean tecnicoVinculado = ordemServico.getUsuario() != null
+                && usuarioId.equals(ordemServico.getUsuario().getId());
+
+        if (!mesmoEndereco || (!isGestor && !tecnicoVinculado)) {
+            throw new com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException(
+                    "exception.access.denied"
+            );
+        }
+
+        return ordemServico;
+    }
+
 }

@@ -12,6 +12,8 @@ public interface OrdemServicoRepository {
 
     Optional<OrdemServico> findById(Long id);
 
+    OrdemServico save(OrdemServico ordemServico);
+
     void delete(Long id);
 
     List<OrdemServico> findByUsuarioId(Long usuarioId);

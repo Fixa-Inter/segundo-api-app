@@ -10,4 +10,6 @@ import java.util.List;
 public interface JpaOcorrenciaRepository extends JpaRepository<OcorrenciaEntity, Long> {
 
     List<OcorrenciaEntity> findAllByUsuario_Id(Long usuarioId);
+
+    List<OcorrenciaEntity> findAllByLocalEndereco_IdIn(List<Long> localEnderecoIds);
 }

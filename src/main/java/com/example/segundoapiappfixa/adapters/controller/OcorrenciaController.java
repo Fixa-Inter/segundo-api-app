@@ -37,6 +37,21 @@ public class OcorrenciaController {
     private final OcorrenciaDynamicMapper dynamicMapper;
 
     // GET
+    @GetMapping
+    public ResponseEntity<List<OcorrenciaOutputDTO>> listar(
+            @RequestParam(required = false)
+            String campos,
+
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(mask(
+                toOutputDTO(listarOcorrencias.listar(
+                        ControllerUtils.usuarioId(authentication)
+                )),
+                campos
+        ));
+    }
+
     @GetMapping("/minhas")
     public ResponseEntity<List<OcorrenciaOutputDTO>> listarMinhas(
             @RequestParam(required = false)

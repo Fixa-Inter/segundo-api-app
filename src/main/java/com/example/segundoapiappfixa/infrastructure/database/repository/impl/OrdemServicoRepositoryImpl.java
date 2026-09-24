@@ -4,7 +4,12 @@ import com.example.segundoapiappfixa.adapters.mapper.OrdemServicoMapper;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.entity.OrdemServicoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.entity.ProblemaEntity;
+import com.example.segundoapiappfixa.infrastructure.database.entity.StatusOrdemServicoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.infrastructure.database.repository.JpaOrdemServicoRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +26,9 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
     private final JpaOrdemServicoRepository jpaOrdemServicoRepository;
     private final OrdemServicoMapper ordemServicoMapper;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     // Método de listar os registros persistidos no banco de dados
     @Override
     public List<OrdemServico> findAllByProblemaIds(List<Long> problemaIds) {
@@ -28,7 +36,8 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
             return List.of();
         }
 
-        return jpaOrdemServicoRepository.findAllByProblema_IdIn(problemaIds).stream()
+        return jpaOrdemServicoRepository
+                .findAllByProblema_IdIn(problemaIds).stream()
                 .map(ordemServicoMapper::toModel)
                 .toList();
     }
@@ -36,8 +45,31 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
     // Método de listar os registros persistidos no banco de dados
     @Override
     public Optional<OrdemServico> findById(Long id) {
-        return jpaOrdemServicoRepository.findById(id)
+        return jpaOrdemServicoRepository
+                .findById(id)
                 .map(ordemServicoMapper::toModel);
+    }
+
+    // Método de salvar no banco de dados
+    @Override
+    public OrdemServico save(OrdemServico ordemServico) {
+        OrdemServicoEntity entity = ordemServicoMapper.toEntity(ordemServico);
+        entity.problema = entityManager.getReference(
+                ProblemaEntity.class,
+                ordemServico.getProblema().getId()
+        );
+
+        entity.usuario = entityManager.getReference(
+                UsuarioEntity.class,
+                ordemServico.getUsuario().getId()
+        );
+
+        entity.statusOrdemServico = entityManager.getReference(
+                StatusOrdemServicoEntity.class,
+                ordemServico.getStatusOrdemServico().getId()
+        );
+
+        return ordemServicoMapper.toModel(jpaOrdemServicoRepository.save(entity));
     }
 
     // Método de deletar dados persistidos no banco de dados

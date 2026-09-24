@@ -1,12 +1,9 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
-import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaDetalhesOutputDTO;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
-import com.example.segundoapiappfixa.domain.model.Foto;
 import com.example.segundoapiappfixa.domain.model.LocalEndereco;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.model.Usuario;
-import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
@@ -21,7 +18,6 @@ public class ListarProblemas {
 
     private final UsuarioRepository usuarioRepository;
     private final LocalEnderecoRepository localEnderecoRepository;
-    private final FotoRepository fotoRepository;
     private final ProblemaRepository problemaRepository;
 
     public List<Problema> listarMinhas(Long usuarioId) {
@@ -52,7 +48,7 @@ public class ListarProblemas {
         return problemas;
     }
 
-    public ProblemaDetalhesOutputDTO listar(Long id, Long usuarioId, boolean isGestor) {
+    public Problema listar(Long id, Long usuarioId, boolean isGestor) {
 
         Problema problema = problemaRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.problema.notFound"));
@@ -73,22 +69,7 @@ public class ListarProblemas {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        List<String> urlFotos = fotoRepository
-                .findAllByProblemaId(id)
-                .stream()
-                .map(Foto::getUrl)
-                .toList();
-
-
-        return new ProblemaDetalhesOutputDTO(
-                problema.getTitulo(),
-                problema.getDescricaoProblema(),
-                problema.getLocalEndereco().getNome(),
-                problema.getDescricaoLocal(),
-                problema.getCategoriaEquipamento().getNome(),
-                problema.getStatus().getNome(),
-                urlFotos
-        );
+        return problema;
     }
 
 }

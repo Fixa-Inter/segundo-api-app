@@ -41,6 +41,20 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
+    public List<Ocorrencia> findAllByLocalEnderecoIds(List<Long> localEnderecoIds) {
+        if (localEnderecoIds == null || localEnderecoIds.isEmpty()) {
+            return List.of();
+        }
+
+        return jpaRepository
+                .findAllByLocalEndereco_IdIn(localEnderecoIds)
+                .stream()
+                .map(mapper::toModel)
+                .toList();
+    }
+
+    // Método de listar os registros persistidos no banco de dados
+    @Override
     public Optional<Ocorrencia> findById(Long id) {
         return jpaRepository
                 .findById(id)

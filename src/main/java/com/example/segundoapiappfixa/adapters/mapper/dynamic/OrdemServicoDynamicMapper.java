@@ -10,8 +10,13 @@ public class OrdemServicoDynamicMapper {
         return new OrdemServicoOutputDTO(
                 fields.contains("id") ? dto.id() : null,
                 fields.contains("titulo") ? dto.titulo() : null,
-                fields.contains("dataCriacao") ? dto.dataCriacao() : null,
+                fields.contains("descricao") ? dto.descricao() : null,
+                fields.contains("categoriaProblema") ? dto.categoriaProblema() : null,
+                fields.contains("categoriaEquipamento") ? dto.categoriaEquipamento() : null,
+                fields.contains("prioridade") ? dto.prioridade() : null,
+                fields.contains("dataPrevista") ? dto.dataPrevista() : null,
                 fields.contains("nomeUsuario") ? dto.nomeUsuario() : null,
-                fields.contains("tipoAcesso") ? dto.tipoAcesso() : null);
+                fields.contains("tipoAcesso") ? dto.tipoAcesso() : null,
+                fields.contains("dataCriacao") ? dto.dataCriacao() : null);
     }
 }
