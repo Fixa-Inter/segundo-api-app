@@ -1,6 +1,9 @@
 package com.example.segundoapiappfixa.infrastructure.database.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.OcorrenciaMapper;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOcorrenciaQueryParam;
+import com.example.segundoapiappfixa.infrastructure.database.repository.specs.OcorrenciaSpecs;
+import com.example.segundoapiappfixa.infrastructure.database.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Ocorrencia;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.entity.EquipamentoEntity;
@@ -13,6 +16,10 @@ import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,14 +36,52 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // Método de listar os registros persistidos no banco de dados
-    @Override
-    public List<Ocorrencia> findAllByUsuarioId(Long usuarioId) {
-        return jpaRepository
-                .findAllByUsuario_Id(usuarioId)
+    private List<Ocorrencia> buscar(Specification<OcorrenciaEntity> base, FiltrosOcorrenciaQueryParam filtros) {
+        Specification<OcorrenciaEntity> specification = base
+                .and(OcorrenciaSpecs.findByTitulo(filtros.titulo()))
+                .and(OcorrenciaSpecs.findByDescricaoOcorrencia(filtros.descricaoOcorrencia()))
+                .and(OcorrenciaSpecs.findByCategoriaProblema(filtros.categoriaProblema()))
+                .and(OcorrenciaSpecs.findByPrioridade(filtros.prioridade()))
+                .and(OcorrenciaSpecs.findByLocalEndereco(filtros.localEndereco()))
+                .and(OcorrenciaSpecs.findByDescricaoLocal(filtros.descricaoLocal()))
+                .and(OcorrenciaSpecs.findByEquipamentoCodigo(filtros.equipamentoCodigo()))
+                .and(OcorrenciaSpecs.findByNomeUsuario(filtros.nomeUsuario()))
+                .and(OcorrenciaSpecs.findByTipoAcesso(filtros.tipoAcesso()))
+                .and(OcorrenciaSpecs.findByDataCriacaoMin(filtros.dataCriacaoMin()))
+                .and(OcorrenciaSpecs.findByDataCriacaoMax(filtros.dataCriacaoMax()));
+
+        Sort sort = SortUtils.definirSort(
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                filtros.direcaoOrdenacao()
+        );
+
+        Pageable pageable = filtros.limite() == null ? null :
+                PageRequest.of(0, filtros.limite(), sort);
+
+        List<OcorrenciaEntity> entidades = pageable != null
+                ? jpaRepository.findAll(specification, pageable).getContent()
+                : jpaRepository.findAll(specification, sort);
+
+        return entidades
                 .stream()
                 .map(mapper::toModel)
                 .toList();
+    }
+
+    // Método de listar os registros persistidos no banco de dados
+    @Override
+    public List<Ocorrencia> findAllByUsuarioId(Long usuarioId, FiltrosOcorrenciaQueryParam filtros) {
+        return buscar(OcorrenciaSpecs.findByUsuarioId(usuarioId), filtros);
+    }
+
+    // Método de listar os registros persistidos no banco de dados
+    @Override
+    public List<Ocorrencia> findAllByLocalEnderecoIds(List<Long> localEnderecoIds, FiltrosOcorrenciaQueryParam filtros) {
+        if (localEnderecoIds == null || localEnderecoIds.isEmpty()) {
+            return List.of();
+        }
+
+        return buscar(OcorrenciaSpecs.findByLocalEnderecoIds(localEnderecoIds), filtros);
     }
 
     // Método de listar os registros persistidos no banco de dados
@@ -51,33 +96,6 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
     @Override
     public Ocorrencia save(Ocorrencia ocorrencia) {
         OcorrenciaEntity entity = toEntityWithReferences(ocorrencia);
-        return mapper.toModel(jpaRepository.save(entity));
-    }
-
-    // Método de atualizar dados dentro do banco de dados
-    @Override
-    public Ocorrencia update(Long id, Ocorrencia ocorrencia) {
-        OcorrenciaEntity entity = jpaRepository.findById(id).orElse(null);
-        if (entity == null) return null;
-
-        if (ocorrencia.getLocalEndereco() != null) {
-            entity.setLocalEndereco(reference(LocalEnderecoEntity.class, ocorrencia.getLocalEndereco().getId()));
-        }
-
-        if (ocorrencia.getEquipamento() != null) {
-            entity.setEquipamento(reference(EquipamentoEntity.class, ocorrencia.getEquipamento().getId()));
-        }
-
-        if (ocorrencia.getCategoriaProblema() != null) entity.setCategoriaProblema(ocorrencia.getCategoriaProblema());
-
-        if (ocorrencia.getPrioridade() != null) entity.setPrioridade(ocorrencia.getPrioridade());
-
-        if (ocorrencia.getTitulo() != null) entity.setTitulo(ocorrencia.getTitulo());
-
-        if (ocorrencia.getDescricaoOcorrencia() != null) entity.setDescricaoOcorrencia(ocorrencia.getDescricaoOcorrencia());
-
-        if (ocorrencia.getDescricaoLocal() != null) entity.setDescricaoLocal(ocorrencia.getDescricaoLocal());
-
         return mapper.toModel(jpaRepository.save(entity));
     }
 

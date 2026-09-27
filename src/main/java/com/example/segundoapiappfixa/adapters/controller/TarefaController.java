@@ -3,14 +3,15 @@ package com.example.segundoapiappfixa.adapters.controller;
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaCriarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Tarefa.TarefaOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
 import com.example.segundoapiappfixa.adapters.mapper.TarefaMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.TarefaDynamicMapper;
+import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
 import com.example.segundoapiappfixa.application.usecase.Tarefa.AtualizarTarefa;
 import com.example.segundoapiappfixa.application.usecase.Tarefa.CriarTarefa;
 import com.example.segundoapiappfixa.application.usecase.Tarefa.DeletarTarefa;
 import com.example.segundoapiappfixa.application.usecase.Tarefa.ListarTarefas;
-import com.example.segundoapiappfixa.auth.dto.AuthenticatedUser;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -47,20 +48,37 @@ public class TarefaController {
             @RequestParam(required = false)
             String campos,
 
+            @ModelAttribute
+            FiltrosTarefaQueryParam filtros,
+
             Authentication authentication
     ) {
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
-
-        boolean isGestor = authentication
-                .getAuthorities()
-                .stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
-
         return ResponseEntity.ok(
-                mask(toOutputDTO(listarTarefas.listarTarefasPelaOrdemServico(
-                        ordemServicoId, isGestor, authenticatedUser.id()
+                mask(toOutputDTO(listarTarefas.listar(
+                        ordemServicoId,
+                        ControllerUtils.isGestor(authentication),
+                        ControllerUtils.usuarioId(authentication), filtros
                 )), campos
         ));
+    }
+
+    @GetMapping("/selecionar/{tarefaId}")
+    public ResponseEntity<TarefaOutputDTO> listarDetalhes(
+            @PathVariable
+            Long tarefaId,
+
+            @RequestParam(required = false)
+            String campos,
+
+            Authentication authentication
+    ) {
+        TarefaOutputDTO dto = mapper.toOutputDTO(listarTarefas.listarDetalhes(
+                tarefaId,
+                ControllerUtils.isGestor(authentication),
+                ControllerUtils.usuarioId(authentication)
+        ));
+
+        return ResponseEntity.ok(mask(dto, campos));
     }
 
     // POST
@@ -71,17 +89,13 @@ public class TarefaController {
             @NotEmpty(message = "{validation.tarefa.lista.required}")
             List<@Valid TarefaCriarInputDTO> tarefaCriarInputDTOS,
 
-            @RequestParam(required = false) String campos,
-
             Authentication authentication
     ) {
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
-
-        return ResponseEntity
+       return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(toOutputDTO(criarTarefa.criarTarefas(
                                 tarefaCriarInputDTOS,
-                                authenticatedUser.id()
+                                ControllerUtils.usuarioId(authentication)
                         ))
                 );
     }
@@ -93,16 +107,12 @@ public class TarefaController {
             @Valid
             TarefaAtualizarInputDTO atualizarInputDTO,
 
-            @RequestParam(required = false) String campos,
-
             Authentication authentication
     ) {
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
-
         return ResponseEntity.ok(
                         mapper.toOutputDTO(atualizarTarefa.atualizar(
                         atualizarInputDTO,
-                        authenticatedUser.id()
+                        ControllerUtils.usuarioId(authentication)
                 ))
         );
     }
@@ -113,20 +123,15 @@ public class TarefaController {
             @PathVariable
             Long tarefaId,
 
-            @RequestParam(required = false) String campos,
-
             Authentication authentication
     ) {
 
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
-
-        boolean isGestor = authentication
-                .getAuthorities()
-                .stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_GESTOR"));
-
         return ResponseEntity.ok(
-                mapper.toOutputDTO(deletarTarefa.deletarTarefa(tarefaId, isGestor, authenticatedUser.id()))
+                mapper.toOutputDTO(deletarTarefa.deletarTarefa(
+                        tarefaId,
+                        ControllerUtils.isGestor(authentication),
+                        ControllerUtils.usuarioId(authentication)
+                ))
         );
 
     }
@@ -147,5 +152,12 @@ public class TarefaController {
                 .stream()
                 .map(dto -> dynamicMapper.mask(dto, selected))
                 .toList();
+    }
+
+    private TarefaOutputDTO mask(TarefaOutputDTO dto, String campos) {
+        List<String> available = DynamicFieldFilter.availableFields(dto);
+        List<String> selected = DynamicFieldFilter.selectedFields(campos, available);
+
+        return dynamicMapper.mask(dto, selected);
     }
 }

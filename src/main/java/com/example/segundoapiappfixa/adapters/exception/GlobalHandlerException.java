@@ -17,6 +17,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.BindException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.persistence.EntityNotFoundException;
@@ -68,6 +70,11 @@ public class GlobalHandlerException {
         return response(HttpStatus.BAD_REQUEST, "exception.request.invalid");
     }
 
+    @ExceptionHandler({BindException.class, MethodArgumentTypeMismatchException.class})
+    ResponseEntity<?> invalidParameter(Exception e) {
+        return response(HttpStatus.BAD_REQUEST, "exception.parameter.invalid");
+    }
+
     @ExceptionHandler({ConstraintViolationException.class, ConversionFailedException.class,
             IllegalArgumentException.class})
     ResponseEntity<?> invalidInput(Exception e) {
@@ -96,7 +103,7 @@ public class GlobalHandlerException {
 
     @ExceptionHandler({JpaSystemException.class, TransactionSystemException.class})
     ResponseEntity<?> persistence(Exception e) {
-        return response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        return response(HttpStatus.INTERNAL_SERVER_ERROR, "exception.database.failure");
     }
 
     @ExceptionHandler({EntityNotFoundException.class, NoSuchElementException.class,
@@ -107,6 +114,6 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<?> generic(Exception e) {
-        return response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        return response(HttpStatus.INTERNAL_SERVER_ERROR, "exception.internal");
     }
 }

@@ -1,6 +1,9 @@
 package com.example.segundoapiappfixa.infrastructure.database.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.TarefaMapper;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
+import com.example.segundoapiappfixa.infrastructure.database.repository.specs.TarefaSpecs;
+import com.example.segundoapiappfixa.infrastructure.database.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.entity.OrdemServicoEntity;
@@ -15,6 +18,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
 @Repository
 @Transactional
@@ -37,10 +44,27 @@ public class TarefaRepositoryImpl implements TarefaRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Tarefa> findAllByOrdemServicoId(Long id) {
-        List<TarefaEntity> tarefaEntities = jpaTarefaRepository.findAllByOrdemServico_Id(id);
+    public List<Tarefa> findAllByOrdemServicoId(Long id, FiltrosTarefaQueryParam filtros) {
+        Specification<TarefaEntity> specification = Specification.where(TarefaSpecs.findByOrdemServicoId(id))
+                .and(TarefaSpecs.findByTituloTarefa(filtros.titulo()))
+                .and(TarefaSpecs.findByDescricao(filtros.descricao()))
+                .and(TarefaSpecs.findByStatusOrdemServico(filtros.status()))
+                .and(TarefaSpecs.findByUsuarioResponsavel(filtros.usuarioResponsavel()));
 
-        return tarefaEntities.stream()
+        Sort sort = SortUtils.definirSort(
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                filtros.direcaoOrdenacao()
+        );
+
+        Pageable pageable = filtros.limite() == null ? null :
+                PageRequest.of(0, filtros.limite(), sort);
+
+        List<TarefaEntity> tarefaEntities = pageable != null
+                ? jpaTarefaRepository.findAll(specification, pageable).getContent()
+                : jpaTarefaRepository.findAll(specification, sort);
+
+        return tarefaEntities
+                .stream()
                 .map(tarefaMapper::toModel)
                 .toList();
     }
@@ -87,10 +111,5 @@ public class TarefaRepositoryImpl implements TarefaRepository {
 
         jpaTarefaRepository.deleteById(id);
         return Optional.of(tarefaMapper.toModel(tarefaEntity));
-    }
-
-    // Método de listar os registros persistidos no banco de dados
-    public Long countByOrdemServicoId(Long id) {
-        return jpaTarefaRepository.countByOrdemServico_Id(id);
     }
 }

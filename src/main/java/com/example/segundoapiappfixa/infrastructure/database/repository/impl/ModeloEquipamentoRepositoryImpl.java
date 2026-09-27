@@ -1,6 +1,9 @@
 package com.example.segundoapiappfixa.infrastructure.database.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.ModeloEquipamentoMapper;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosModeloEquipamentoQueryParam;
+import com.example.segundoapiappfixa.infrastructure.database.repository.specs.ModeloEquipamentoSpecs;
+import com.example.segundoapiappfixa.infrastructure.database.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.ModeloEquipamento;
 import com.example.segundoapiappfixa.domain.repository.ModeloEquipamentoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.entity.ModeloEquipamentoEntity;
@@ -11,6 +14,10 @@ import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,9 +33,26 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
     private EntityManager entityManager;
 
     // Método de listar os registros persistidos no banco de dados
-    public List<ModeloEquipamento> findByEnderecoId(Long enderecoId) {
-        return repository
-                .findAllByUsuario_Endereco_Id(enderecoId)
+    public List<ModeloEquipamento> findByEnderecoId(Long enderecoId, FiltrosModeloEquipamentoQueryParam filtros) {
+        Specification<ModeloEquipamentoEntity> specification = Specification.where(ModeloEquipamentoSpecs.findByEnderecoId(enderecoId))
+                .and(ModeloEquipamentoSpecs.findByNome(filtros.nome()))
+                .and(ModeloEquipamentoSpecs.findByDescricao(filtros.descricao()))
+                .and(ModeloEquipamentoSpecs.findByMarca(filtros.marca()))
+                .and(ModeloEquipamentoSpecs.findByCategoria(filtros.categoria()));
+
+        Sort sort = SortUtils.definirSort(
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                filtros.direcaoOrdenacao()
+        );
+
+        Pageable pageable = filtros.limite() == null ? null :
+                PageRequest.of(0, filtros.limite(), sort);
+
+        List<ModeloEquipamentoEntity> modelos = pageable != null
+                ? repository.findAll(specification, pageable).getContent()
+                : repository.findAll(specification, sort);
+
+        return modelos
                 .stream()
                 .map(mapper::toModel)
                 .toList();

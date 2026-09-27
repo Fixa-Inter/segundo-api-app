@@ -1,18 +1,29 @@
 package com.example.segundoapiappfixa.domain.repository;
 
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEquipamentoQueryParam;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.List;
 
 public interface EquipamentoRepository {
 
-    List<Equipamento> findByModeloEquipamentoId(Long modeloEquipamentoId);
+    Map<String, String> camposNormalizados = Map.of(
+            "codigo", "codigo",
+            "local_endereco", "localEndereco.nome",
+            "usuario", "usuario.nomeCompleto"
+    );
 
-    Optional<Equipamento> findById(Long id);
+    List<Equipamento> findByModeloEquipamentoId(
+            Long modeloEquipamentoId,
+            FiltrosEquipamentoQueryParam filtros
+    );
+
+    Optional<Equipamento> findById(Long equipamentoId);
 
     Equipamento save(Equipamento equipamento);
 
-    Optional<Equipamento> deleteById(Long id);
+    Optional<Equipamento> deleteById(Long equipamentoId);
 
 }

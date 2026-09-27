@@ -51,6 +51,6 @@ public class AtualizarOcorrencia {
 
         if (dto.descricaoLocal() != null) atual.setDescricaoLocal(dto.descricaoLocal());
 
-        return ocorrenciaRepository.update(id, atual);
+        return ocorrenciaRepository.save(atual);
     }
 }
