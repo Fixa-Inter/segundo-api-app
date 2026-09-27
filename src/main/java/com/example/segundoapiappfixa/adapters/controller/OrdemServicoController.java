@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 
 import com.example.segundoapiappfixa.adapters.dto.output.OrdemServico.OrdemServicoOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOrdemServicoQueryParam;
+import com.example.segundoapiappfixa.adapters.controller.contract.OrdemServicoControllerContract;
 import com.example.segundoapiappfixa.adapters.mapper.OrdemServicoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.OrdemServicoDynamicMapper;
@@ -26,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/os")
 @RequiredArgsConstructor
-public class OrdemServicoController {
+public class OrdemServicoController implements OrdemServicoControllerContract {
 
     // UseCases
     private final ListarOrdensServico listarOrdensServico;

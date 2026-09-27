@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.adapters.controller;
 
 import com.example.segundoapiappfixa.adapters.dto.output.Usuario.UsuarioOutputDTO;
+import com.example.segundoapiappfixa.adapters.controller.contract.PerfilControllerContract;
 import com.example.segundoapiappfixa.adapters.mapper.UsuarioMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.UsuarioDynamicMapper;
@@ -19,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/perfil")
 @RequiredArgsConstructor
-public class PerfilController {
+public class PerfilController implements PerfilControllerContract {
 
     // UseCases
     private final DetalhesPerfil detalhesPerfil;

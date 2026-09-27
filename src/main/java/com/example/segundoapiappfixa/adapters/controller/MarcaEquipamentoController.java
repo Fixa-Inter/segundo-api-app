@@ -4,6 +4,7 @@ import com.example.segundoapiappfixa.adapters.dto.input.MarcaEquipamento.MarcaEq
 import com.example.segundoapiappfixa.adapters.dto.input.MarcaEquipamento.MarcaEquipamentoCadastrarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.MarcaEquipamento.MarcaEquipamentoOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosMarcaEquipamentoQueryParam;
+import com.example.segundoapiappfixa.adapters.controller.contract.MarcaEquipamentoControllerContract;
 import com.example.segundoapiappfixa.adapters.mapper.MarcaEquipamentoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.MarcaEquipamentoDynamicMapper;
@@ -23,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/equipamentos/marcas")
 @RequiredArgsConstructor
-public class MarcaEquipamentoController {
+public class MarcaEquipamentoController implements MarcaEquipamentoControllerContract {
 
     // UseCases
     private final ListarMarcasEquipamento listarMarcasEquipamento;

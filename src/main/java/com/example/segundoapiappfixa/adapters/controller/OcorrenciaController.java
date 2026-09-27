@@ -4,6 +4,7 @@ import com.example.segundoapiappfixa.adapters.dto.input.Ocorrencia.OcorrenciaAtu
 import com.example.segundoapiappfixa.adapters.dto.input.Ocorrencia.OcorrenciaCadastrarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Ocorrencia.OcorrenciaOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOcorrenciaQueryParam;
+import com.example.segundoapiappfixa.adapters.controller.contract.OcorrenciaControllerContract;
 import com.example.segundoapiappfixa.adapters.mapper.OcorrenciaMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.OcorrenciaDynamicMapper;
@@ -25,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/ocorrencias")
 @RequiredArgsConstructor
-public class OcorrenciaController {
+public class OcorrenciaController implements OcorrenciaControllerContract {
 
     // UseCases
     private final ListarOcorrencias listarOcorrencias;

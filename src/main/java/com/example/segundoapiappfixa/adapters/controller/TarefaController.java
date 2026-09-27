@@ -4,6 +4,7 @@ import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaAtualizarIn
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaCriarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Tarefa.TarefaOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
+import com.example.segundoapiappfixa.adapters.controller.contract.TarefaControllerContract;
 import com.example.segundoapiappfixa.adapters.mapper.TarefaMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.TarefaDynamicMapper;
@@ -26,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tarefas")
 @RequiredArgsConstructor
-public class TarefaController {
+public class TarefaController implements TarefaControllerContract {
 
     // UseCases
     private final ListarTarefas listarTarefas;

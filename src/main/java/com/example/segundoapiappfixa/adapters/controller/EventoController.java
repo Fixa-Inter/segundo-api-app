@@ -4,6 +4,7 @@ import com.example.segundoapiappfixa.adapters.dto.input.Evento.EventoAtualizarIn
 import com.example.segundoapiappfixa.adapters.dto.input.Evento.EventoCadastrarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Evento.EventoOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEventosQueryParam;
+import com.example.segundoapiappfixa.adapters.controller.contract.EventoControllerContract;
 import com.example.segundoapiappfixa.adapters.mapper.EventoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.EventoDynamicMapper;
@@ -25,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/eventos")
 @RequiredArgsConstructor
-public class EventoController {
+public class EventoController implements EventoControllerContract {
 
     // UseCases
     private final ListarEventos listarEventos;

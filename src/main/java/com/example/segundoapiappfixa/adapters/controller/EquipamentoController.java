@@ -4,6 +4,7 @@ import com.example.segundoapiappfixa.adapters.dto.input.Equipamento.EquipamentoA
 import com.example.segundoapiappfixa.adapters.dto.input.Equipamento.EquipamentoCadastrarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Equipamento.EquipamentoOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEquipamentoQueryParam;
+import com.example.segundoapiappfixa.adapters.controller.contract.EquipamentoControllerContract;
 import com.example.segundoapiappfixa.adapters.mapper.EquipamentoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.EquipamentoDynamicMapper;
@@ -25,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/equipamentos")
 @RequiredArgsConstructor
-public class EquipamentoController {
+public class EquipamentoController implements EquipamentoControllerContract {
 
     // UseCases
     private final ListarEquipamentos listarEquipamentos;
