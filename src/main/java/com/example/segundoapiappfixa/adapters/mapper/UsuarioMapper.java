@@ -1,6 +1,5 @@
 package com.example.segundoapiappfixa.adapters.mapper;
 
-import com.example.segundoapiappfixa.adapters.dto.output.Usuario.TecnicoOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Usuario.UsuarioOutputDTO;
 import com.example.segundoapiappfixa.domain.model.Turno;
 import com.example.segundoapiappfixa.domain.model.Usuario;
@@ -25,10 +24,6 @@ public interface UsuarioMapper {
     @Mapping(source = "endereco.cnpj", target = "cnpjEndereco")
     @Mapping(source = "turnos", target = "turnos")
     UsuarioOutputDTO toOutputDTO(Usuario usuario);
-
-    @Mapping(source = "tipoAcesso.nome", target = "tipoAcesso")
-    @Mapping(source = "turnos", target = "turnos")
-    TecnicoOutputDTO toTecnicoOutputDTO(Usuario usuario);
 
     default List<Turno> mapTurnos(List<TurnoUsuarioEntity> turnos) {
         if (turnos == null) return List.of();

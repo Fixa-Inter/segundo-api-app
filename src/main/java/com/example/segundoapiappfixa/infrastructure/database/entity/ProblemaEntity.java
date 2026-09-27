@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "Problema")
 @Getter
@@ -50,4 +51,7 @@ public class ProblemaEntity {
 
     @Column(name = "status")
     private StatusProblema status;
+
+    @OneToMany(mappedBy = "problema")
+    private List<FotoEntity> fotos;
 }

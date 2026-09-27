@@ -1,12 +1,10 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
-import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaDetalhesOutputDTO;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
-import com.example.segundoapiappfixa.domain.model.Foto;
 import com.example.segundoapiappfixa.domain.model.LocalEndereco;
 import com.example.segundoapiappfixa.domain.model.Problema;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import com.example.segundoapiappfixa.domain.model.Usuario;
-import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
@@ -21,18 +19,17 @@ public class ListarProblemas {
 
     private final UsuarioRepository usuarioRepository;
     private final LocalEnderecoRepository localEnderecoRepository;
-    private final FotoRepository fotoRepository;
     private final ProblemaRepository problemaRepository;
 
-    public List<Problema> listarMinhas(Long usuarioId) {
-        List<Problema> problemas = problemaRepository.findAllByUsuarioId(usuarioId);
+    public List<Problema> listarMinhas(Long usuarioId, FiltrosProblemaQueryParam filtros) {
+        List<Problema> problemas = problemaRepository.findAllByUsuarioId(usuarioId, filtros);
 
         if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
 
         return problemas;
     }
 
-    public List<Problema> listar(Long usuarioId) {
+    public List<Problema> listar(Long usuarioId, FiltrosProblemaQueryParam filtros) {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || usuario.getEndereco() == null || usuario.getEndereco().getId() == null) {
@@ -45,14 +42,14 @@ public class ListarProblemas {
                 .map(LocalEndereco::getId)
                 .toList();
 
-        List<Problema> problemas = problemaRepository.findAllByLocalEnderecoIds(localEnderecoIds);
+        List<Problema> problemas = problemaRepository.findAllByLocalEnderecoIds(localEnderecoIds, filtros);
 
         if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
 
         return problemas;
     }
 
-    public ProblemaDetalhesOutputDTO listar(Long id, Long usuarioId, boolean isGestor) {
+    public Problema listar(Long id, Long usuarioId, boolean isGestor) {
 
         Problema problema = problemaRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.problema.notFound"));
@@ -73,22 +70,7 @@ public class ListarProblemas {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        List<String> urlFotos = fotoRepository
-                .findAllByProblemaId(id)
-                .stream()
-                .map(Foto::getUrl)
-                .toList();
-
-
-        return new ProblemaDetalhesOutputDTO(
-                problema.getTitulo(),
-                problema.getDescricaoProblema(),
-                problema.getLocalEndereco().getNome(),
-                problema.getDescricaoLocal(),
-                problema.getCategoriaEquipamento().getNome(),
-                problema.getStatus().getNome(),
-                urlFotos
-        );
+        return problema;
     }
 
 }

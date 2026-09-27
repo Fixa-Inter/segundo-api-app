@@ -6,8 +6,9 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record TarefaOutputDTO(
         Long id,
-        String tituloTarefa,
-        String tituloOrdemServico,
+        String titulo,
+        String descricao,
+        String status,
         String usuarioResponsavel,
         LocalDate dataCriacao
 ) {

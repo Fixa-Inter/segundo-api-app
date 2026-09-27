@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 import com.example.segundoapiappfixa.adapters.dto.input.CategoriaEquipamento.CategoriaEquipamentoAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.CategoriaEquipamento.CategoriaEquipamentoCadastrarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.CategoriaEquipamento.CategoriaEquipamentoOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosCategoriaEquipamentoQueryParam;
 import com.example.segundoapiappfixa.adapters.mapper.CategoriaEquipamentoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.CategoriaEquipamentoDynamicMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
@@ -39,6 +40,9 @@ public class CategoriaEquipamentoController {
     // GET
     @GetMapping
     public ResponseEntity<List<CategoriaEquipamentoOutputDTO>> listar(
+            @ModelAttribute
+            FiltrosCategoriaEquipamentoQueryParam filtros,
+
             @RequestParam(required = false)
             String campos,
 
@@ -46,7 +50,8 @@ public class CategoriaEquipamentoController {
     ) {
         return ResponseEntity.ok(mask(
                 toOutputDTO(listarCategoriasEquipamento.listar(
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication),
+                        filtros
                 )),
 
                 campos

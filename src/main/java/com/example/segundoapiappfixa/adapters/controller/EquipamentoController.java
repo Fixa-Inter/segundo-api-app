@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 import com.example.segundoapiappfixa.adapters.dto.input.Equipamento.EquipamentoAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Equipamento.EquipamentoCadastrarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Equipamento.EquipamentoOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEquipamentoQueryParam;
 import com.example.segundoapiappfixa.adapters.mapper.EquipamentoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.EquipamentoDynamicMapper;
@@ -42,6 +43,9 @@ public class EquipamentoController {
             @PathVariable
             Long modeloEquipamentoId,
 
+            @ModelAttribute
+            FiltrosEquipamentoQueryParam filtros,
+
             @RequestParam(required = false)
             String campos,
 
@@ -50,7 +54,8 @@ public class EquipamentoController {
         return ResponseEntity.ok(mask(
                 toOutputDTO(listarEquipamentos.listar(
                         modeloEquipamentoId,
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication),
+                        filtros
                 )),
                 campos
         ));
