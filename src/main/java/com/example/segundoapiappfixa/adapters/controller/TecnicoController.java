@@ -20,6 +20,7 @@ import com.example.segundoapiappfixa.domain.model.Aptidao;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
+import com.example.segundoapiappfixa.adapters.controller.contract.TecnicoControllerContract;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tecnicos")
 @RequiredArgsConstructor
-public class TecnicoController {
+public class TecnicoController implements TecnicoControllerContract {
 
     // UseCases
     private final ListarTecnicos listarTecnicos;
