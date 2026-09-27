@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 import com.example.segundoapiappfixa.adapters.dto.input.Evento.EventoAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Evento.EventoCadastrarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Evento.EventoOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEventosQueryParam;
 import com.example.segundoapiappfixa.adapters.mapper.EventoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.EventoDynamicMapper;
@@ -39,19 +40,28 @@ public class EventoController {
     // GET
     @GetMapping
     public ResponseEntity<List<EventoOutputDTO>> listar(
-            @RequestParam(required = false) String campos,
+            @RequestParam(required = false)
+            String campos,
+
+            @ModelAttribute
+            FiltrosEventosQueryParam filtros,
+
             Authentication authentication
     ) {
         return ResponseEntity.ok(mask(
-                toOutputDTO(listarEventos.listar(ControllerUtils.usuarioId(authentication))),
+                toOutputDTO(listarEventos.listar(ControllerUtils.usuarioId(authentication), filtros)),
                 campos
         ));
     }
 
     @GetMapping("/{eventoId}")
     public ResponseEntity<EventoOutputDTO> listarDetalhes(
-            @PathVariable Long eventoId,
-            @RequestParam(required = false) String campos,
+            @PathVariable
+            Long eventoId,
+
+            @RequestParam(required = false)
+            String campos,
+
             Authentication authentication
     ) {
         return ResponseEntity.ok(mask(
@@ -66,7 +76,10 @@ public class EventoController {
     // POST
     @PostMapping
     public ResponseEntity<EventoOutputDTO> cadastrar(
-            @Valid @RequestBody EventoCadastrarInputDTO dto,
+            @Valid
+            @RequestBody
+            EventoCadastrarInputDTO dto,
+
             Authentication authentication
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toOutputDTO(
@@ -77,7 +90,10 @@ public class EventoController {
     // PATCH
     @PatchMapping
     public ResponseEntity<EventoOutputDTO> atualizar(
-            @Valid @RequestBody EventoAtualizarInputDTO dto,
+            @Valid
+            @RequestBody
+            EventoAtualizarInputDTO dto,
+
             Authentication authentication
     ) {
         return ResponseEntity.ok(mapper.toOutputDTO(
@@ -88,7 +104,9 @@ public class EventoController {
     // DELETE
     @DeleteMapping("/{eventoId}")
     public ResponseEntity<EventoOutputDTO> deletar(
-            @PathVariable Long eventoId,
+            @PathVariable
+            Long eventoId,
+
             Authentication authentication
     ) {
         return ResponseEntity.ok(mapper.toOutputDTO(

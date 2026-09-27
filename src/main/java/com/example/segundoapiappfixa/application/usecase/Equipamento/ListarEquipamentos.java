@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Equipamento;
 
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEquipamentoQueryParam;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 import com.example.segundoapiappfixa.domain.model.Usuario;
@@ -18,11 +19,16 @@ public class ListarEquipamentos {
     private final EquipamentoRepository repository;
     private final UsuarioRepository usuarioRepository;
 
-    public List<Equipamento> listar(Long modeloEquipamentoId, Long usuarioId) {
+    public List<Equipamento> listar(
+            Long modeloEquipamentoId,
+            Long usuarioId,
+            FiltrosEquipamentoQueryParam filtros
+    ) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        List<Equipamento> equipamentos = repository.findByModeloEquipamentoId(modeloEquipamentoId)
+        List<Equipamento> equipamentos = repository
+                .findByModeloEquipamentoId(modeloEquipamentoId, filtros)
                 .stream()
                 .filter(equipamento -> equipamento.getUsuario().getEndereco().getId()
                         .equals(usuario.getEndereco().getId()))

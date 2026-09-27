@@ -1,6 +1,9 @@
 package com.example.segundoapiappfixa.infrastructure.database.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.EventoMapper;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEventosQueryParam;
+import com.example.segundoapiappfixa.infrastructure.database.repository.specs.EventoSpecs;
+import com.example.segundoapiappfixa.infrastructure.database.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Evento;
 import com.example.segundoapiappfixa.domain.repository.EventoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.entity.EventoEntity;
@@ -11,6 +14,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -30,8 +37,34 @@ public class EventoRepositoryImpl implements EventoRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Evento> findByUsuarioId(Long usuarioId) {
-        return repository.findAllByUsuario_Id(usuarioId).stream().map(mapper::toModel).toList();
+    public List<Evento> findByUsuarioId(Long usuarioId, FiltrosEventosQueryParam filtros) {
+        Specification<EventoEntity> specification = Specification.where(EventoSpecs.findByUsuarioId(usuarioId))
+                .and(EventoSpecs.findByTitulo(filtros.titulo()))
+                .and(EventoSpecs.findByDescricao(filtros.descricao()))
+                .and(EventoSpecs.findByLocalEndereco(filtros.localEndereco()))
+                .and(EventoSpecs.findByDescricaoLocal(filtros.descricaoLocal()))
+                .and(EventoSpecs.findByDataHoraInicio(filtros.dataHoraInicio()))
+                .and(EventoSpecs.findByDataHoraFim(filtros.dataHoraFim()))
+                .and(EventoSpecs.findByObservacao(filtros.observacao()))
+                .and(EventoSpecs.findByUsuario(filtros.usuario()));
+
+        Sort sort = SortUtils.definirSort(
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(),camposNormalizados),
+                filtros.direcaoOrdenacao()
+        );
+
+        Pageable pageable = filtros.limite() == null ? null :
+                PageRequest.of(0, filtros.limite(), sort);
+
+        List<EventoEntity> eventos =
+                pageable != null
+                        ? repository.findAll(specification, pageable).getContent()
+                        : repository.findAll(specification, sort);
+
+        return eventos
+                .stream()
+                .map(mapper::toModel)
+                .toList();
     }
 
     // Método de listar os registros persistidos no banco de dados

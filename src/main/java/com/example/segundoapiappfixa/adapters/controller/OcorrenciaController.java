@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 import com.example.segundoapiappfixa.adapters.dto.input.Ocorrencia.OcorrenciaAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Ocorrencia.OcorrenciaCadastrarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Ocorrencia.OcorrenciaOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOcorrenciaQueryParam;
 import com.example.segundoapiappfixa.adapters.mapper.OcorrenciaMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.OcorrenciaDynamicMapper;
@@ -42,11 +43,14 @@ public class OcorrenciaController {
             @RequestParam(required = false)
             String campos,
 
+            @ModelAttribute
+            FiltrosOcorrenciaQueryParam filtros,
+
             Authentication authentication
     ) {
         return ResponseEntity.ok(mask(
                 toOutputDTO(listarOcorrencias.listar(
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication), filtros
                 )),
                 campos
         ));
@@ -57,11 +61,14 @@ public class OcorrenciaController {
             @RequestParam(required = false)
             String campos,
 
+            @ModelAttribute
+            FiltrosOcorrenciaQueryParam filtros,
+
             Authentication authentication
     ) {
         return ResponseEntity.ok(mask(
                 toOutputDTO(listarOcorrencias.listarMinhas(
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication), filtros
                 )),
                 campos
         ));

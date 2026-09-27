@@ -9,8 +9,9 @@ public class TarefaDynamicMapper {
     public TarefaOutputDTO mask(TarefaOutputDTO dto, List<String> fields) {
         return new TarefaOutputDTO(
                 fields.contains("id") ? dto.id() : null,
-                fields.contains("tituloTarefa") ? dto.tituloTarefa() : null,
-                fields.contains("tituloOrdemServico") ? dto.tituloOrdemServico() : null,
+                fields.contains("titulo") ? dto.titulo() : null,
+                fields.contains("descricao") ? dto.descricao() : null,
+                fields.contains("status") ? dto.status() : null,
                 fields.contains("usuarioResponsavel") ? dto.usuarioResponsavel() : null,
                 fields.contains("dataCriacao") ? dto.dataCriacao() : null);
     }

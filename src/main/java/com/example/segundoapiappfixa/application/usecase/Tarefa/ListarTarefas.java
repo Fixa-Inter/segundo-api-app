@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.application.usecase.Tarefa;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
@@ -25,12 +26,14 @@ public class ListarTarefas {
     public List<Tarefa> listar(
             Long ordemServicoId,
             Boolean isGestor,
-            Long usuarioId
+            Long usuarioId,
+            FiltrosTarefaQueryParam filtros
     ) {
         OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
 
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
         if (!usuario.getEndereco().getId()
                 .equals(ordemServico.getProblema().getLocalEndereco().getEndereco().getId()) ||
@@ -39,7 +42,7 @@ public class ListarTarefas {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        return tarefaRepository.findAllByOrdemServicoId(ordemServicoId);
+        return tarefaRepository.findAllByOrdemServicoId(ordemServicoId, filtros);
     }
 
     public Tarefa listarDetalhes(Long tarefaId, boolean isGestor, Long usuarioId) {

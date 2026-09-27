@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.application.usecase.Problema;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.LocalEndereco;
 import com.example.segundoapiappfixa.domain.model.Problema;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
@@ -20,15 +21,15 @@ public class ListarProblemas {
     private final LocalEnderecoRepository localEnderecoRepository;
     private final ProblemaRepository problemaRepository;
 
-    public List<Problema> listarMinhas(Long usuarioId) {
-        List<Problema> problemas = problemaRepository.findAllByUsuarioId(usuarioId);
+    public List<Problema> listarMinhas(Long usuarioId, FiltrosProblemaQueryParam filtros) {
+        List<Problema> problemas = problemaRepository.findAllByUsuarioId(usuarioId, filtros);
 
         if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
 
         return problemas;
     }
 
-    public List<Problema> listar(Long usuarioId) {
+    public List<Problema> listar(Long usuarioId, FiltrosProblemaQueryParam filtros) {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || usuario.getEndereco() == null || usuario.getEndereco().getId() == null) {
@@ -41,7 +42,7 @@ public class ListarProblemas {
                 .map(LocalEndereco::getId)
                 .toList();
 
-        List<Problema> problemas = problemaRepository.findAllByLocalEnderecoIds(localEnderecoIds);
+        List<Problema> problemas = problemaRepository.findAllByLocalEnderecoIds(localEnderecoIds, filtros);
 
         if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
 

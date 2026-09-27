@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
 import com.example.segundoapiappfixa.application.usecase.Problema.AtualizarStatus;
 import com.example.segundoapiappfixa.application.usecase.Problema.CriarProblema;
@@ -41,11 +42,14 @@ public class ProblemaController {
             @RequestParam(required = false)
             String campos,
 
+            @ModelAttribute
+            FiltrosProblemaQueryParam filtros,
+
             Authentication authentication
     ) {
         return ResponseEntity.ok(
                 mask(toOutputDTO(listarProblemas.listar(
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication), filtros
                 )), campos)
         );
     }
@@ -55,11 +59,14 @@ public class ProblemaController {
             @RequestParam(required = false)
             String campos,
 
+            @ModelAttribute
+            FiltrosProblemaQueryParam filtros,
+
             Authentication authentication
     ) {
         return ResponseEntity.ok(
                 mask(toOutputDTO(listarProblemas.listarMinhas(
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication), filtros
                 )), campos)
         );
     }

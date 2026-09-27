@@ -14,6 +14,7 @@ public record OrdemServicoOutputDTO (
         String categoriaEquipamento,
         String prioridade,
         LocalDate dataPrevista,
+        String status,
         String nomeUsuario,
         String tipoAcesso,
         LocalDate dataCriacao

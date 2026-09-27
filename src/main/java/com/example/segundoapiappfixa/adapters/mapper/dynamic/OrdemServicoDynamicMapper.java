@@ -15,6 +15,7 @@ public class OrdemServicoDynamicMapper {
                 fields.contains("categoriaEquipamento") ? dto.categoriaEquipamento() : null,
                 fields.contains("prioridade") ? dto.prioridade() : null,
                 fields.contains("dataPrevista") ? dto.dataPrevista() : null,
+                fields.contains("status") ? dto.status() : null,
                 fields.contains("nomeUsuario") ? dto.nomeUsuario() : null,
                 fields.contains("tipoAcesso") ? dto.tipoAcesso() : null,
                 fields.contains("dataCriacao") ? dto.dataCriacao() : null);

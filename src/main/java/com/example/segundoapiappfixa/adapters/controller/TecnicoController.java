@@ -3,7 +3,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 import com.example.segundoapiappfixa.adapters.dto.output.OrdemServico.OrdemServicoOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Aptidao.AptidaoOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Aptidao.AptidaoAtualizarInputDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.Usuario.TecnicoOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.Usuario.UsuarioOutputDTO;
 import com.example.segundoapiappfixa.adapters.mapper.OrdemServicoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.AptidaoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.UsuarioMapper;
@@ -19,6 +19,7 @@ import com.example.segundoapiappfixa.application.usecase.Tecnico.ListarOrdensSer
 import com.example.segundoapiappfixa.domain.model.Aptidao;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Usuario;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -49,15 +50,18 @@ public class TecnicoController {
 
     // GET
     @GetMapping
-    public ResponseEntity<List<TecnicoOutputDTO>> listar(
+    public ResponseEntity<List<UsuarioOutputDTO>> listar(
             @RequestParam(required = false)
             String campos,
+
+            @ModelAttribute
+            FiltrosUsuarioQueryParam filtros,
 
             Authentication authentication
     ) {
         return ResponseEntity.ok(maskTecnicos(
                 toTecnicoOutputDTO(listarTecnicos.listar(
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication), filtros
                 )),
 
                 campos
@@ -122,8 +126,8 @@ public class TecnicoController {
     }
 
     // Mapper para DTO de saída em lote
-    private List<TecnicoOutputDTO> toTecnicoOutputDTO(List<Usuario> tecnicos) {
-        return tecnicos.stream().map(usuarioMapper::toTecnicoOutputDTO).toList();
+    private List<UsuarioOutputDTO> toTecnicoOutputDTO(List<Usuario> tecnicos) {
+        return tecnicos.stream().map(usuarioMapper::toOutputDTO).toList();
     }
 
     private List<AptidaoOutputDTO> toAptidaoOutputDTO(List<Aptidao> competencias) {
@@ -136,7 +140,7 @@ public class TecnicoController {
 
 
     // Aplicação do Mapper Dinâmico
-    private List<TecnicoOutputDTO> maskTecnicos(List<TecnicoOutputDTO> dtos, String campos) {
+    private List<UsuarioOutputDTO> maskTecnicos(List<UsuarioOutputDTO> dtos, String campos) {
         if (dtos.isEmpty()) return List.of();
 
         List<String> available = DynamicFieldFilter.availableFields(dtos.getFirst());
@@ -144,7 +148,7 @@ public class TecnicoController {
 
         return dtos
                 .stream()
-                .map(dto -> usuarioDynamicMapper.maskTecnico(dto, selected))
+                .map(dto -> usuarioDynamicMapper.mask(dto, selected))
                 .toList();
     }
 

@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 import com.example.segundoapiappfixa.adapters.dto.input.MarcaEquipamento.MarcaEquipamentoAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.MarcaEquipamento.MarcaEquipamentoCadastrarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.MarcaEquipamento.MarcaEquipamentoOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosMarcaEquipamentoQueryParam;
 import com.example.segundoapiappfixa.adapters.mapper.MarcaEquipamentoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.MarcaEquipamentoDynamicMapper;
@@ -39,10 +40,13 @@ public class MarcaEquipamentoController {
     @GetMapping
     public ResponseEntity<List<MarcaEquipamentoOutputDTO>> listar(
             @RequestParam(required = false)
-            String campos
+            String campos,
+
+            @ModelAttribute
+            FiltrosMarcaEquipamentoQueryParam filtros
     ) {
         return ResponseEntity.ok(mask(
-                toOutputDTO(listarMarcasEquipamento.listar()),
+                toOutputDTO(listarMarcasEquipamento.listar(filtros)),
                 campos
         ));
     }
@@ -78,7 +82,8 @@ public class MarcaEquipamentoController {
     @PatchMapping
     public ResponseEntity<MarcaEquipamentoOutputDTO> atualizar(
             @Valid
-            @RequestBody MarcaEquipamentoAtualizarInputDTO dto
+            @RequestBody
+            MarcaEquipamentoAtualizarInputDTO dto
     ) {
         return ResponseEntity.ok(
                 mapper.toOutputDTO(atualizarMarcaEquipamento.atualizar(dto))

@@ -3,6 +3,8 @@ package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.LocalEndereco;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOrdemServicoQueryParam;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
@@ -23,7 +25,7 @@ public class ListarOrdensServico {
     private final ProblemaRepository problemaRepository;
     private final OrdemServicoRepository ordemServicoRepository;
 
-    public List<OrdemServico> listar(Long usuarioId) {
+    public List<OrdemServico> listar(Long usuarioId, FiltrosOrdemServicoQueryParam filtros) {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || usuario.getEndereco() == null || usuario.getEndereco().getId() == null) {
@@ -37,21 +39,21 @@ public class ListarOrdensServico {
                 .toList();
 
         List<Long> problemasIds = problemaRepository
-                .findAllByLocalEnderecoIds(localEnderecoIds)
+                .findAllByLocalEnderecoIds(localEnderecoIds, new FiltrosProblemaQueryParam(null, null, null, null, null, null, null, null, null, null, null, null, null))
                 .stream()
                 .map(Problema::getId)
                 .toList();
 
-        List<OrdemServico> ordensServico = ordemServicoRepository.findAllByProblemaIds(problemasIds);
+        List<OrdemServico> ordensServico = ordemServicoRepository.findAllByProblemaIds(problemasIds, filtros);
 
         if (ordensServico.isEmpty()) throw new EntidadeNaoEncontradaException("exception.ordemServico.notFound");
 
         return ordensServico;
     }
 
-    public List<OrdemServico> listarMinhas(Long usuarioId) {
+    public List<OrdemServico> listarMinhas(Long usuarioId, FiltrosOrdemServicoQueryParam filtros) {
 
-        List<OrdemServico> ordensServico = ordemServicoRepository.findByUsuarioId(usuarioId);
+        List<OrdemServico> ordensServico = ordemServicoRepository.findByUsuarioId(usuarioId, filtros);
         if (ordensServico.isEmpty()) throw new EntidadeNaoEncontradaException("exception.ordemServico.notFound");
 
         return ordensServico;

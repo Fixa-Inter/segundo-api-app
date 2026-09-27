@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.application.usecase.Ocorrencia;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.LocalEndereco;
 import com.example.segundoapiappfixa.domain.model.Ocorrencia;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOcorrenciaQueryParam;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
@@ -20,7 +21,7 @@ public class ListarOcorrencias {
     private final UsuarioRepository usuarioRepository;
     private final LocalEnderecoRepository localEnderecoRepository;
 
-    public List<Ocorrencia> listar(Long usuarioId) {
+    public List<Ocorrencia> listar(Long usuarioId, FiltrosOcorrenciaQueryParam filtros) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.notFound"));
 
@@ -31,7 +32,7 @@ public class ListarOcorrencias {
                 .toList();
 
         List<Ocorrencia> ocorrencias = ocorrenciaRepository
-                .findAllByLocalEnderecoIds(localEnderecoIds);
+                .findAllByLocalEnderecoIds(localEnderecoIds, filtros);
 
         if (ocorrencias.isEmpty()) {
             throw new EntidadeNaoEncontradaException("exception.ocorrencia.notFound");
@@ -49,8 +50,8 @@ public class ListarOcorrencias {
         return ocorrencia;
     }
 
-    public List<Ocorrencia> listarMinhas(Long usuarioId) {
-        return ocorrenciaRepository.findAllByUsuarioId(usuarioId);
+    public List<Ocorrencia> listarMinhas(Long usuarioId, FiltrosOcorrenciaQueryParam filtros) {
+        return ocorrenciaRepository.findAllByUsuarioId(usuarioId, filtros);
     }
 
     private void validarAcesso(Ocorrencia ocorrencia, Long usuarioId) {

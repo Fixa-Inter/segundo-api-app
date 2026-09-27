@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaCriarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Tarefa.TarefaOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
 import com.example.segundoapiappfixa.adapters.mapper.TarefaMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.TarefaDynamicMapper;
@@ -47,13 +48,16 @@ public class TarefaController {
             @RequestParam(required = false)
             String campos,
 
+            @ModelAttribute
+            FiltrosTarefaQueryParam filtros,
+
             Authentication authentication
     ) {
         return ResponseEntity.ok(
                 mask(toOutputDTO(listarTarefas.listar(
                         ordemServicoId,
                         ControllerUtils.isGestor(authentication),
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication), filtros
                 )), campos
         ));
     }
@@ -85,8 +89,6 @@ public class TarefaController {
             @NotEmpty(message = "{validation.tarefa.lista.required}")
             List<@Valid TarefaCriarInputDTO> tarefaCriarInputDTOS,
 
-            @RequestParam(required = false) String campos,
-
             Authentication authentication
     ) {
        return ResponseEntity
@@ -105,8 +107,6 @@ public class TarefaController {
             @Valid
             TarefaAtualizarInputDTO atualizarInputDTO,
 
-            @RequestParam(required = false) String campos,
-
             Authentication authentication
     ) {
         return ResponseEntity.ok(
@@ -122,8 +122,6 @@ public class TarefaController {
     public ResponseEntity<TarefaOutputDTO> deletar(
             @PathVariable
             Long tarefaId,
-
-            @RequestParam(required = false) String campos,
 
             Authentication authentication
     ) {

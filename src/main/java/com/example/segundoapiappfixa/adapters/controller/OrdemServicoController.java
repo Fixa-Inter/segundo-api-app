@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.adapters.controller;
 
 import com.example.segundoapiappfixa.adapters.dto.output.OrdemServico.OrdemServicoOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOrdemServicoQueryParam;
 import com.example.segundoapiappfixa.adapters.mapper.OrdemServicoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.OrdemServicoDynamicMapper;
@@ -43,11 +44,14 @@ public class OrdemServicoController {
             @RequestParam(required = false)
             String campos,
 
+            @ModelAttribute
+            FiltrosOrdemServicoQueryParam filtros,
+
             Authentication authentication
     ) {
        return ResponseEntity.ok(
                 mask(toOutputDTO(listarOrdensServico.listar(
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication), filtros
                 )), campos)
         );
     }
@@ -57,11 +61,14 @@ public class OrdemServicoController {
             @RequestParam(required = false)
             String campos,
 
+            @ModelAttribute
+            FiltrosOrdemServicoQueryParam filtros,
+
             Authentication authentication
     ) {
         return ResponseEntity.ok(
                 mask(toOutputDTO(listarOrdensServico.listarMinhas(
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication), filtros
                 )), campos)
         );
     }
