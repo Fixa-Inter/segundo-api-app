@@ -56,6 +56,11 @@ public class SecurityConfig{
                         // Permissão de Acesso para CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
 
                         // Endpoints de Autenticação
                         .requestMatchers(
@@ -69,7 +74,8 @@ public class SecurityConfig{
                                 HttpMethod.GET,
                                 "/api/v1/solicitacoes/minhas",
                                 "/api/v1/solicitacoes/selecionar/**",
-                                "/api/v1/eventos/**"
+                                "/api/v1/eventos/**",
+                                "/api/v1/perfil/**"
                         ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
 
                         .requestMatchers(

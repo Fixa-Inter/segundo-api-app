@@ -8,6 +8,7 @@ import com.example.segundoapiappfixa.adapters.mapper.CategoriaEquipamentoMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.CategoriaEquipamentoDynamicMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
+import com.example.segundoapiappfixa.adapters.controller.contract.CategoriaEquipamentoControllerContract;
 import com.example.segundoapiappfixa.application.usecase.CategoriaEquipamento.ListarCategoriasEquipamento;
 import com.example.segundoapiappfixa.application.usecase.CategoriaEquipamento.CadastrarCategoriaEquipamento;
 import com.example.segundoapiappfixa.application.usecase.CategoriaEquipamento.AtualizarCategoriaEquipamento;
@@ -25,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/equipamentos/categorias")
 @RequiredArgsConstructor
-public class CategoriaEquipamentoController {
+public class CategoriaEquipamentoController implements CategoriaEquipamentoControllerContract {
 
     // UseCases
     private final ListarCategoriasEquipamento listarCategoriasEquipamento;
