@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de recuperação</title></head>
+<body style="margin:0;padding:0;background:#f5f6f9;font-family:Arial,Helvetica,sans-serif;color:#202020;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#f5f6f9;">
+    <tr>
+        <td align="center" style="padding:22px 12px 36px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;">
+                <tr>
+                    <td align="center" style="padding:12px 0 30px;">
+                        <div style="font-size:29px;line-height:1;font-weight:bold;letter-spacing:2px;color:#101a3d;">
+                            <img src="https://res.cloudinary.com/nq0cjn3e/image/upload/v1790774504/fixa-logo.png" width="220" alt="Fixa" style="display:block;max-width:220px;height:auto;margin:0 auto;">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height:4px;background:#1268f3;font-size:0;line-height:0;">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="center" style="background:#fff;padding:34px 34px 38px;">
+                        <img src="https://res.cloudinary.com/nq0cjn3e/image/upload/v1790774505/manus-email.png" width="190" height="190" alt="Boneca Manus"
+                             style="display:block;width:190px;height:190px;object-fit:contain;margin:0 auto 18px;">
+                        <h1 style="margin:0;font-size:27px;line-height:1.25;font-weight:bold;color:#292929;">Olá, <span
+                                th:text="${nome}">__NOME__</span>!</h1>
+                        <p style="margin:12px auto 0;max-width:430px;font-size:16px;line-height:1.6;color:#777985;">Use
+                            o código abaixo para confirmar sua identidade e redefinir sua senha.</p>
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center"
+                               style="margin:28px auto 12px;">
+                            <tr>
+                                <td align="center" style="background:#1268f3;border-radius:4px;padding:17px 30px;"><span
+                                        th:text="${codigo}"
+                                        style="font-size:31px;line-height:1;font-weight:bold;letter-spacing:9px;color:#fff;user-select:all;">__CODIGO__</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <p style="margin:25px auto 0;max-width:430px;font-size:14px;line-height:1.6;color:#777985;">Esse
+                            código expira em <strong th:text="${validade}">__VALIDADE__</strong> e só pode ser usado uma
+                            vez.</p>
+                        <p style="margin:10px auto 0;max-width:430px;font-size:14px;line-height:1.6;color:#777985;">Se
+                            você não solicitou essa alteração, ignore este e-mail.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding:28px 24px 0;color:#a1a3ad;">
+                        <div style="font-size:22px;letter-spacing:8px;color:#d5d6dc;">● ● ● ● ●</div>
+                        <p style="margin:15px 0 0;font-size:12px;line-height:1.6;">Política de privacidade &nbsp;|&nbsp;
+                            Ajuda</p>
+                        <p style="margin:14px 0 0;font-size:11px;line-height:1.6;">Este é um e-mail automático. Por
+                            favor, não responda.</p>
+                        <p style="margin:10px 0 0;font-size:11px;line-height:1.6;">© Manus. Todos os direitos
+                            reservados.</p></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

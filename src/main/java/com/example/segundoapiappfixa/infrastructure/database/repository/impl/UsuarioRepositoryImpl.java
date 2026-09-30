@@ -80,4 +80,9 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
                 .map(mapper::toModel)
                 .toList();
     }
+
+    public Usuario save(Usuario usuario) {
+        UsuarioEntity usuarioEntity = mapper.toEntity(usuario);
+        return mapper.toModel(repository.save(usuarioEntity));
+    }
 }

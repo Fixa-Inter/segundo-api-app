@@ -98,12 +98,12 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
     ResponseEntity<?> invalidDataAccess(InvalidDataAccessApiUsageException e) {
-        return response(HttpStatus.BAD_REQUEST, "exception.database.invalidUsage");
+        return response(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler({JpaSystemException.class, TransactionSystemException.class})
     ResponseEntity<?> persistence(Exception e) {
-        return response(HttpStatus.INTERNAL_SERVER_ERROR, "exception.database.failure");
+        return response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
     @ExceptionHandler({EntityNotFoundException.class, NoSuchElementException.class,
@@ -114,6 +114,6 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<?> generic(Exception e) {
-        return response(HttpStatus.INTERNAL_SERVER_ERROR, "exception.internal");
+        return response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }
