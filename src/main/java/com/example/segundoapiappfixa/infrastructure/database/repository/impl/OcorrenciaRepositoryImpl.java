@@ -37,7 +37,8 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
     private EntityManager entityManager;
 
     private List<Ocorrencia> buscar(Specification<OcorrenciaEntity> base, FiltrosOcorrenciaQueryParam filtros) {
-        Specification<OcorrenciaEntity> specification = base
+        Specification<OcorrenciaEntity> specification = OcorrenciaSpecs.findByEstaAtivo()
+                .and(base)
                 .and(OcorrenciaSpecs.findByTitulo(filtros.titulo()))
                 .and(OcorrenciaSpecs.findByDescricaoOcorrencia(filtros.descricaoOcorrencia()))
                 .and(OcorrenciaSpecs.findByCategoriaProblema(filtros.categoriaProblema()))
@@ -88,7 +89,8 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
     @Override
     public Optional<Ocorrencia> findById(Long id) {
         return jpaRepository
-                .findById(id)
+                .findOne(Specification.where(OcorrenciaSpecs.findByEstaAtivo())
+                        .and((root, query, cb) -> cb.equal(root.get("id"), id)))
                 .map(mapper::toModel);
     }
 
@@ -105,7 +107,8 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
         OcorrenciaEntity entity = jpaRepository.findById(id).orElse(null);
         if (entity == null) return Optional.empty();
 
-        jpaRepository.deleteById(id);
+        entity.setEstaAtivo(false);
+        jpaRepository.save(entity);
         return Optional.of(mapper.toModel(entity));
     }
 

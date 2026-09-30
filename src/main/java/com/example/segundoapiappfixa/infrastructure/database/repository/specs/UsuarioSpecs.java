@@ -8,7 +8,9 @@ import org.springframework.data.jpa.domain.Specification;
 import java.time.LocalDate;
 
 public final class UsuarioSpecs {
-    private UsuarioSpecs() {
+
+    public static Specification<UsuarioEntity> findByEstaAtivo() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("estaAtivo"));
     }
 
     public static Specification<UsuarioEntity> findByEnderecoId(Long v) {

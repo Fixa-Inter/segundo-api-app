@@ -42,7 +42,8 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     @Transactional(readOnly = true)
     public Optional<Usuario> findById(Long id) {
         return repository
-                .findById(id)
+                .findOne(Specification.where(UsuarioSpecs.findByEstaAtivo())
+                        .and((root, query, cb) -> cb.equal(root.get("id"), id)))
                 .map(mapper::toModel);
     }
 
@@ -53,13 +54,14 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
             TipoAcesso tipoAcesso,
             FiltrosUsuarioQueryParam filtros
     ) {
-        Specification<UsuarioEntity> specification = Specification.where(UsuarioSpecs.findByEnderecoId(enderecoId))
+        Specification<UsuarioEntity> specification = Specification.where(UsuarioSpecs.findByEstaAtivo())
+                .and(UsuarioSpecs.findByEnderecoId(enderecoId))
                 .and(UsuarioSpecs.findByTipoAcesso(tipoAcesso))
                 .and(UsuarioSpecs.findByNomeCompleto(filtros.nomeCompleto()))
                 .and(UsuarioSpecs.findByEmail(filtros.email()))
                 .and(UsuarioSpecs.findByCargo(filtros.cargo()))
                 .and(UsuarioSpecs.findByCnpjEndereco(filtros.cnpjEndereco()))
-                .and(UsuarioSpecs.findByEstaAtivo(filtros.estaAtivo()));
+                .and(UsuarioSpecs.findByEstaAtivo());
 
         Sort sort = SortUtils.definirSort(
                 SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),

@@ -34,7 +34,8 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
 
     // Método de listar os registros persistidos no banco de dados
     public List<ModeloEquipamento> findByEnderecoId(Long enderecoId, FiltrosModeloEquipamentoQueryParam filtros) {
-        Specification<ModeloEquipamentoEntity> specification = Specification.where(ModeloEquipamentoSpecs.findByEnderecoId(enderecoId))
+        Specification<ModeloEquipamentoEntity> specification = Specification.where(ModeloEquipamentoSpecs.findByEstaAtivo())
+                .and(ModeloEquipamentoSpecs.findByEnderecoId(enderecoId))
                 .and(ModeloEquipamentoSpecs.findByNome(filtros.nome()))
                 .and(ModeloEquipamentoSpecs.findByDescricao(filtros.descricao()))
                 .and(ModeloEquipamentoSpecs.findByMarca(filtros.marca()))
@@ -61,7 +62,8 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
     // Método de listar os registros persistidos no banco de dados
     public Optional<ModeloEquipamento> findById(Long id) {
         return repository
-                .findById(id)
+                .findOne(Specification.where(ModeloEquipamentoSpecs.findByEstaAtivo())
+                        .and((root, query, cb) -> cb.equal(root.get("id"), id)))
                 .map(mapper::toModel);
     }
 
@@ -83,7 +85,8 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
 
         if (entity.isEmpty()) return Optional.empty();
 
-        repository.deleteById(id);
+        entity.get().setEstaAtivo(false);
+        repository.save(entity.get());
         return entity.map(mapper::toModel);
     }
 }

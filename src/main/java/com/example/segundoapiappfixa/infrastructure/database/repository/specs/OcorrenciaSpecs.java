@@ -8,7 +8,9 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 public final class OcorrenciaSpecs {
-    private OcorrenciaSpecs() {
+
+    public static Specification<OcorrenciaEntity> findByEstaAtivo() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("estaAtivo"));
     }
 
     public static Specification<OcorrenciaEntity> findByUsuarioId(Long v) {

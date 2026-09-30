@@ -11,6 +11,10 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class EquipamentoSpecs {
 
+    public static Specification<EquipamentoEntity> findByEstaAtivo() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("estaAtivo"));
+    }
+
     public static Specification<EquipamentoEntity> findByModeloEquipamentoId(Long modeloEquipamentoId) {
         if (modeloEquipamentoId == null) return Specification.unrestricted();
 

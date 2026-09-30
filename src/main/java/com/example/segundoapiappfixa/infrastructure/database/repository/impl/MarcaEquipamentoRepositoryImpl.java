@@ -28,7 +28,7 @@ public class MarcaEquipamentoRepositoryImpl implements MarcaEquipamentoRepositor
     public List<MarcaEquipamento> findAll(FiltrosMarcaEquipamentoQueryParam filtros) {
         Specification<MarcaEquipamentoEntity> specification = Specification.where(MarcaEquipamentoSpecs.findByNome(filtros.nome()))
                 .and(MarcaEquipamentoSpecs.findByDescricao(filtros.descricao()))
-                .and(MarcaEquipamentoSpecs.findByEstaAtivo(filtros.estaAtivo()));
+                .and(MarcaEquipamentoSpecs.findByEstaAtivo());
 
         Sort sort = SortUtils.definirSort(
                 SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
@@ -52,7 +52,8 @@ public class MarcaEquipamentoRepositoryImpl implements MarcaEquipamentoRepositor
     // Método de listar os registros persistidos no banco de dados
     public Optional<MarcaEquipamento> findById(Long id) {
         return repository
-                .findById(id)
+                .findOne(Specification.where(MarcaEquipamentoSpecs.findByEstaAtivo())
+                        .and((root, query, cb) -> cb.equal(root.get("id"), id)))
                 .map(mapper::toModel);
     }
 
@@ -75,7 +76,8 @@ public class MarcaEquipamentoRepositoryImpl implements MarcaEquipamentoRepositor
         Optional<MarcaEquipamentoEntity> entity = repository.findById(id);
         if (entity.isEmpty()) return Optional.empty();
 
-        repository.deleteById(id);
+        entity.get().setEstaAtivo(false);
+        repository.save(entity.get());
         return entity.map(mapper::toModel);
     }
 }

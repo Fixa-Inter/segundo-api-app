@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -35,6 +36,10 @@ public class AuthService {
                 );
 
         Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+
+        if (usuario == null || !Boolean.TRUE.equals(usuario.getEstaAtivo())) {
+            throw new DisabledException("Usuário inativo");
+        }
 
         String role = authentication
                 .getAuthorities()

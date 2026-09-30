@@ -40,7 +40,8 @@ public class EquipamentoRepositoryImpl implements EquipamentoRepository {
             FiltrosEquipamentoQueryParam filtros
     ) {
 
-        Specification<EquipamentoEntity> specification = Specification.where(EquipamentoSpecs.findByModeloEquipamentoId(modeloEquipamentoId))
+        Specification<EquipamentoEntity> specification = Specification.where(EquipamentoSpecs.findByEstaAtivo())
+                .and(EquipamentoSpecs.findByModeloEquipamentoId(modeloEquipamentoId))
                 .and(EquipamentoSpecs.findByCodigo(filtros.codigo()))
                 .and(EquipamentoSpecs.findByLocalEndereco(filtros.localEndereco()))
                 .and(EquipamentoSpecs.findByUsuario(filtros.usuario()));
@@ -67,7 +68,8 @@ public class EquipamentoRepositoryImpl implements EquipamentoRepository {
     // Método de listar os registros persistidos no banco de dados
     public Optional<Equipamento> findById(Long id) {
         return repository
-                .findById(id)
+                .findOne(Specification.where(EquipamentoSpecs.findByEstaAtivo())
+                        .and((root, query, cb) -> cb.equal(root.get("id"), id)))
                 .map(mapper::toModel);
     }
 
@@ -100,7 +102,8 @@ public class EquipamentoRepositoryImpl implements EquipamentoRepository {
         EquipamentoEntity entity = repository.findById(id).orElse(null);
         if (entity == null) return Optional.empty();
 
-        repository.deleteById(id);
+        entity.setEstaAtivo(false);
+        repository.save(entity);
         return Optional.of(mapper.toModel(entity));
     }
 

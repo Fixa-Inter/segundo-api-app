@@ -5,7 +5,9 @@ import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
 public final class ModeloEquipamentoSpecs {
-    private ModeloEquipamentoSpecs() {
+
+    public static Specification<ModeloEquipamentoEntity> findByEstaAtivo() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("estaAtivo"));
     }
 
     public static Specification<ModeloEquipamentoEntity> findByEnderecoId(Long id) {

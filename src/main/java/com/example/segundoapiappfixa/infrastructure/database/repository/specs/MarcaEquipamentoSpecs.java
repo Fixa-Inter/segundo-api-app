@@ -5,7 +5,11 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.Map;
 
 public final class MarcaEquipamentoSpecs {
-    private MarcaEquipamentoSpecs() {}
+
+    public static Specification<MarcaEquipamentoEntity> findByEstaAtivo() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("estaAtivo"));
+    }
+
     public static Specification<MarcaEquipamentoEntity> findByNome(String valor) {
         if (valor == null || valor.isBlank()) return Specification.unrestricted();
 

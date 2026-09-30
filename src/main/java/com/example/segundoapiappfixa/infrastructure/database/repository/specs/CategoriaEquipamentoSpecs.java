@@ -9,6 +9,10 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class CategoriaEquipamentoSpecs {
 
+    public static Specification<CategoriaEquipamentoEntity> findByEstaAtivo() {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("estaAtivo"));
+    }
+
     public static Specification<CategoriaEquipamentoEntity> findByEnderecoId(Long enderecoId) {
         if (enderecoId == null) return Specification.unrestricted();
 

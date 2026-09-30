@@ -52,7 +52,8 @@ public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoR
     // Método de listar os registros persistidos no banco de dados
     public Optional<CategoriaEquipamento> findById(Long id) {
         return repository
-                .findById(id)
+                .findOne(Specification.where(CategoriaEquipamentoSpecs.findByEstaAtivo())
+                        .and((root, query, cb) -> cb.equal(root.get("id"), id)))
                 .map(mapper::toModel);
     }
 
@@ -65,14 +66,16 @@ public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoR
 
         if (entity == null) return Optional.empty();
 
-        repository.deleteById(id);
+        entity.setEstaAtivo(false);
+        repository.save(entity);
         return Optional.of(mapper.toModel(entity));
     }
 
     // Método de listar os registros persistidos no banco de dados
     public List<CategoriaEquipamento> findByEnderecoId(Long usuarioEnderecoId, FiltrosCategoriaEquipamentoQueryParam filtros) {
 
-        Specification<CategoriaEquipamentoEntity> specification = Specification.where(CategoriaEquipamentoSpecs.findByEnderecoId(usuarioEnderecoId))
+        Specification<CategoriaEquipamentoEntity> specification = Specification.where(CategoriaEquipamentoSpecs.findByEstaAtivo())
+                .and(CategoriaEquipamentoSpecs.findByEnderecoId(usuarioEnderecoId))
                 .and(CategoriaEquipamentoSpecs.findByNome(filtros.nome()))
                 .and(CategoriaEquipamentoSpecs.findByDescricao(filtros.descricao()))
                 .and(CategoriaEquipamentoSpecs.findByNomeUsuario(filtros.nomeUsuario()));
