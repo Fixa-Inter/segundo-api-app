@@ -10,7 +10,7 @@ import com.example.segundoapiappfixa.domain.repository.PasswordTokenRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.security.JwtTokenProvider;
-import com.example.segundoapiappfixa.infrastructure.external.EmailSender;
+import com.example.segundoapiappfixa.infrastructure.external.email.EmailSender;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

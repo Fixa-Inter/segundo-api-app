@@ -1,4 +1,4 @@
-package com.example.segundoapiappfixa.infrastructure.external;
+package com.example.segundoapiappfixa.infrastructure.external.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.MimeMessageHelper;
