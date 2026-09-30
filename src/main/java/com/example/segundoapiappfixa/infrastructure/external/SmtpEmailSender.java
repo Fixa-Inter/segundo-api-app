@@ -1,18 +1,20 @@
 package com.example.segundoapiappfixa.infrastructure.external;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
 import java.nio.charset.StandardCharsets;
-import java.io.InputStream;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 @Component
 @RequiredArgsConstructor
 public class SmtpEmailSender implements EmailSender {
+
     private final JavaMailSender mailSender;
+    private final SpringTemplateEngine templateEngine;
 
     @Value("${spring.mail.username:}")
     private String senderAddress;
@@ -21,17 +23,13 @@ public class SmtpEmailSender implements EmailSender {
     public void enviarCodigo(String recipient, String nome, String codigo, String validade) {
 
         try {
-            ClassPathResource templateResource = new ClassPathResource("templates/email/recuperar-senha.html");
+            Context context = new Context();
 
-            String template;
-            try (InputStream input = templateResource.getInputStream()) {
-                template = new String(input.readAllBytes(), StandardCharsets.UTF_8);
-            }
+            context.setVariable("nome", nome);
+            context.setVariable("codigo", codigo);
+            context.setVariable("validade", validade);
 
-            String html = template
-                    .replace("__NOME__", escapeHtml(nome))
-                    .replace("__CODIGO__", escapeHtml(codigo))
-                    .replace("__VALIDADE__", escapeHtml(validade));
+            String html = templateEngine.process("email/recuperar-senha", context);
 
             MimeMessageHelper helper = new MimeMessageHelper(
                     mailSender.createMimeMessage(),
@@ -52,13 +50,4 @@ public class SmtpEmailSender implements EmailSender {
         }
     }
 
-    private String escapeHtml(String value) {
-        if (value == null) return "";
-        return value
-                .replace("&", "&amp;")
-                .replace("<", "&lt;")
-                .replace(">", "&gt;")
-                .replace("\"", "&quot;")
-                .replace("'", "&#39;");
-    }
 }
