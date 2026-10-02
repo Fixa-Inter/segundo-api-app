@@ -4,7 +4,10 @@ import com.example.segundoapiappfixa.adapters.mapper.FotoMapper;
 import com.example.segundoapiappfixa.domain.model.Foto;
 import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.entity.FotoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.entity.ProblemaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.repository.JpaFotoRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,9 @@ public class FotoProblemaRepositoryImpl implements FotoRepository {
     private final JpaFotoRepository repository;
     private final FotoMapper mapper;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     // Método de salvar no banco de dados
     @Override
     public List<Foto> findAllByProblemaId(Long problemaId) {
@@ -34,6 +40,15 @@ public class FotoProblemaRepositoryImpl implements FotoRepository {
     @Override
     public Foto save(Foto foto) {
         FotoEntity fotoEntity = mapper.toEntity(foto);
+
+        if (foto.getProblema() != null && foto.getProblema().getId() != null) {
+
+            fotoEntity.setProblema(
+                    entityManager.getReference(
+                        ProblemaEntity.class,
+                        foto.getProblema().getId()
+                    ));
+        }
 
         FotoEntity fotoPersistida = repository.save(fotoEntity);
         return mapper.toModel(fotoPersistida);
