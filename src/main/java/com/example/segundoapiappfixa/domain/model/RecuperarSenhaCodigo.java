@@ -13,8 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class RecuperarSenhaCodigo {
     private Long id;
-    private Usuario usuario;
     private Integer codigo;
-    private Date dataExpiracao;
+    private Long usuarioId;
     private Boolean estaAtivo;
 }

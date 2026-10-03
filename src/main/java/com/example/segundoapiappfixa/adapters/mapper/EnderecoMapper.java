@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.adapters.mapper;
 
 import com.example.segundoapiappfixa.domain.model.Endereco;
-import com.example.segundoapiappfixa.infrastructure.database.entity.EnderecoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.EnderecoEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

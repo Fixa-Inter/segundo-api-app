@@ -6,7 +6,7 @@ import com.example.segundoapiappfixa.auth.dto.RedefinirSenhaOutputDTO;
 import com.example.segundoapiappfixa.auth.dto.RedefinirSenhaRequestDTO;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.model.RecuperarSenhaCodigo;
-import com.example.segundoapiappfixa.domain.repository.PasswordTokenRepository;
+import com.example.segundoapiappfixa.domain.repository.RecuperarSenhaCodigoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.security.JwtTokenProvider;
@@ -29,7 +29,7 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordTokenRepository passwordTokenRepository;
+    private final RecuperarSenhaCodigoRepository recuperarSenhaCodigoRepository;
     private final UsuarioRepository usuarioRepository;
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
@@ -81,33 +81,24 @@ public class AuthService {
             throw new RegraProblemaException("validation.usuario.inativo");
         }
 
-        RecuperarSenhaCodigo anterior = passwordTokenRepository.findActiveByUsuarioId(usuario.getId());
-
-        // Desativa código ainda vigente
-        if (anterior != null) {
-            anterior.setEstaAtivo(false);
-            passwordTokenRepository.save(anterior);
-        }
-
         int codigo = ThreadLocalRandom.current().nextInt(100000, 1000000);
-        long dataExpiracaoMilissegundos = 3 * 60 * 1000L;
         String nome = usuario.getNomeCompleto().split(" ")[0];
 
+        recuperarSenhaCodigoRepository.deleteAll(usuario.getId());
         RecuperarSenhaCodigo recuperacao = new RecuperarSenhaCodigo(
                 null,
-                usuario,
                 codigo,
-                new Date(System.currentTimeMillis() + dataExpiracaoMilissegundos),
+                usuario.getId(),
                 true
         );
 
-        passwordTokenRepository.save(recuperacao);
+        recuperarSenhaCodigoRepository.save(recuperacao);
 
         emailSender.enviarCodigo(
                 usuario.getEmail(),
                 nome,
                 String.valueOf(codigo),
-                String.format("%d minutos", dataExpiracaoMilissegundos / (60 * 1000L))
+                "3 minutos"
         );
 
         return new RedefinirSenhaOutputDTO(
@@ -121,12 +112,11 @@ public class AuthService {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RegraProblemaException("validation.codigo.invalido"));
 
-        RecuperarSenhaCodigo recuperacao = passwordTokenRepository.findActiveByUsuarioId(usuario.getId());
+        RecuperarSenhaCodigo recuperacao = recuperarSenhaCodigoRepository.findByUsuarioIdAndEstaAtivo(usuario.getId());
 
         return recuperacao != null
                 && codigo != null
-                && codigo.equals(recuperacao.getCodigo())
-                && recuperacao.getDataExpiracao().after(new Date());
+                && codigo.equals(recuperacao.getCodigo());
     }
 
     public String redefinirSenha(RedefinirSenhaRequestDTO dto) {
@@ -142,9 +132,7 @@ public class AuthService {
         usuario.setSenhaHash(novaSenhaHash);
         usuarioRepository.save(usuario);
 
-        RecuperarSenhaCodigo recuperacao = passwordTokenRepository.findActiveByUsuarioId(usuario.getId());
-        recuperacao.setEstaAtivo(false);
-        passwordTokenRepository.save(recuperacao);
+        recuperarSenhaCodigoRepository.deleteAll(usuario.getId());
 
         return "Nova senha registrada com sucesso!";
     }

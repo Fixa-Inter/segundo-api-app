@@ -83,7 +83,7 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<?> integrity(DataIntegrityViolationException e) {
-        return response(HttpStatus.CONFLICT, "exception.database.integrity");
+        return response(HttpStatus.CONFLICT, e.getMessage());
     }
 
     @ExceptionHandler(OptimisticLockingFailureException.class)

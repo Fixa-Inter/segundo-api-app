@@ -1,14 +1,12 @@
 package com.example.segundoapiappfixa.infrastructure.security;
 
 import com.example.segundoapiappfixa.domain.model.Usuario;
-import com.example.segundoapiappfixa.infrastructure.database.repository.impl.UsuarioRepositoryImpl;
+import com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl.UsuarioRepositoryImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.nio.file.AccessDeniedException;
 
 @Service
 @AllArgsConstructor

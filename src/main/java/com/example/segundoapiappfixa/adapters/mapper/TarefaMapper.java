@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.adapters.mapper;
 
 import com.example.segundoapiappfixa.adapters.dto.output.Tarefa.TarefaOutputDTO;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
-import com.example.segundoapiappfixa.infrastructure.database.entity.TarefaEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.TarefaEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
