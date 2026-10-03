@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.adapters.mapper;
 
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 import com.example.segundoapiappfixa.adapters.dto.output.Equipamento.EquipamentoOutputDTO;
-import com.example.segundoapiappfixa.infrastructure.database.entity.EquipamentoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.EquipamentoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

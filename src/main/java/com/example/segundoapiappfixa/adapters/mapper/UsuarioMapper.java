@@ -3,9 +3,9 @@ package com.example.segundoapiappfixa.adapters.mapper;
 import com.example.segundoapiappfixa.adapters.dto.output.Usuario.UsuarioOutputDTO;
 import com.example.segundoapiappfixa.domain.model.Turno;
 import com.example.segundoapiappfixa.domain.model.Usuario;
-import com.example.segundoapiappfixa.infrastructure.database.entity.TurnoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.entity.TurnoUsuarioEntity;
-import com.example.segundoapiappfixa.infrastructure.database.entity.UsuarioEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.TurnoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.TurnoUsuarioEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

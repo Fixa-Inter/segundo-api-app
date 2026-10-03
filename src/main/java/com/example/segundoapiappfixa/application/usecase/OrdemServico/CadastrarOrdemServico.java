@@ -20,8 +20,6 @@ import java.time.LocalDateTime;
 @UseCase
 @RequiredArgsConstructor
 public class CadastrarOrdemServico {
-    private static final Long STATUS_INICIAL_ID = 1L;
-
     private final OrdemServicoRepository ordemServicoRepository;
     private final ProblemaRepository problemaRepository;
     private final UsuarioRepository usuarioRepository;
@@ -35,11 +33,14 @@ public class CadastrarOrdemServico {
         Problema problema = problemaRepository.findById(input.problemaId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.problema.notFound"));
 
-        if (!gestor.getEndereco().getId().equals(responsavel.getEndereco().getId()) || !gestor.getEndereco().getId().equals(problema.getLocalEndereco().getEndereco().getId())) {
+        if (
+                !gestor.getEndereco().getId().equals(responsavel.getEndereco().getId())
+                || !gestor.getEndereco().getId().equals(problema.getLocalEndereco().getEndereco().getId())
+        ) {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        StatusOrdemServico status = statusRepository.findById(STATUS_INICIAL_ID)
+        StatusOrdemServico status = statusRepository.findById(input.statusOrdemServicoId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.statusOrdemServico.notFound"));
 
         OrdemServico ordemServico = new OrdemServico(

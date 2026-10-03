@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.adapters.mapper;
 
 import com.example.segundoapiappfixa.adapters.dto.output.Evento.EventoOutputDTO;
 import com.example.segundoapiappfixa.domain.model.Evento;
-import com.example.segundoapiappfixa.infrastructure.database.entity.EventoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.EventoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

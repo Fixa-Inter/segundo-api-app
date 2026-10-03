@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.adapters.mapper;
 
 import com.example.segundoapiappfixa.adapters.dto.output.Ocorrencia.OcorrenciaOutputDTO;
 import com.example.segundoapiappfixa.domain.model.Ocorrencia;
-import com.example.segundoapiappfixa.infrastructure.database.entity.OcorrenciaEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OcorrenciaEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
