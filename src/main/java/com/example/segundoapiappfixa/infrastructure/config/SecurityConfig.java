@@ -65,7 +65,10 @@ public class SecurityConfig{
                         // Endpoints de Autenticação
                         .requestMatchers(
                                 "/api/v1/auth/login",
-                                "/api/v1/auth/refresh"
+                                "/api/v1/auth/refresh",
+                                "/api/v1/auth/esqueceu-senha/**",
+                                "/api/v1/auth/validar-codigo",
+                                "/api/v1/auth/redefinir-senha"
                         ).permitAll()
                         .requestMatchers("/api/v1/auth/logout").authenticated()
 

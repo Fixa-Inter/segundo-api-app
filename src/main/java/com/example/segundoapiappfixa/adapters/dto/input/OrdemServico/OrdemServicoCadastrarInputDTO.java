@@ -14,6 +14,9 @@ public record OrdemServicoCadastrarInputDTO(
         @NotNull(message = "{validation.ordemServico.usuario.required}")
         Long usuarioId,
 
+        @NotNull(message = "{validation.ordemServico.statusOrdemServico.required}")
+        Long statusOrdemServicoId,
+
         @NotNull(message = "{validation.ordemServico.categoria.required}")
         CategoriaProblema categoriaProblema,
 

@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.adapters.mapper;
 
 import com.example.segundoapiappfixa.adapters.dto.output.Foto.FotoOutputDTO;
 import com.example.segundoapiappfixa.domain.model.Foto;
-import com.example.segundoapiappfixa.infrastructure.database.entity.FotoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.FotoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

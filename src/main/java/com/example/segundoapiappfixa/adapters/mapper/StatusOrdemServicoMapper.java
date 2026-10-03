@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.adapters.mapper;
 
 import com.example.segundoapiappfixa.domain.model.StatusOrdemServico;
-import com.example.segundoapiappfixa.infrastructure.database.entity.StatusOrdemServicoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.StatusOrdemServicoEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

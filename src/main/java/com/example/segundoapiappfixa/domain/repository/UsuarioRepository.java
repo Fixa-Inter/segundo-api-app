@@ -17,4 +17,6 @@ public interface UsuarioRepository {
 
     List<Usuario> findByEnderecoIdAndTipoAcesso(Long enderecoId, TipoAcesso tipoAcesso, FiltrosUsuarioQueryParam filtros);
 
+    Usuario save(Usuario usuario);
+
 }
