@@ -39,11 +39,9 @@ public class AtualizarOcorrencia {
                     .orElseThrow(() -> new RegraProblemaException("exception.categoriaEquipamento.required")));
         }
 
-        if (dto.categoriaProblemaId() != null) atual.setCategoriaProblema(
-                CategoriaProblema.fromId(dto.categoriaProblemaId().intValue()));
+        if (dto.categoriaProblemaId() != null) atual.setCategoriaProblema(dto.categoriaProblemaId());
 
-        if (dto.prioridade() != null) atual.setPrioridade(
-                Prioridade.fromId(dto.prioridade().intValue()));
+        if (dto.prioridade() != null) atual.setPrioridade(dto.prioridade());
 
         if (dto.titulo() != null) atual.setTitulo(dto.titulo());
 
