@@ -2,6 +2,8 @@ package com.example.segundoapiappfixa.infrastructure.database.sql.entity;
 
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.CategoriaProblemaConverter;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.PrioridadeConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,9 +36,11 @@ public class OcorrenciaEntity {
     @JoinColumn(name = "equipamento_id")
     public EquipamentoEntity equipamento;
 
+    @Convert(converter = CategoriaProblemaConverter.class)
     @Column(name = "categoria_problema")
     public CategoriaProblema categoriaProblema;
 
+    @Convert(converter = PrioridadeConverter.class)
     @Column(name = "prioridade")
     public Prioridade prioridade;
 
