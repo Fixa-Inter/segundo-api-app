@@ -28,6 +28,8 @@ public interface OrdemServicoRepository {
 
     Optional<OrdemServico> findById(Long ordemServicoId);
 
+    boolean existsByProblemaId(Long problemaId);
+
     OrdemServico save(OrdemServico ordemServico);
 
     void delete(Long ordemServicoId);
