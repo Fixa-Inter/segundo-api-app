@@ -2,6 +2,9 @@ package com.example.segundoapiappfixa.infrastructure.database.sql.repository.spe
 
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.*;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OcorrenciaEntity;
+import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
+import com.example.segundoapiappfixa.domain.enums.Prioridade;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -35,11 +38,11 @@ public final class OcorrenciaSpecs {
     }
 
     public static Specification<OcorrenciaEntity> findByCategoriaProblema(String v) {
-        return enumLike("categoriaProblema", v);
+        return enumLike("categoriaProblema", v, CategoriaProblema.class);
     }
 
     public static Specification<OcorrenciaEntity> findByPrioridade(String v) {
-        return enumLike("prioridade", v);
+        return enumLike("prioridade", v, Prioridade.class);
     }
 
     public static Specification<OcorrenciaEntity> findByLocalEndereco(String v) {
@@ -55,7 +58,7 @@ public final class OcorrenciaSpecs {
     }
 
     public static Specification<OcorrenciaEntity> findByTipoAcesso(String v) {
-        return relationLike("usuario", "tipoAcesso", v);
+        return enumRelationLike("usuario", "tipoAcesso", v, TipoAcesso.class);
     }
 
     public static Specification<OcorrenciaEntity> findByDataCriacaoMin(LocalDateTime v) {
@@ -73,9 +76,42 @@ public final class OcorrenciaSpecs {
         return (r, q, c) -> c.like(c.lower(r.get(f)), "%" + v.toLowerCase() + "%");
     }
 
-    private static Specification<OcorrenciaEntity> enumLike(String f, String v) {
+    private static Specification<OcorrenciaEntity> enumLike(
+            String f,
+            String v,
+            Class<? extends Enum<?>> enumType
+    ) {
         if (v == null || v.isBlank()) return Specification.unrestricted();
-        return (r, q, c) -> c.equal(r.get(f), v);
+
+        Enum<?> enumValue = enumValue(enumType, v);
+        if (enumValue == null) return Specification.unrestricted();
+
+        return (r, q, c) -> c.equal(r.get(f), enumValue);
+    }
+
+    private static Specification<OcorrenciaEntity> enumRelationLike(
+            String rel,
+            String f,
+            String v,
+            Class<? extends Enum<?>> enumType
+    ) {
+        if (v == null || v.isBlank()) return Specification.unrestricted();
+
+        Enum<?> enumValue = enumValue(enumType, v);
+        if (enumValue == null) return Specification.unrestricted();
+
+        return (r, q, c) -> c.equal(r.join(rel, JoinType.INNER).get(f), enumValue);
+    }
+
+    private static Enum<?> enumValue(Class<? extends Enum<?>> enumType, String value) {
+        try {
+            if (enumType == CategoriaProblema.class) return CategoriaProblema.fromNome(value);
+            if (enumType == Prioridade.class) return Prioridade.fromNome(value);
+            if (enumType == TipoAcesso.class) return TipoAcesso.fromNome(value);
+            return Enum.valueOf(enumType.asSubclass(Enum.class), value);
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
     }
 
     private static Specification<OcorrenciaEntity> relationLike(String rel, String f, String v) {
