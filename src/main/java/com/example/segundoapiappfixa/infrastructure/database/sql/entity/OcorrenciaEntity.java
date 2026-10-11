@@ -33,8 +33,8 @@ public class OcorrenciaEntity {
     public LocalEnderecoEntity localEndereco;
 
     @ManyToOne
-    @JoinColumn(name = "equipamento_id")
-    public EquipamentoEntity equipamento;
+    @JoinColumn(name = "categoria_equipamento_id")
+    public CategoriaEquipamentoEntity categoriaEquipamento;
 
     @Convert(converter = CategoriaProblemaConverter.class)
     @Column(name = "categoria_problema")

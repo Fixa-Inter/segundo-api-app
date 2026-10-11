@@ -10,8 +10,8 @@ public record OcorrenciaCadastrarInputDTO (
         @NotNull(message = "{validation.local.required}")
         Long localEnderecoId,
 
-        @NotNull(message = "{validation.equipamento.required}")
-        Long equipamentoId,
+        @NotNull(message = "{validation.categoriaEquipamento.required}")
+        Long categoriaEquipamentoId,
 
         @NotNull(message = "{validation.categoria.required}")
         Long categoriaProblemaId,

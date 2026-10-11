@@ -46,8 +46,8 @@ public final class OcorrenciaSpecs {
         return relationLike("localEndereco", "nome", v);
     }
 
-    public static Specification<OcorrenciaEntity> findByEquipamentoCodigo(String v) {
-        return relationLike("equipamento", "codigo", v);
+    public static Specification<OcorrenciaEntity> findByCategoriaEquipamento(String v) {
+        return relationLike("categoriaEquipamento", "nome", v);
     }
 
     public static Specification<OcorrenciaEntity> findByNomeUsuario(String v) {

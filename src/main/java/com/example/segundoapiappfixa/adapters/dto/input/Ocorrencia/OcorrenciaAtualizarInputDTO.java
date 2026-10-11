@@ -9,7 +9,7 @@ public record OcorrenciaAtualizarInputDTO(
         @Positive(message = "{validation.ocorrencia.invalid}")
         Long id,
         Long localEnderecoId,
-        Long equipamentoId,
+        Long categoriaEquipamentoId,
         Long categoriaProblemaId,
         String titulo,
         String descricaoOcorrencia,

@@ -5,7 +5,7 @@ import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.model.*;
-import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
+import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
@@ -21,7 +21,7 @@ public class CriarOcorrencia {
     private final OcorrenciaRepository ocorrenciaRepository;
     private final UsuarioRepository usuarioRepository;
     private final LocalEnderecoRepository localEnderecoRepository;
-    private final EquipamentoRepository equipamentoRepository;
+    private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
 
     public Ocorrencia cadastrar(OcorrenciaCadastrarInputDTO dto, Long usuarioId) {
 
@@ -32,8 +32,8 @@ public class CriarOcorrencia {
         LocalEndereco localEndereco = localEnderecoRepository.findById(dto.localEnderecoId())
                 .orElseThrow(() -> new RegraProblemaException("exception.local.required"));
 
-        Equipamento equipamento = equipamentoRepository.findById(dto.equipamentoId())
-                .orElseThrow(() -> new RegraProblemaException("exception.equipamento.required"));
+        CategoriaEquipamento categoriaEquipamento = categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
+                .orElseThrow(() -> new RegraProblemaException("exception.categoriaEquipamento.required"));
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RegraProblemaException("exception.usuario.required"));
@@ -42,7 +42,7 @@ public class CriarOcorrencia {
                 null,
                 usuario,
                 localEndereco,
-                equipamento,
+                categoriaEquipamento,
                 CategoriaProblema.fromId(dto.categoriaProblemaId().intValue()),
                 Prioridade.fromId(dto.prioridade().intValue()),
                 dto.titulo(),

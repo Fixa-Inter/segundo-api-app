@@ -17,7 +17,7 @@ public class Ocorrencia {
     private Long id;
     private Usuario usuario;
     private LocalEndereco localEndereco;
-    private Equipamento equipamento;
+    private CategoriaEquipamento categoriaEquipamento;
     private CategoriaProblema categoriaProblema;
     private Prioridade prioridade;
     private String titulo;

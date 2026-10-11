@@ -13,7 +13,7 @@ public record OcorrenciaOutputDTO(
         String localEndereco,
         String descricaoLocal,
         LocalDate dataCriacao,
-        String equipamentoCodigo,
+        String categoriaEquipamento,
         String nomeUsuario,
         String tipoAcesso
 ) {

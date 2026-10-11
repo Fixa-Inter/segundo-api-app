@@ -15,7 +15,7 @@ public interface OcorrenciaMapper {
     @Mapping(source = "categoriaProblema.nome", target = "categoriaProblema")
     @Mapping(source = "prioridade.nome", target = "prioridade")
     @Mapping(source = "localEndereco.nome", target = "localEndereco")
-    @Mapping(source = "equipamento.codigo", target = "equipamentoCodigo")
+    @Mapping(source = "categoriaEquipamento.nome", target = "categoriaEquipamento")
     @Mapping(source = "usuario.nomeCompleto", target = "nomeUsuario")
     @Mapping(source = "usuario.tipoAcesso.nome", target = "tipoAcesso")
     OcorrenciaOutputDTO toOutputDTO(Ocorrencia ocorrencia);

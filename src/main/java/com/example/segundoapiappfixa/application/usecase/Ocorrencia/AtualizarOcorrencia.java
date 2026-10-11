@@ -6,7 +6,7 @@ import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
-import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
+import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class AtualizarOcorrencia {
     private final OcorrenciaRepository ocorrenciaRepository;
     private final LocalEnderecoRepository localEnderecoRepository;
-    private final EquipamentoRepository equipamentoRepository;
+    private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
 
     public Ocorrencia atualizar(OcorrenciaAtualizarInputDTO dto, Long usuarioId) {
 
@@ -34,9 +34,9 @@ public class AtualizarOcorrencia {
                     .orElseThrow(() -> new RegraProblemaException("exception.local.required")));
         }
 
-        if (dto.equipamentoId() != null) {
-            atual.setEquipamento(equipamentoRepository.findById(dto.equipamentoId())
-                    .orElseThrow(() -> new RegraProblemaException("exception.equipamento.required")));
+        if (dto.categoriaEquipamentoId() != null) {
+            atual.setCategoriaEquipamento(categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
+                    .orElseThrow(() -> new RegraProblemaException("exception.categoriaEquipamento.required")));
         }
 
         if (dto.categoriaProblemaId() != null) atual.setCategoriaProblema(
