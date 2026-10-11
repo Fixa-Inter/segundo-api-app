@@ -122,6 +122,7 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
         if (ocorrencia.getCategoriaEquipamento() != null) {
             entity.categoriaEquipamento = reference(CategoriaEquipamentoEntity.class, ocorrencia.getCategoriaEquipamento().getId());
         }
+
         return entity;
     }
 

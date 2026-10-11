@@ -7,7 +7,6 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.repository.util
 import com.example.segundoapiappfixa.domain.model.ModeloEquipamento;
 import com.example.segundoapiappfixa.domain.repository.ModeloEquipamentoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ModeloEquipamentoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaModeloEquipamentoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -70,11 +69,6 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
     // Método de salvar no banco de dados
     public ModeloEquipamento save(ModeloEquipamento model) {
         ModeloEquipamentoEntity entity = mapper.toEntity(model);
-
-        entity.usuario = entityManager.getReference(
-                UsuarioEntity.class,
-                model.getUsuario().getId()
-        );
 
         return mapper.toModel(repository.save(entity));
     }
