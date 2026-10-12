@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.entity;
 
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.CategoriaProblemaConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class AptidaoEntity {
     @JoinColumn(name = "usuario_id")
     public UsuarioEntity usuario;
 
+    @Convert(converter = CategoriaProblemaConverter.class)
     @Column(name = "categoria_problema")
     private CategoriaProblema categoriaProblema;
 

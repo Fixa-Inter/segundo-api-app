@@ -3,6 +3,7 @@ package com.example.segundoapiappfixa.application.usecase.Problema;
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
+import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -54,12 +55,13 @@ public class CriarProblema {
                     null,
                     null,
                     null,
+                    null,
                     url,
                     true,
                     LocalDateTime.now()
             );
 
-            fotos.add(fotoRepository.save(foto));
+            fotos.add(fotoRepository.save(foto, TipoFoto.PROBLEMA));
         }
 
         problemaPersistido.setFotos(fotos);

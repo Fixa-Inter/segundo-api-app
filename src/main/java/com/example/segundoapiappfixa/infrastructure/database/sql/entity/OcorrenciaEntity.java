@@ -2,6 +2,8 @@ package com.example.segundoapiappfixa.infrastructure.database.sql.entity;
 
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.CategoriaProblemaConverter;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.PrioridadeConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "Ocorrencia")
 @Getter
@@ -31,12 +34,14 @@ public class OcorrenciaEntity {
     public LocalEnderecoEntity localEndereco;
 
     @ManyToOne
-    @JoinColumn(name = "equipamento_id")
-    public EquipamentoEntity equipamento;
+    @JoinColumn(name = "categoria_equipamento_id")
+    public CategoriaEquipamentoEntity categoriaEquipamento;
 
+    @Convert(converter = CategoriaProblemaConverter.class)
     @Column(name = "categoria_problema")
     public CategoriaProblema categoriaProblema;
 
+    @Convert(converter = PrioridadeConverter.class)
     @Column(name = "prioridade")
     public Prioridade prioridade;
 
@@ -54,4 +59,7 @@ public class OcorrenciaEntity {
 
     @Column(name = "esta_ativo")
     private Boolean estaAtivo;
+
+    @OneToMany(mappedBy = "ocorrencia")
+    private List<FotoEntity> fotos;
 }

@@ -13,12 +13,14 @@ public interface FotoMapper {
     @Mapping(target = "ocorrencia", ignore = true)
     @Mapping(target = "ordemServico", ignore = true)
     @Mapping(target = "usuario", ignore = true)
+    @Mapping(target = "observacaoConclusao", ignore = true)
     FotoEntity toEntity(Foto foto);
 
     @Mapping(target = "problema", ignore = true)
     @Mapping(target = "ocorrencia", ignore = true)
     @Mapping(target = "ordemServico", ignore = true)
     @Mapping(target = "usuario", ignore = true)
+    @Mapping(target = "observacaoConclusao", ignore = true)
     Foto toModel(FotoEntity entity);
 
     FotoOutputDTO toOutputDTO(Foto foto);

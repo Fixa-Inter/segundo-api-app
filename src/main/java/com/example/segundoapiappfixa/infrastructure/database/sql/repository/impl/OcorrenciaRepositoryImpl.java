@@ -6,7 +6,7 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.repository.spec
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Ocorrencia;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.EquipamentoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.CategoriaEquipamentoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalEnderecoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OcorrenciaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
@@ -45,7 +45,7 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
                 .and(OcorrenciaSpecs.findByPrioridade(filtros.prioridade()))
                 .and(OcorrenciaSpecs.findByLocalEndereco(filtros.localEndereco()))
                 .and(OcorrenciaSpecs.findByDescricaoLocal(filtros.descricaoLocal()))
-                .and(OcorrenciaSpecs.findByEquipamentoCodigo(filtros.equipamentoCodigo()))
+                .and(OcorrenciaSpecs.findByCategoriaEquipamento(filtros.categoriaEquipamento()))
                 .and(OcorrenciaSpecs.findByNomeUsuario(filtros.nomeUsuario()))
                 .and(OcorrenciaSpecs.findByTipoAcesso(filtros.tipoAcesso()))
                 .and(OcorrenciaSpecs.findByDataCriacaoMin(filtros.dataCriacaoMin()))
@@ -119,9 +119,10 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
 
         entity.localEndereco = reference(LocalEnderecoEntity.class, ocorrencia.getLocalEndereco().getId());
 
-        if (ocorrencia.getEquipamento() != null) {
-            entity.equipamento = reference(EquipamentoEntity.class, ocorrencia.getEquipamento().getId());
+        if (ocorrencia.getCategoriaEquipamento() != null) {
+            entity.categoriaEquipamento = reference(CategoriaEquipamentoEntity.class, ocorrencia.getCategoriaEquipamento().getId());
         }
+
         return entity;
     }
 

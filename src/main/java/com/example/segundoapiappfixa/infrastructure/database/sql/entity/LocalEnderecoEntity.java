@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.entity;
 
 import com.example.segundoapiappfixa.domain.enums.TipoLocalEndereco;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.TipoLocalEnderecoConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class LocalEnderecoEntity {
     @Column(name = "nome")
     private String nome;
 
+    @Convert(converter = TipoLocalEnderecoConverter.class)
     @Column(name = "tipo_local_endereco")
     private TipoLocalEndereco tipoLocalEndereco;
 

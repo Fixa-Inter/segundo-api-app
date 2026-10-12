@@ -24,12 +24,19 @@ public class AtualizarStatus {
         if (problema.getStatus() != StatusProblema.PENDENTE || dto.statusProblema() == StatusProblema.PENDENTE)
             throw new RegraProblemaException("exception.status.transition");
 
-        if (dto.statusProblema() == StatusProblema.APROVADO && dto.motivoRecusa() != null) {
+        boolean possuiMotivoRecusa = dto.motivoRecusa() != null
+                && !dto.motivoRecusa().isBlank();
+
+        if (dto.statusProblema() == StatusProblema.REPROVADO && !possuiMotivoRecusa) {
+            throw new RegraProblemaException("exception.recusa.required");
+        }
+
+        if (dto.statusProblema() != StatusProblema.REPROVADO && possuiMotivoRecusa) {
             throw new RegraProblemaException("exception.recusa.transition");
         }
 
         problema.setStatus(dto.statusProblema());
-        problema.setMotivoRecusa(dto.motivoRecusa());
+        problema.setMotivoRecusa(possuiMotivoRecusa ? dto.motivoRecusa().trim() : null);
 
         return problemaRepository.save(problema);
     }

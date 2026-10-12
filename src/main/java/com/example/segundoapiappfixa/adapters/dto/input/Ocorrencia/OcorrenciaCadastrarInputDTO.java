@@ -1,7 +1,11 @@
 package com.example.segundoapiappfixa.adapters.dto.input.Ocorrencia;
 
+import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
+import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import java.util.List;
 
 public record OcorrenciaCadastrarInputDTO (
         @NotNull(message = "{validation.usuario.required}")
@@ -10,11 +14,11 @@ public record OcorrenciaCadastrarInputDTO (
         @NotNull(message = "{validation.local.required}")
         Long localEnderecoId,
 
-        @NotNull(message = "{validation.equipamento.required}")
-        Long equipamentoId,
+        @NotNull(message = "{validation.categoriaEquipamento.required}")
+        Long categoriaEquipamentoId,
 
         @NotNull(message = "{validation.categoria.required}")
-        Long categoriaProblemaId,
+        CategoriaProblema categoriaProblemaId,
 
         @NotBlank(message = "{validation.titulo.required}")
         String titulo,
@@ -26,6 +30,8 @@ public record OcorrenciaCadastrarInputDTO (
         String descricaoLocal,
 
         @NotNull(message = "{validation.prioridade.required}")
-        Long prioridade
+        Prioridade prioridade,
+        @NotEmpty(message = "{validation.fotos.required}")
+        List<@NotBlank(message = "{validation.foto.required}") String> urlsFoto
 ) {
 }

@@ -21,8 +21,8 @@ public record FiltrosOcorrenciaQueryParam(
         @BindParam("descricao_local")
         String descricaoLocal,
 
-        @BindParam("equipamento_codigo")
-        String equipamentoCodigo,
+        @BindParam("categoria_equipamento")
+        String categoriaEquipamento,
 
         @BindParam("nome_usuario")
         String nomeUsuario,

@@ -84,6 +84,11 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
                 .map(ordemServicoMapper::toModel);
     }
 
+    @Override
+    public boolean existsByProblemaId(Long problemaId) {
+        return jpaOrdemServicoRepository.existsByProblema_Id(problemaId);
+    }
+
     // Método de salvar no banco de dados
     @Override
     public OrdemServico save(OrdemServico ordemServico) {

@@ -1,10 +1,10 @@
-package com.example.segundoapiappfixa.domain.enums.converter;
+package com.example.segundoapiappfixa.infrastructure.database.sql.converter;
 
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
-@Converter(autoApply = true)
+@Converter
 public class StatusProblemaConverter implements AttributeConverter<StatusProblema, Integer> {
     @Override
     public Integer convertToDatabaseColumn(StatusProblema attribute) {

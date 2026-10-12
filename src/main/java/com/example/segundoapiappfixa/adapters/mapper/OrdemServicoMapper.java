@@ -6,7 +6,11 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OrdemSer
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {
+        ProblemaMapper.class,
+        UsuarioMapper.class,
+        StatusOrdemServicoMapper.class
+})
 public interface OrdemServicoMapper {
 
     OrdemServicoEntity toEntity(OrdemServico model);
