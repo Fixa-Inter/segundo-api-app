@@ -65,17 +65,6 @@ public class FotoRepositoryImpl implements FotoRepository {
                             ));
                 }
             }
-
-            case USUARIO -> {
-                if (foto.getUsuario() != null && foto.getUsuario().getId() != null) {
-
-                    fotoEntity.setUsuario(
-                            entityManager.getReference(
-                                    UsuarioEntity.class,
-                                    foto.getUsuario().getId()
-                            ));
-                }
-            }
         }
 
         FotoEntity fotoPersistida = repository.save(fotoEntity);

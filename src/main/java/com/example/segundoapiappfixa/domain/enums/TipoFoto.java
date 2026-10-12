@@ -10,9 +10,7 @@ import lombok.Getter;
 public enum TipoFoto {
 
     PROBLEMA(),
-    USUARIO(),
     OBSERVACAO_CONCLUSAO(),
-    ORDEM_SERVICO(),
     OCORRENCIA()
 
 }
