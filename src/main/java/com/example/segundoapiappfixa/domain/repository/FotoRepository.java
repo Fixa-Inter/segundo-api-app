@@ -7,11 +7,6 @@ import java.util.List;
 
 public interface FotoRepository {
 
-    List<Foto> findAllByProblemaId(Long problemaId);
-
-    List<Foto> findaAllByObservacaoConclusaoId(Long observacaoConclusao);
-
-    void deleteAllByObservacaoConclusaoId(Long observacaoConclusaoId);
-
     Foto save(Foto foto, TipoFoto tipoFoto);
+
 }

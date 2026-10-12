@@ -4,6 +4,8 @@ import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import java.util.List;
 
 public record OcorrenciaCadastrarInputDTO (
         @NotNull(message = "{validation.usuario.required}")
@@ -28,6 +30,8 @@ public record OcorrenciaCadastrarInputDTO (
         String descricaoLocal,
 
         @NotNull(message = "{validation.prioridade.required}")
-        Prioridade prioridade
+        Prioridade prioridade,
+        @NotEmpty(message = "{validation.fotos.required}")
+        List<@NotBlank(message = "{validation.foto.required}") String> urlsFoto
 ) {
 }

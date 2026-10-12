@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "Ocorrencia")
 @Getter
@@ -58,4 +59,7 @@ public class OcorrenciaEntity {
 
     @Column(name = "esta_ativo")
     private Boolean estaAtivo;
+
+    @OneToMany(mappedBy = "ocorrencia")
+    private List<FotoEntity> fotos;
 }

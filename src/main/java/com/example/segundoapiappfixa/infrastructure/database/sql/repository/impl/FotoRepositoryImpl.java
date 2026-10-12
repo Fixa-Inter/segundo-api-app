@@ -4,9 +4,7 @@ import com.example.segundoapiappfixa.adapters.mapper.FotoMapper;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.domain.model.Foto;
 import com.example.segundoapiappfixa.domain.repository.FotoRepository;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.FotoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ObservacaoConclusaoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.*;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaFotoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -27,30 +25,6 @@ public class FotoRepositoryImpl implements FotoRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    // Método de listar os registros persistidos no banco de dados
-    @Override
-    public List<Foto> findAllByProblemaId(Long problemaId) {
-        return repository.
-                findByProblema_Id(problemaId)
-                .stream()
-                .map(mapper::toModel)
-                .toList();
-    }
-
-    @Override
-    public List<Foto> findaAllByObservacaoConclusaoId(Long observacaoConclusao) {
-        return repository.
-                findByObservacaoConclusao_Id(observacaoConclusao)
-                .stream()
-                .map(mapper::toModel)
-                .toList();
-    }
-
-    @Override
-    public void deleteAllByObservacaoConclusaoId(Long observacaoConclusaoId) {
-        repository.deleteByObservacaoConclusao_Id(observacaoConclusaoId);
-    }
 
     // Método de salvar no banco de dados
     @Override
@@ -77,6 +51,28 @@ public class FotoRepositoryImpl implements FotoRepository {
                             entityManager.getReference(
                                     ObservacaoConclusaoEntity.class,
                                     foto.getObservacaoConclusao().getId()
+                            ));
+                }
+            }
+
+            case OCORRENCIA -> {
+                if (foto.getOcorrencia() != null && foto.getOcorrencia().getId() != null) {
+
+                    fotoEntity.setOcorrencia(
+                            entityManager.getReference(
+                                    OcorrenciaEntity.class,
+                                    foto.getOcorrencia().getId()
+                            ));
+                }
+            }
+
+            case USUARIO -> {
+                if (foto.getUsuario() != null && foto.getUsuario().getId() != null) {
+
+                    fotoEntity.setUsuario(
+                            entityManager.getReference(
+                                    UsuarioEntity.class,
+                                    foto.getUsuario().getId()
                             ));
                 }
             }

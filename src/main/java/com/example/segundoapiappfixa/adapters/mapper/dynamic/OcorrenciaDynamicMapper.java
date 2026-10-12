@@ -20,7 +20,8 @@ public class OcorrenciaDynamicMapper {
                 fields.contains("dataCriacao") ? dto.dataCriacao() : null,
                 fields.contains("categoriaEquipamento") ? dto.categoriaEquipamento() : null,
                 fields.contains("nomeUsuario") ? dto.nomeUsuario() : null,
-                fields.contains("tipoAcesso") ? dto.tipoAcesso() : null
+                fields.contains("tipoAcesso") ? dto.tipoAcesso() : null,
+                fields.contains("fotos") ? dto.fotos() : null
         );
     }
 }

@@ -4,6 +4,8 @@ import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 
 public record OcorrenciaAtualizarInputDTO(
         @NotNull(message = "{validation.ocorrencia.required}")
@@ -19,6 +21,7 @@ public record OcorrenciaAtualizarInputDTO(
         String descricaoOcorrencia,
         String descricaoLocal,
 
-        Prioridade prioridade
+        Prioridade prioridade,
+        List<@NotBlank(message = "{validation.foto.required}") String> urlsFoto
 ) {
 }

@@ -9,10 +9,14 @@ import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepos
 import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
+import com.example.segundoapiappfixa.domain.repository.FotoRepository;
+import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @UseCase
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class CriarOcorrencia {
     private final UsuarioRepository usuarioRepository;
     private final LocalEnderecoRepository localEnderecoRepository;
     private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
+    private final FotoRepository fotoRepository;
 
     public Ocorrencia cadastrar(OcorrenciaCadastrarInputDTO dto, Long usuarioId) {
 
@@ -49,9 +54,28 @@ public class CriarOcorrencia {
                 dto.descricaoOcorrencia(),
                 dto.descricaoLocal(),
                 LocalDateTime.now(),
-                true
+                true,
+                List.of()
         );
 
-        return ocorrenciaRepository.save(ocorrencia);
+        Ocorrencia persistida = ocorrenciaRepository.save(ocorrencia);
+        List<Foto> fotos = new ArrayList<>();
+        for (String url : dto.urlsFoto()) {
+            Foto foto = new Foto(
+                    null,
+                    null,
+                    persistida,
+                    null,
+                    null,
+                    usuario,
+                    url,
+                    true,
+                    LocalDateTime.now()
+            );
+
+            fotos.add(fotoRepository.save(foto, TipoFoto.OCORRENCIA));
+        }
+        persistida.setFotos(fotos);
+        return persistida;
     }
 }
