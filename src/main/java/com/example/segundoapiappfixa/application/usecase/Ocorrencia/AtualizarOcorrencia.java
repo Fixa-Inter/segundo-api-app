@@ -6,18 +6,24 @@ import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
-import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
+import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
+import com.example.segundoapiappfixa.domain.repository.FotoRepository;
+import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @UseCase
 @RequiredArgsConstructor
 public class AtualizarOcorrencia {
     private final OcorrenciaRepository ocorrenciaRepository;
     private final LocalEnderecoRepository localEnderecoRepository;
-    private final EquipamentoRepository equipamentoRepository;
+    private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
+    private final FotoRepository fotoRepository;
 
     public Ocorrencia atualizar(OcorrenciaAtualizarInputDTO dto, Long usuarioId) {
 
@@ -34,16 +40,14 @@ public class AtualizarOcorrencia {
                     .orElseThrow(() -> new RegraProblemaException("exception.local.required")));
         }
 
-        if (dto.equipamentoId() != null) {
-            atual.setEquipamento(equipamentoRepository.findById(dto.equipamentoId())
-                    .orElseThrow(() -> new RegraProblemaException("exception.equipamento.required")));
+        if (dto.categoriaEquipamentoId() != null) {
+            atual.setCategoriaEquipamento(categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
+                    .orElseThrow(() -> new RegraProblemaException("exception.categoriaEquipamento.required")));
         }
 
-        if (dto.categoriaProblemaId() != null) atual.setCategoriaProblema(
-                CategoriaProblema.fromId(dto.categoriaProblemaId().intValue()));
+        if (dto.categoriaProblemaId() != null) atual.setCategoriaProblema(dto.categoriaProblemaId());
 
-        if (dto.prioridade() != null) atual.setPrioridade(
-                Prioridade.fromId(dto.prioridade().intValue()));
+        if (dto.prioridade() != null) atual.setPrioridade(dto.prioridade());
 
         if (dto.titulo() != null) atual.setTitulo(dto.titulo());
 
@@ -51,6 +55,27 @@ public class AtualizarOcorrencia {
 
         if (dto.descricaoLocal() != null) atual.setDescricaoLocal(dto.descricaoLocal());
 
-        return ocorrenciaRepository.save(atual);
+        atual = ocorrenciaRepository.save(atual);
+        if (dto.urlsFoto() != null) {
+            List<Foto> fotos = new ArrayList<>();
+
+            for (String url : dto.urlsFoto()) {
+                Foto foto = new Foto(
+                        null,
+                        null,
+                        atual,
+                        null,
+                        null,
+                        atual.getUsuario(),
+                        url,
+                        true,
+                        LocalDateTime.now()
+                );
+
+                fotos.add(fotoRepository.save(foto, TipoFoto.OCORRENCIA));
+            }
+            atual.setFotos(fotos);
+        }
+        return atual;
     }
 }

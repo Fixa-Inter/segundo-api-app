@@ -25,7 +25,7 @@ public class AtualizarModeloEquipamento {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!modelo.getUsuario().getEndereco().getId()
+        if (!modelo.getCategoriaEquipamento().getUsuario().getEndereco().getId()
                 .equals(usuario.getEndereco().getId())
         ) throw new RegraProblemaException("exception.access.denied");
 
@@ -36,9 +36,16 @@ public class AtualizarModeloEquipamento {
         }
 
         if (dto.categoriaEquipamentoId() != null) {
-            modelo.setCategoriaEquipamento(
-                    categoriaRepository.findById(dto.categoriaEquipamentoId())
-                            .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.categoriaEquipamento.notFound")));
+            CategoriaEquipamento categoria = categoriaRepository.findById(dto.categoriaEquipamentoId())
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.categoriaEquipamento.notFound"));
+
+            if (categoria.getUsuario() == null
+                    || categoria.getUsuario().getEndereco() == null
+                    || !categoria.getUsuario().getEndereco().getId().equals(usuario.getEndereco().getId())) {
+                throw new RegraProblemaException("exception.access.denied");
+            }
+
+            modelo.setCategoriaEquipamento(categoria);
         }
 
         if (dto.nome() != null) modelo.setNome(dto.nome());

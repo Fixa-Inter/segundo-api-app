@@ -2,6 +2,9 @@ package com.example.segundoapiappfixa.infrastructure.database.sql.repository.spe
 
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.*;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OrdemServicoEntity;
+import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
+import com.example.segundoapiappfixa.domain.enums.Prioridade;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -30,15 +33,22 @@ public final class OrdemServicoSpecs {
 
     public static Specification<OrdemServicoEntity> findByCategoriaEquipamento(String v) {
         if (v == null || v.isBlank()) return Specification.unrestricted();
-        return (r, q, c) -> c.like(c.lower(r.join("problema", JoinType.INNER).join("categoriaEquipamento", JoinType.INNER).get("nome")), "%" + v.toLowerCase() + "%");
+        return (r, q, c) -> c.like(
+                c.lower(
+                        r.join("problema", JoinType.INNER)
+                                .join("categoriaEquipamento", JoinType.INNER)
+                                .get("nome")
+                ),
+                "%" + v.toLowerCase() + "%"
+        );
     }
 
     public static Specification<OrdemServicoEntity> findByCategoriaProblema(String v) {
-        return enumLike("categoriaProblema", v);
+        return enumLike("categoriaProblema", v, CategoriaProblema.class);
     }
 
     public static Specification<OrdemServicoEntity> findByPrioridade(String v) {
-        return enumLike("prioridade", v);
+        return enumLike("prioridade", v, Prioridade.class);
     }
 
     public static Specification<OrdemServicoEntity> findByDataPrevistaMin(LocalDateTime v) {
@@ -56,12 +66,32 @@ public final class OrdemServicoSpecs {
     }
 
     public static Specification<OrdemServicoEntity> findByTipoAcesso(String v) {
-        return relationLike("usuario", "tipoAcesso", v);
+        return enumRelationLike("usuario", "tipoAcesso", v, TipoAcesso.class);
     }
 
-    private static Specification<OrdemServicoEntity> enumLike(String f, String v) {
+    private static Specification<OrdemServicoEntity> enumLike(String f, String v, Class<? extends Enum<?>> enumType) {
         if (v == null || v.isBlank()) return Specification.unrestricted();
-        return (r, q, c) -> c.equal(r.get(f), v);
+        Enum<?> value = enumValue(enumType, v);
+        if (value == null) return Specification.unrestricted();
+        return (r, q, c) -> c.equal(r.get(f), value);
+    }
+
+    private static Specification<OrdemServicoEntity> enumRelationLike(String rel, String field, String v, Class<? extends Enum<?>> enumType) {
+        if (v == null || v.isBlank()) return Specification.unrestricted();
+        Enum<?> value = enumValue(enumType, v);
+        if (value == null) return Specification.unrestricted();
+        return (r, q, c) -> c.equal(r.join(rel, JoinType.INNER).get(field), value);
+    }
+
+    private static Enum<?> enumValue(Class<? extends Enum<?>> enumType, String value) {
+        try {
+            if (enumType == CategoriaProblema.class) return CategoriaProblema.fromNome(value);
+            if (enumType == Prioridade.class) return Prioridade.fromNome(value);
+            if (enumType == TipoAcesso.class) return TipoAcesso.fromNome(value);
+            return Enum.valueOf(enumType.asSubclass(Enum.class), value);
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
     }
 
     private static Specification<OrdemServicoEntity> relationLike(String rel, String f, String v) {

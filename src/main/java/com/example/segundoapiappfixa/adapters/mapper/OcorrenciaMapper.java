@@ -6,7 +6,7 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.entity.Ocorrenc
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = FotoMapper.class)
 public interface OcorrenciaMapper {
 
     OcorrenciaEntity toEntity(Ocorrencia ocorrencia);
@@ -15,8 +15,9 @@ public interface OcorrenciaMapper {
     @Mapping(source = "categoriaProblema.nome", target = "categoriaProblema")
     @Mapping(source = "prioridade.nome", target = "prioridade")
     @Mapping(source = "localEndereco.nome", target = "localEndereco")
-    @Mapping(source = "equipamento.codigo", target = "equipamentoCodigo")
+    @Mapping(source = "categoriaEquipamento.nome", target = "categoriaEquipamento")
     @Mapping(source = "usuario.nomeCompleto", target = "nomeUsuario")
     @Mapping(source = "usuario.tipoAcesso.nome", target = "tipoAcesso")
+    @Mapping(source = "fotos", target = "fotos")
     OcorrenciaOutputDTO toOutputDTO(Ocorrencia ocorrencia);
 }

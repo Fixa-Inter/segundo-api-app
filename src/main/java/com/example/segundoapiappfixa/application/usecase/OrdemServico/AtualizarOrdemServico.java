@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
 import com.example.segundoapiappfixa.adapters.dto.input.OrdemServico.OrdemServicoAtualizarInputDTO;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.model.Usuario;
@@ -40,6 +41,11 @@ public class AtualizarOrdemServico {
         if (input.usuarioId() != null) {
             Usuario responsavel = usuarioRepository.findById(input.usuarioId())
                     .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.notFound"));
+
+            if (responsavel.getTipoAcesso() != TipoAcesso.GESTOR
+                    && responsavel.getTipoAcesso() != TipoAcesso.TECNICO) {
+                throw new RegraProblemaException("exception.responsavel.denied");
+            }
 
             if (responsavel.getEndereco() == null || !gestor.getEndereco().getId().equals(responsavel.getEndereco().getId())) {
                 throw new RegraProblemaException("exception.access.denied");

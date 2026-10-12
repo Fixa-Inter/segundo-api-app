@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.entity;
 
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.StatusProblemaConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,6 +50,7 @@ public class ProblemaEntity {
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
 
+    @Convert(converter = StatusProblemaConverter.class)
     @Column(name = "status")
     private StatusProblema status;
 

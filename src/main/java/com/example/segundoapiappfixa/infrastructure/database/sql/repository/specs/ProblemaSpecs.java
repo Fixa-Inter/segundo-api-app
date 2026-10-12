@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.infrastructure.database.sql.repository.spe
 
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.*;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -45,7 +46,14 @@ public final class ProblemaSpecs {
     }
 
     public static Specification<ProblemaEntity> findByTipoAcesso(String v) {
-        return relationLike("usuario", "tipoAcesso", v);
+        if (v == null || v.isBlank()) return Specification.unrestricted();
+        final TipoAcesso tipoAcesso;
+        try {
+            tipoAcesso = TipoAcesso.fromNome(v);
+        } catch (IllegalArgumentException exception) {
+            return Specification.unrestricted();
+        }
+        return (r, q, c) -> c.equal(r.join("usuario", JoinType.INNER).get("tipoAcesso"), tipoAcesso);
     }
 
     public static Specification<ProblemaEntity> findByDataCriacaoMin(LocalDateTime v) {

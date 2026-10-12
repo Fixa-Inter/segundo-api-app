@@ -15,7 +15,7 @@ public interface OcorrenciaRepository {
             "prioridade", "prioridade",
             "local_endereco", "localEndereco.nome",
             "descricao_local", "descricaoLocal",
-            "equipamento_codigo", "equipamento.codigo",
+            "categoria_equipamento", "categoriaEquipamento.nome",
             "nome_usuario", "usuario.nomeCompleto",
             "tipo_acesso", "usuario.tipoAcesso"
     );

@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.entity;
 
 import com.example.segundoapiappfixa.domain.enums.TipoInstituicao;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.TipoInstituicaoConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class InstituicaoEntity {
     @Column(name = "nome")
     private String nome;
 
+    @Convert(converter = TipoInstituicaoConverter.class)
     @Column(name = "tipo_instituicao")
     private TipoInstituicao tipoInstituicao;
 

@@ -12,7 +12,13 @@ public final class ModeloEquipamentoSpecs {
     }
 
     public static Specification<ModeloEquipamentoEntity> findByEnderecoId(Long id) {
-        return (r, q, cb) -> cb.equal(r.join("usuario", JoinType.INNER).join("endereco", JoinType.INNER).get("id"), id);
+        return (r, q, cb) -> cb.equal(
+                r.join("categoriaEquipamento", JoinType.INNER)
+                        .join("usuario", JoinType.INNER)
+                        .join("endereco", JoinType.INNER)
+                        .get("id"),
+                id
+        );
     }
 
     public static Specification<ModeloEquipamentoEntity> findByNome(String v) {

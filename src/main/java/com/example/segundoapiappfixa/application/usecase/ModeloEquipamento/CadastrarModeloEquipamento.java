@@ -28,9 +28,14 @@ public class CadastrarModeloEquipamento {
         CategoriaEquipamento categoria = categoriaRepository.findById(dto.categoriaEquipamentoId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.categoriaEquipamento.notFound"));
 
+        if (categoria.getUsuario() == null
+                || categoria.getUsuario().getEndereco() == null
+                || !categoria.getUsuario().getEndereco().getId().equals(usuario.getEndereco().getId())) {
+            throw new EntidadeNaoEncontradaException("exception.access.denied");
+        }
+
         ModeloEquipamento modeloEquipamento = new ModeloEquipamento(
                 null,
-                usuario,
                 marca,
                 categoria,
                 dto.nome(),

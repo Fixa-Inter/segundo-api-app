@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.entity;
 
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.TipoAcessoConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class UsuarioEntity {
     @Column(name = "email")
     private String email;
 
+    @Convert(converter = TipoAcessoConverter.class)
     @Column(name = "tipo_acesso")
     private TipoAcesso tipoAcesso;
 

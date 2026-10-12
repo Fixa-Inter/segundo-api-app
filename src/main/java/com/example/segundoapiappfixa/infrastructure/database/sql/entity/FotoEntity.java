@@ -33,6 +33,10 @@ public class FotoEntity {
     private OrdemServicoEntity ordemServico;
 
     @ManyToOne
+    @JoinColumn(name = "observacao_conclusao_id")
+    private ObservacaoConclusaoEntity observacaoConclusao;
+
+    @ManyToOne
     @JoinColumn(name = "usuario_id")
     private UsuarioEntity usuario;
 

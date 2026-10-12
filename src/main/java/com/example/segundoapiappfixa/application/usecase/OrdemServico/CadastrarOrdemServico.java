@@ -2,6 +2,8 @@ package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
 import com.example.segundoapiappfixa.adapters.dto.input.OrdemServico.OrdemServicoCadastrarInputDTO;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.domain.enums.StatusProblema;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.model.StatusOrdemServico;
@@ -27,6 +29,7 @@ public class CadastrarOrdemServico {
 
     @Transactional
     public OrdemServico cadastrar(OrdemServicoCadastrarInputDTO input, Long usuarioAutenticadoId) {
+
         Usuario gestor = buscarUsuario(usuarioAutenticadoId);
         Usuario responsavel = buscarUsuario(input.usuarioId());
 
@@ -38,6 +41,19 @@ public class CadastrarOrdemServico {
                 || !gestor.getEndereco().getId().equals(problema.getLocalEndereco().getEndereco().getId())
         ) {
             throw new RegraProblemaException("exception.access.denied");
+        }
+
+        if (responsavel.getTipoAcesso() != TipoAcesso.GESTOR
+                && responsavel.getTipoAcesso() != TipoAcesso.TECNICO) {
+            throw new RegraProblemaException("exception.responsavel.denied");
+        }
+
+        if (problema.getStatus() != StatusProblema.APROVADO) {
+            throw new RegraProblemaException("exception.problema.notApproved");
+        }
+
+        if (ordemServicoRepository.existsByProblemaId(problema.getId())) {
+            throw new RegraProblemaException("exception.ordemServico.duplicate");
         }
 
         StatusOrdemServico status = statusRepository.findById(input.statusOrdemServicoId())

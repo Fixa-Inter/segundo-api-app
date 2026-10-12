@@ -7,6 +7,7 @@ public record TarefaAtualizarInputDTO(
         Long id,
 
         String titulo,
-        String descricao
+        String descricao,
+        Long statusOrdemServicoId
 ) {
 }
