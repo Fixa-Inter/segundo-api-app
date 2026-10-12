@@ -16,6 +16,7 @@ public class Foto {
     private Problema problema;
     private Ocorrencia ocorrencia;
     private OrdemServico ordemServico;
+    private ObservacaoConclusao observacaoConclusao;
     private Usuario usuario;
     private String url;
     private Boolean estaAtivo;
