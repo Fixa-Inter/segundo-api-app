@@ -4,10 +4,8 @@ import com.example.segundoapiappfixa.adapters.dto.input.OrdemServico.OrdemServic
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
-import com.example.segundoapiappfixa.domain.model.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
-import com.example.segundoapiappfixa.domain.repository.StatusOrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
@@ -18,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AtualizarOrdemServico {
     private final OrdemServicoRepository ordemServicoRepository;
-    private final StatusOrdemServicoRepository statusRepository;
     private final UsuarioRepository usuarioRepository;
 
     @Transactional
@@ -54,12 +51,7 @@ public class AtualizarOrdemServico {
             ordemServico.setUsuario(responsavel);
         }
 
-        if (input.statusOrdemServicoId() != null) {
-            StatusOrdemServico status = statusRepository.findById(input.statusOrdemServicoId())
-                    .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.statusOrdemServico.notFound"));
-
-            ordemServico.setStatusOrdemServico(status);
-        }
+        if (input.statusOrdemServico() != null) ordemServico.setStatusOrdemServico(input.statusOrdemServico());
 
         if (input.categoriaProblema() != null) ordemServico.setCategoriaProblema(input.categoriaProblema());
         if (input.prioridade() != null) ordemServico.setPrioridade(input.prioridade());
@@ -73,7 +65,7 @@ public class AtualizarOrdemServico {
             OrdemServico ordemServico,
             Long usuarioAutenticadoId
     ) {
-        boolean atualizaApenasStatus = input.statusOrdemServicoId() != null
+        boolean atualizaApenasStatus = input.statusOrdemServico() != null
                 && input.usuarioId() == null
                 && input.categoriaProblema() == null
                 && input.dataPrevista() == null

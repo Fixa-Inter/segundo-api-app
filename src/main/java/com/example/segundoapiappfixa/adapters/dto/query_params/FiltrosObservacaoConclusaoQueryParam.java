@@ -26,9 +26,6 @@ public record FiltrosObservacaoConclusaoQueryParam(
 
         String prioridade,
 
-        @BindParam("status_ordem_servico")
-        String statusOrdemServico,
-
         @BindParam("nome_responsavel")
         String nomeResponsavel,
 

@@ -19,8 +19,8 @@ public enum CategoriaProblema {
     ILUMINACAO("Iluminação", 9),
     LIMPEZA_CONSERVACAO("Limpeza e Conservação", 10);
 
-    private String nome;
-    private int id;
+    private final String nome;
+    private final int id;
 
     public static CategoriaProblema fromNome(String nome) {
         for (CategoriaProblema categoriaProblema : values()) {

@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.adapters.dto.input.Tarefa;
 
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import jakarta.validation.constraints.NotNull;
 
 public record TarefaAtualizarInputDTO(
@@ -8,6 +9,6 @@ public record TarefaAtualizarInputDTO(
 
         String titulo,
         String descricao,
-        Long statusOrdemServicoId
+        StatusOrdemServico statusOrdemServico
 ) {
 }

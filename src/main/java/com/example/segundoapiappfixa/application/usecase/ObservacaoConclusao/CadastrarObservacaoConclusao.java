@@ -2,11 +2,11 @@ package com.example.segundoapiappfixa.application.usecase.ObservacaoConclusao;
 
 import com.example.segundoapiappfixa.adapters.dto.input.ObservacaoConclusao.ObservacaoConclusaoCriarInputDTO;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.domain.repository.ObservacaoConclusaoRepository;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
-import com.example.segundoapiappfixa.domain.repository.StatusOrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
@@ -26,7 +26,6 @@ public class CadastrarObservacaoConclusao {
     private final OrdemServicoRepository ordemServicoRepository;
     private final UsuarioRepository usuarioRepository;
     private final FotoRepository fotoRepository;
-    private final StatusOrdemServicoRepository statusRepository;
 
     public ObservacaoConclusao cadastrar(
             ObservacaoConclusaoCriarInputDTO dto,
@@ -47,10 +46,7 @@ public class CadastrarObservacaoConclusao {
 
         validarPermissao(usuario, ordemServico, gestor);
 
-        StatusOrdemServico status = statusRepository.findById(dto.statusOrdemServicoId())
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.statusOrdemServico.notFound"));
-
-        ordemServico.setStatusOrdemServico(status);
+        ordemServico.setStatusOrdemServico(StatusOrdemServico.CONCLUIDA);
         ordemServicoRepository.save(ordemServico);
 
         ObservacaoConclusao observacaoConclusao = new ObservacaoConclusao(

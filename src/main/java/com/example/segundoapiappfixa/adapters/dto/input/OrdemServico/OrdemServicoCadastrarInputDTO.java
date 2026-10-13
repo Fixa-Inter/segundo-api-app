@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.adapters.dto.input.OrdemServico;
 
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ public record OrdemServicoCadastrarInputDTO(
         Long usuarioId,
 
         @NotNull(message = "{validation.ordemServico.statusOrdemServico.required}")
-        Long statusOrdemServicoId,
+        StatusOrdemServico statusOrdemServico,
 
         @NotNull(message = "{validation.ordemServico.categoria.required}")
         CategoriaProblema categoriaProblema,

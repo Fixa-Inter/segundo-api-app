@@ -79,7 +79,7 @@ public class ObservacaoConclusaoRepositoryImpl implements ObservacaoConclusaoRep
                     .and(ObservacaoConclusaoSpecs.nestedLike("problema", "", "descricaoLocal", f.descricaoLocal()))
                     .and(ObservacaoConclusaoSpecs.nestedLike("problema", "status", "nome", f.statusProblema()))
                     .and(ObservacaoConclusaoSpecs.relationLike("usuario", "nomeCompleto", f.nomeResponsavel()))
-                    .and(ObservacaoConclusaoSpecs.relationLike("statusOrdemServico", "nome", f.statusOrdemServico()));
+                    .and(ObservacaoConclusaoSpecs.statusOrdemServico(f.statusOrdemServico()));
         }
         return repository.findAll(base).stream().map(mapper::toModel).toList();
     }

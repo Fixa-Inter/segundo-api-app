@@ -12,8 +12,8 @@ public enum Dificuldade {
     MEDIO("Médio", 2),
     DIFICIL("Difícil", 3);
 
-    private String nome;
-    private int id;
+    private final String nome;
+    private final int id;
 
     public static Dificuldade fromNome(String nome) {
         for (Dificuldade dificuldade : values()) {

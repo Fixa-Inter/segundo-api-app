@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.enums.Dificuldade;
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 
 public final class ObservacaoConclusaoSpecs {
     private ObservacaoConclusaoSpecs() {
@@ -37,6 +38,19 @@ public final class ObservacaoConclusaoSpecs {
 
     public static Specification<ObservacaoConclusaoEntity> dificuldade(String value) {
         return enumValue("dificuldade", value, Dificuldade.class);
+    }
+
+    public static Specification<ObservacaoConclusaoEntity> statusOrdemServico(String value) {
+        if (value == null || value.isBlank()) return Specification.unrestricted();
+        try {
+            StatusOrdemServico status = StatusOrdemServico.fromNome(value);
+            return (r, q, c) -> c.equal(
+                    r.join("ordemServico", JoinType.INNER).get("statusOrdemServico"),
+                    status
+            );
+        } catch (IllegalArgumentException exception) {
+            return Specification.unrestricted();
+        }
     }
 
     public static Specification<ObservacaoConclusaoEntity> like(String field, String value) {

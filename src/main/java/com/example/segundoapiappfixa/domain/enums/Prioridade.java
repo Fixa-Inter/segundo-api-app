@@ -12,8 +12,8 @@ public enum Prioridade {
     MEDIA("Média", 1),
     BAIXA("Baixa", 2);
 
-    private String nome;
-    private int id;
+    private final String nome;
+    private final int id;
 
     public static Prioridade fromNome(String nome) {
         for (Prioridade prioridade : values()) {

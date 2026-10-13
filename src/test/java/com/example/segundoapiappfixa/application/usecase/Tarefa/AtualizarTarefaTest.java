@@ -2,7 +2,6 @@ package com.example.segundoapiappfixa.application.usecase.Tarefa;
 
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaAtualizarInputDTO;
 import com.example.segundoapiappfixa.domain.model.*;
-import com.example.segundoapiappfixa.domain.repository.StatusOrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;

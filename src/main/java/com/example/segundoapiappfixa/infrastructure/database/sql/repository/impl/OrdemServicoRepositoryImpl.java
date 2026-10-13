@@ -8,7 +8,6 @@ import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OrdemServicoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.StatusOrdemServicoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaOrdemServicoRepository;
 import jakarta.persistence.EntityManager;
@@ -53,6 +52,7 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
                 .and(OrdemServicoSpecs.findByCategoriaProblema(filtros.categoriaProblema()))
                 .and(OrdemServicoSpecs.findByCategoriaEquipamento(filtros.categoriaEquipamento()))
                 .and(OrdemServicoSpecs.findByPrioridade(filtros.prioridade()))
+                .and(OrdemServicoSpecs.findByStatusOrdemServico(filtros.statusOrdemServico()))
                 .and(OrdemServicoSpecs.findByDataPrevistaMin(filtros.dataPrevistaMin()))
                 .and(OrdemServicoSpecs.findByDataPrevistaMax(filtros.dataPrevistaMax()))
                 .and(OrdemServicoSpecs.findByNomeUsuario(filtros.nomeUsuario()))
@@ -101,11 +101,6 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
         entity.usuario = entityManager.getReference(
                 UsuarioEntity.class,
                 ordemServico.getUsuario().getId()
-        );
-
-        entity.statusOrdemServico = entityManager.getReference(
-                StatusOrdemServicoEntity.class,
-                ordemServico.getStatusOrdemServico().getId()
         );
 
         return ordemServicoMapper.toModel(jpaOrdemServicoRepository.save(entity));

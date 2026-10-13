@@ -8,8 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {
         ProblemaMapper.class,
-        UsuarioMapper.class,
-        StatusOrdemServicoMapper.class
+        UsuarioMapper.class
 })
 public interface OrdemServicoMapper {
 
