@@ -34,8 +34,6 @@ public class UsuarioEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "telefone", nullable = false, length = 11)
-    private String telefone;
 
     @Convert(converter = TipoAcessoConverter.class)
     @Column(name = "tipo_acesso")

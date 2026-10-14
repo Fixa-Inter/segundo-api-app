@@ -19,7 +19,6 @@ public class Usuario {
     private Endereco endereco;
     private String nomeCompleto;
     private String email;
-    private String telefone;
     private TipoAcesso tipoAcesso;
     private String senhaHash;
     private String cargo;
