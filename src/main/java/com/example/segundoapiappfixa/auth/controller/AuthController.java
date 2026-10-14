@@ -47,6 +47,13 @@ public class AuthController implements AuthControllerContract {
         return ResponseEntity.ok(service.login(requestDTO));
     }
 
+    @PostMapping("/login/google")
+    public ResponseEntity<GoogleLoginResponseDTO> loginGoogle(
+            @Valid @RequestBody GoogleLoginRequestDTO requestDTO
+    ) {
+        return ResponseEntity.ok(service.loginWithGoogle(requestDTO));
+    }
+
     @PostMapping("/esqueceu-senha/{email}")
     public ResponseEntity<RedefinirSenhaOutputDTO> esqueceuSenha(
             @PathVariable String email

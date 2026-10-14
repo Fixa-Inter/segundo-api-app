@@ -1,10 +1,6 @@
 package com.example.segundoapiappfixa.auth.service;
 
-import com.example.segundoapiappfixa.auth.dto.LoginRequestDTO;
-import com.example.segundoapiappfixa.auth.dto.LoginResponseDTO;
-import com.example.segundoapiappfixa.auth.dto.CadastroUsuarioRequestDTO;
-import com.example.segundoapiappfixa.auth.dto.RedefinirSenhaOutputDTO;
-import com.example.segundoapiappfixa.auth.dto.RedefinirSenhaRequestDTO;
+import com.example.segundoapiappfixa.auth.dto.*;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.model.RecuperarSenhaCodigo;
 import com.example.segundoapiappfixa.domain.repository.RecuperarSenhaCodigoRepository;
@@ -16,6 +12,8 @@ import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontr
 import com.example.segundoapiappfixa.infrastructure.security.JwtTokenProvider;
 import com.example.segundoapiappfixa.infrastructure.external.email.EmailSender;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.infrastructure.security.FirebaseTokenVerifier;
+import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +40,7 @@ public class AuthService {
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
     private final EnderecoRepository enderecoRepository;
+    private final FirebaseTokenVerifier firebaseTokenVerifier;
 
     public LoginResponseDTO cadastrar(CadastroUsuarioRequestDTO dto) {
         String email = dto.email().trim().toLowerCase(Locale.ROOT);
@@ -125,6 +124,42 @@ public class AuthService {
 
         return new LoginResponseDTO(
                 authentication.getName(),
+                token
+        );
+    }
+
+    public GoogleLoginResponseDTO loginWithGoogle(GoogleLoginRequestDTO dto) {
+        FirebaseToken firebaseToken = firebaseTokenVerifier.verify(dto.idToken());
+        String email = firebaseToken.getEmail();
+
+        if (!Boolean.TRUE.equals(firebaseToken.isEmailVerified())) {
+            throw new RegraProblemaException("validation.auth.google.emailNotVerified");
+        }
+
+        email = email.trim().toLowerCase(Locale.ROOT);
+        Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+
+        if (usuario == null) {
+            return GoogleLoginResponseDTO.registrationRequired(
+                    email,
+                    firebaseToken.getName()
+            );
+        }
+
+        if (!Boolean.TRUE.equals(usuario.getEstaAtivo())) {
+            throw new DisabledException("Usuário inativo");
+        }
+
+        String token = jwtTokenProvider.generateAccessToken(
+                usuario.getId(),
+                usuario.getEmail(),
+                usuario.getTipoAcesso().name(),
+                new Date()
+        );
+
+        return GoogleLoginResponseDTO.authenticated(
+                usuario.getEmail(),
+                usuario.getNomeCompleto(),
                 token
         );
     }
