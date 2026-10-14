@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.domain.repository;
 
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
+import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
 import java.util.Map;
@@ -15,7 +16,16 @@ public interface UsuarioRepository {
 
     Optional<Usuario> findById(Long id);
 
-    List<Usuario> findByEnderecoIdAndTipoAcesso(Long enderecoId, TipoAcesso tipoAcesso, FiltrosUsuarioQueryParam filtros);
+    List<Usuario> findByEnderecoIdAndTipoAcesso(
+            Long enderecoId,
+            TipoAcesso tipoAcesso,
+            FiltrosUsuarioQueryParam filtros
+    );
+
+    List<Usuario> findTecnicosRecomendados(
+            Long enderecoId,
+            CategoriaProblema categoriaProblema
+    );
 
     Usuario save(Usuario usuario);
 

@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.application.usecase.Tecnico;
 
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
@@ -29,6 +30,25 @@ public class ListarTecnicos {
         if (usuarios.isEmpty()) throw new EntidadeNaoEncontradaException("exception.usuario.required");
 
         return usuarios;
+    }
+
+    public List<Usuario> listarRecomendar(
+            CategoriaProblema categoriaProblema,
+            Long usuarioId
+    ) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
+
+        List<Usuario> tecnicos = usuarioRepository.findTecnicosRecomendados(
+                usuario.getEndereco().getId(),
+                categoriaProblema
+        );
+
+        if (tecnicos.isEmpty()) {
+            throw new EntidadeNaoEncontradaException("exception.usuario.required");
+        }
+
+        return tecnicos;
     }
 
 }

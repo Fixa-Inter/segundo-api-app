@@ -16,6 +16,7 @@ import com.example.segundoapiappfixa.application.usecase.Tecnico.ListarTecnicos;
 import com.example.segundoapiappfixa.application.usecase.Tecnico.ListarAptidoes;
 import com.example.segundoapiappfixa.application.usecase.Tecnico.AtualizarAptidao;
 import com.example.segundoapiappfixa.application.usecase.Tecnico.ListarOrdensServicoTecnico;
+import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.model.Aptidao;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Usuario;
@@ -63,6 +64,27 @@ public class TecnicoController implements TecnicoControllerContract {
         return ResponseEntity.ok(maskTecnicos(
                 toTecnicoOutputDTO(listarTecnicos.listar(
                         ControllerUtils.usuarioId(authentication), filtros
+                )),
+
+                campos
+        ));
+    }
+
+    @GetMapping("/recomendar/{categoriaProblema}")
+    @Override
+    public ResponseEntity<List<UsuarioOutputDTO>> listarRecomendar(
+            @PathVariable
+            CategoriaProblema categoriaProblema,
+
+            @RequestParam(required = false)
+            String campos,
+
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(maskTecnicos(
+                toTecnicoOutputDTO(listarTecnicos.listarRecomendar(
+                        categoriaProblema,
+                        ControllerUtils.usuarioId(authentication)
                 )),
 
                 campos

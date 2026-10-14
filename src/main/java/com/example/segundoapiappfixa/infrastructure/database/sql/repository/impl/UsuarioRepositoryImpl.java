@@ -1,6 +1,8 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
+import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
@@ -76,6 +78,20 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
                 : repository.findAll(specification, sort);
 
         return usuarioEntities
+                .stream()
+                .map(mapper::toModel)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Usuario> findTecnicosRecomendados(Long enderecoId, CategoriaProblema categoriaProblema) {
+        return repository.findTecnicosRecomendados(
+                        enderecoId,
+                        categoriaProblema,
+                        TipoAcesso.TECNICO,
+                        StatusOrdemServico.CONCLUIDA
+                )
                 .stream()
                 .map(mapper::toModel)
                 .toList();
