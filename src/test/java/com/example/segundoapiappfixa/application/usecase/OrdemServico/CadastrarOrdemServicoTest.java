@@ -4,6 +4,7 @@ import com.example.segundoapiappfixa.adapters.dto.input.OrdemServico.OrdemServic
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
@@ -30,8 +31,6 @@ class CadastrarOrdemServicoTest {
     @Mock private OrdemServicoRepository ordemServicoRepository;
     @Mock private ProblemaRepository problemaRepository;
     @Mock private UsuarioRepository usuarioRepository;
-    @Mock private StatusOrdemServicoRepository statusRepository;
-
     @InjectMocks
     private CadastrarOrdemServico cadastrarOrdemServico;
 
@@ -113,7 +112,7 @@ class CadastrarOrdemServicoTest {
 
     private OrdemServicoCadastrarInputDTO input() {
         return new OrdemServicoCadastrarInputDTO(
-                3L, 2L, 4L, CategoriaProblema.ELETRICA,
+                3L, 2L, StatusOrdemServico.NAO_INICIADA, CategoriaProblema.ELETRICA,
                 LocalDate.of(2026, 10, 20), Prioridade.MEDIA);
     }
 }

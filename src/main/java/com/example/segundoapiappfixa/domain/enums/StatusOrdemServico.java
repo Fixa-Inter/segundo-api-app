@@ -10,8 +10,9 @@ import lombok.Getter;
 public enum StatusOrdemServico {
     NAO_INICIADA("Não Iniciada", 0),
     ATRASADA("Atrasada", 1),
-    EM_ANDAMENTO("Em andamento", 2),
-    CONCLUIDA("Concluída", 3);
+    PAUSADA("Pausada", 2),
+    EM_ANDAMENTO("Em andamento", 3),
+    CONCLUIDA("Concluída", 4);
 
     private final String nome;
     private final int id;

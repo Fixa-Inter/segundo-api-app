@@ -20,7 +20,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AtualizarTarefaTest {
     @Mock private TarefaRepository tarefaRepository;
-    @Mock private StatusOrdemServicoRepository statusRepository;
     @Mock private UsuarioRepository usuarioRepository;
     @InjectMocks private AtualizarTarefa atualizarTarefa;
 

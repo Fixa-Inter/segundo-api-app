@@ -40,19 +40,6 @@ public final class ObservacaoConclusaoSpecs {
         return enumValue("dificuldade", value, Dificuldade.class);
     }
 
-    public static Specification<ObservacaoConclusaoEntity> statusOrdemServico(String value) {
-        if (value == null || value.isBlank()) return Specification.unrestricted();
-        try {
-            StatusOrdemServico status = StatusOrdemServico.fromNome(value);
-            return (r, q, c) -> c.equal(
-                    r.join("ordemServico", JoinType.INNER).get("statusOrdemServico"),
-                    status
-            );
-        } catch (IllegalArgumentException exception) {
-            return Specification.unrestricted();
-        }
-    }
-
     public static Specification<ObservacaoConclusaoEntity> like(String field, String value) {
         if (value == null || value.isBlank()) return Specification.unrestricted();
         return (r, q, c) -> c.like(c.lower(r.get(field)), "%" + value.toLowerCase() + "%");
