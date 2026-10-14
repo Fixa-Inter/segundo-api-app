@@ -14,7 +14,7 @@ public record ProblemaCriarInputDTO(
         String descricaoProblema,
 
         @NotNull(message = "{validation.local.required}")
-        Long localEnderecoID,
+        Long localUnidadeID,
 
         @NotBlank(message = "{validation.descricaoLocal.required}")
         String descricaoLocal,

@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum TipoLocalEndereco {
+public enum TipoLocalUnidade {
     SALA_AULA("Sala de Aula", 1),
     LABORATORIO("Laboratório", 2),
     DEPTO_ADMINISTRATIVO("Depto. Administrativo", 3),
@@ -18,20 +18,20 @@ public enum TipoLocalEndereco {
     private final String nome;
     private final int id;
 
-    public static TipoLocalEndereco fromNome(String nome) {
-        for (TipoLocalEndereco tipoLocalEndereco : values()) {
-            if(tipoLocalEndereco.getNome().equals(nome)) {
-                return tipoLocalEndereco;
+    public static TipoLocalUnidade fromNome(String nome) {
+        for (TipoLocalUnidade tipoLocalUnidade : values()) {
+            if(tipoLocalUnidade.getNome().equals(nome)) {
+                return tipoLocalUnidade;
             }
         }
 
         throw new IllegalArgumentException("Status inválido: " + nome);
     }
 
-    public static TipoLocalEndereco fromId(int id) {
-        for (TipoLocalEndereco tipoLocalEndereco : values()) {
-            if(tipoLocalEndereco.getId() == id) {
-                return tipoLocalEndereco;
+    public static TipoLocalUnidade fromId(int id) {
+        for (TipoLocalUnidade tipoLocalUnidade : values()) {
+            if(tipoLocalUnidade.getId() == id) {
+                return tipoLocalUnidade;
             }
         }
 

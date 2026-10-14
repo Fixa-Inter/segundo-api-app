@@ -32,11 +32,11 @@ public class AuthController implements AuthControllerContract {
         return ResponseEntity.ok(listarOpcoesCadastro.listarInstituicoes());
     }
 
-    @GetMapping("/instituicoes/{instituicaoId}/enderecos")
-    public ResponseEntity<List<CadastroNomeOutputDTO>> listarEnderecos(
+    @GetMapping("/instituicoes/{instituicaoId}/unidades")
+    public ResponseEntity<List<CadastroNomeOutputDTO>> listarUnidades(
             @PathVariable Long instituicaoId
     ) {
-        return ResponseEntity.ok(listarOpcoesCadastro.listarEnderecos(instituicaoId));
+        return ResponseEntity.ok(listarOpcoesCadastro.listarUnidades(instituicaoId));
     }
 
     @Override

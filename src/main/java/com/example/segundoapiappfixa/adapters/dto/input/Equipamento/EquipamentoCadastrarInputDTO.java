@@ -11,7 +11,7 @@ public record EquipamentoCadastrarInputDTO(
         Long modeloEquipamentoId,
 
         @NotNull(message = "{validation.local.required}")
-        Long localEnderecoId,
+        Long localUnidadeId,
 
         @NotBlank(message = "{validation.codigo.required}")
         String codigo

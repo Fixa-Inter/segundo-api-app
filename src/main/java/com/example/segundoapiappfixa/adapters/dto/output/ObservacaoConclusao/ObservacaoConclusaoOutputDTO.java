@@ -11,7 +11,7 @@ public record ObservacaoConclusaoOutputDTO(
         String descricaoProblema,
         String categoriaProblema,
         String categoriaEquipamento,
-        String localEndereco,
+        String localUnidade,
         String descricaoLocal,
         String statusProblema,
         String prioridade,

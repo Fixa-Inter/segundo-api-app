@@ -40,26 +40,26 @@ class CadastrarOrdemServicoTest {
 
     @BeforeEach
     void setUp() {
-        Endereco endereco = new Endereco();
-        endereco.setId(10L);
+        Unidade unidade = new Unidade();
+        unidade.setId(10L);
 
         gestor = new Usuario();
         gestor.setId(1L);
         gestor.setTipoAcesso(TipoAcesso.GESTOR);
-        gestor.setEndereco(endereco);
+        gestor.setUnidade(unidade);
 
         responsavel = new Usuario();
         responsavel.setId(2L);
         responsavel.setTipoAcesso(TipoAcesso.TECNICO);
-        responsavel.setEndereco(endereco);
+        responsavel.setUnidade(unidade);
 
-        LocalEndereco local = new LocalEndereco();
-        local.setEndereco(endereco);
+        LocalUnidade local = new LocalUnidade();
+        local.setUnidade(unidade);
 
         problema = new Problema();
         problema.setId(3L);
         problema.setStatus(StatusProblema.APROVADO);
-        problema.setLocalEndereco(local);
+        problema.setLocalUnidade(local);
     }
 
     @Test

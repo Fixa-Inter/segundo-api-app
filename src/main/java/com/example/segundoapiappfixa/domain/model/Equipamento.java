@@ -15,7 +15,7 @@ public class Equipamento {
     private Long id;
     private Usuario usuario;
     private ModeloEquipamento modeloEquipamento;
-    private LocalEndereco localEndereco;
+    private LocalUnidade localUnidade;
     private String codigo;
     private Boolean estaAtivo;
     private LocalDateTime dataCriacao;

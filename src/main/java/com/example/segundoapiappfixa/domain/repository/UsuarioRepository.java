@@ -10,20 +10,20 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository {
-    Map<String, String> camposNormalizados = Map.of("nome_completo", "nomeCompleto", "email", "email", "cargo", "cargo", "cnpj_endereco", "endereco.cnpj", "esta_ativo", "estaAtivo");
+    Map<String, String> camposNormalizados = Map.of("nome_completo", "nomeCompleto", "email", "email", "cargo", "cargo", "cnpj_unidade", "unidade.cnpj", "esta_ativo", "estaAtivo");
 
     Optional<Usuario> findByEmail(String email);
 
     Optional<Usuario> findById(Long id);
 
-    List<Usuario> findByEnderecoIdAndTipoAcesso(
-            Long enderecoId,
+    List<Usuario> findByUnidadeIdAndTipoAcesso(
+            Long unidadeId,
             TipoAcesso tipoAcesso,
             FiltrosUsuarioQueryParam filtros
     );
 
     List<Usuario> findTecnicosRecomendados(
-            Long enderecoId,
+            Long unidadeId,
             CategoriaProblema categoriaProblema
     );
 

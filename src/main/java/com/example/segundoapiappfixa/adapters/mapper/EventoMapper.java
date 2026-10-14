@@ -12,7 +12,7 @@ public interface EventoMapper {
     EventoEntity toEntity(Evento model);
     Evento toModel(EventoEntity entity);
 
-    @Mapping(source = "localEndereco.nome", target = "localEndereco")
+    @Mapping(source = "localUnidade.nome", target = "localUnidade")
     @Mapping(source = "usuario.nomeCompleto", target = "usuario")
     EventoOutputDTO toOutputDTO(Evento evento);
 }

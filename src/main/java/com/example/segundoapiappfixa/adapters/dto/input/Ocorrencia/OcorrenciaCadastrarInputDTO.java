@@ -12,7 +12,7 @@ public record OcorrenciaCadastrarInputDTO (
         Long usuarioId,
 
         @NotNull(message = "{validation.local.required}")
-        Long localEnderecoId,
+        Long localUnidadeId,
 
         @NotNull(message = "{validation.categoriaEquipamento.required}")
         Long categoriaEquipamentoId,

@@ -21,8 +21,8 @@ public class ListarTecnicos {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        List<Usuario> usuarios = usuarioRepository.findByEnderecoIdAndTipoAcesso(
-                usuario.getEndereco().getId(),
+        List<Usuario> usuarios = usuarioRepository.findByUnidadeIdAndTipoAcesso(
+                usuario.getUnidade().getId(),
                 TipoAcesso.TECNICO,
                 filtros
         );
@@ -40,7 +40,7 @@ public class ListarTecnicos {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
         List<Usuario> tecnicos = usuarioRepository.findTecnicosRecomendados(
-                usuario.getEndereco().getId(),
+                usuario.getUnidade().getId(),
                 categoriaProblema
         );
 

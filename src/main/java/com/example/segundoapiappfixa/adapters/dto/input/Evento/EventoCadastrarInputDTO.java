@@ -8,7 +8,7 @@ public record EventoCadastrarInputDTO (
         @NotNull(message = "{validation.usuario.required}")
         Long usuarioId,
         @NotNull(message = "{validation.local.required}")
-        Long localEnderecoId,
+        Long localUnidadeId,
         @NotBlank(message = "{validation.titulo.required}")
         String titulo,
         @NotBlank(message = "{validation.descricao.required}")

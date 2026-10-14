@@ -17,7 +17,7 @@ public class Problema {
     private Long id;
     private Usuario usuario;
     private CategoriaEquipamento categoriaEquipamento;
-    private LocalEndereco localEndereco;
+    private LocalUnidade localUnidade;
     private String titulo;
     private String descricaoProblema;
     private String descricaoLocal;

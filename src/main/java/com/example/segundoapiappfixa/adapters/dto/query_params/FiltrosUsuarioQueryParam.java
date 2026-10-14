@@ -12,8 +12,8 @@ public record FiltrosUsuarioQueryParam(
         @BindParam("tipo_acesso")
         String tipoAcesso,
 
-        @BindParam("cnpj_endereco")
-        String cnpjEndereco,
+        @BindParam("cnpj_unidade")
+        String cnpjUnidade,
 
         @BindParam("data_nascimento")
         String dataNascimento,

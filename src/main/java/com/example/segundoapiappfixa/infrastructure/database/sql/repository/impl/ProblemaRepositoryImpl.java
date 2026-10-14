@@ -37,13 +37,13 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Problema> findAllByLocalEnderecoIds(List<Long> localEnderecoIds, FiltrosProblemaQueryParam filtros) {
+    public List<Problema> findAllByLocalUnidadeIds(List<Long> localUnidadeIds, FiltrosProblemaQueryParam filtros) {
 
-        if (localEnderecoIds.isEmpty()) {
+        if (localUnidadeIds.isEmpty()) {
             return List.of();
         }
 
-        return buscar(ProblemaSpecs.findByLocalEnderecoIds(localEnderecoIds), filtros);
+        return buscar(ProblemaSpecs.findByLocalUnidadeIds(localUnidadeIds), filtros);
     }
 
     private List<Problema> buscar(Specification<ProblemaEntity> base, FiltrosProblemaQueryParam filtros) {
@@ -51,7 +51,7 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
                 .and(ProblemaSpecs.findByTitulo(filtros.titulo()))
                 .and(ProblemaSpecs.findByDescricaoProblema(filtros.descricaoProblema()))
                 .and(ProblemaSpecs.findByCategoriaEquipamento(filtros.categoriaEquipamento()))
-                .and(ProblemaSpecs.findByLocalEndereco(filtros.localEndereco()))
+                .and(ProblemaSpecs.findByLocalUnidade(filtros.localUnidade()))
                 .and(ProblemaSpecs.findByDescricaoLocal(filtros.descricaoLocal()))
                 .and(ProblemaSpecs.findByNomeUsuario(filtros.nomeUsuario()))
                 .and(ProblemaSpecs.findByTipoAcesso(filtros.tipoAcesso()))

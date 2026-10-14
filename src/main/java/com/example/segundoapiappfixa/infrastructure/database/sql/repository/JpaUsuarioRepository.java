@@ -32,7 +32,7 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Long>
                 ON t.ordemServico.usuario = u
                 AND t.statusOrdemServico <> :concluida
             WHERE
-                u.endereco.id = :enderecoId
+                u.unidade.id = :unidadeId
                 AND u.tipoAcesso = :tecnico
                 AND u.estaAtivo = true
             GROUP BY
@@ -42,7 +42,7 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Long>
                 COUNT(t.id) ASC
             """)
     List<UsuarioEntity> findTecnicosRecomendados(
-            @Param("enderecoId") Long enderecoId,
+            @Param("unidadeId") Long unidadeId,
             @Param("categoria") CategoriaProblema categoria,
             @Param("tecnico") TipoAcesso tecnico,
             @Param("concluida") StatusOrdemServico concluida

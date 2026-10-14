@@ -11,7 +11,7 @@ public record ProblemaOutputDTO (
         String titulo,
         String descricaoProblema,
         String categoriaEquipamento,
-        String localEndereco,
+        String localUnidade,
         String descricaoLocal,
         String status,
         String usuario,

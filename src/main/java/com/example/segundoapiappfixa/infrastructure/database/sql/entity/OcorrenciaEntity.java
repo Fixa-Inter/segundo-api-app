@@ -30,8 +30,8 @@ public class OcorrenciaEntity {
     public UsuarioEntity usuario;
 
     @ManyToOne
-    @JoinColumn(name = "local_endereco_id")
-    public LocalEnderecoEntity localEndereco;
+    @JoinColumn(name = "local_unidade_id")
+    public LocalUnidadeEntity localUnidade;
 
     @ManyToOne
     @JoinColumn(name = "categoria_equipamento_id")

@@ -51,8 +51,8 @@ public class ObservacaoConclusaoRepositoryImpl implements ObservacaoConclusaoRep
     }
 
     @Override
-    public List<ObservacaoConclusao> findAllByEnderecoId(Long id, FiltrosObservacaoConclusaoQueryParam f) {
-        return buscar(ObservacaoConclusaoSpecs.findByEnderecoId(id), f);
+    public List<ObservacaoConclusao> findAllByUnidadeId(Long id, FiltrosObservacaoConclusaoQueryParam f) {
+        return buscar(ObservacaoConclusaoSpecs.findByUnidadeId(id), f);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ObservacaoConclusaoRepositoryImpl implements ObservacaoConclusaoRep
                     .and(ObservacaoConclusaoSpecs.nestedLike("problema", "", "titulo", f.titulo()))
                     .and(ObservacaoConclusaoSpecs.nestedLike("problema", "", "descricaoProblema", f.descricaoProblema()))
                     .and(ObservacaoConclusaoSpecs.nestedLike("problema", "categoriaEquipamento", "nome", f.categoriaEquipamento()))
-                    .and(ObservacaoConclusaoSpecs.nestedLike("problema", "localEndereco", "nome", f.localEndereco()))
+                    .and(ObservacaoConclusaoSpecs.nestedLike("problema", "localUnidade", "nome", f.localUnidade()))
                     .and(ObservacaoConclusaoSpecs.nestedLike("problema", "", "descricaoLocal", f.descricaoLocal()))
                     .and(ObservacaoConclusaoSpecs.nestedLike("problema", "status", "nome", f.statusProblema()))
                     .and(ObservacaoConclusaoSpecs.relationLike("usuario", "nomeCompleto", f.nomeResponsavel()));

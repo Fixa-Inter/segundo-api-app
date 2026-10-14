@@ -16,7 +16,7 @@ public interface ObservacaoConclusaoMapper {
     @Mapping(source = "ordemServico.problema.descricaoProblema", target = "descricaoProblema")
     @Mapping(source = "ordemServico.categoriaProblema.nome", target = "categoriaProblema")
     @Mapping(source = "ordemServico.problema.categoriaEquipamento.nome", target = "categoriaEquipamento")
-    @Mapping(source = "ordemServico.problema.localEndereco.nome", target = "localEndereco")
+    @Mapping(source = "ordemServico.problema.localUnidade.nome", target = "localUnidade")
     @Mapping(source = "ordemServico.problema.descricaoLocal", target = "descricaoLocal")
     @Mapping(source = "ordemServico.problema.status.nome", target = "statusProblema")
     @Mapping(source = "ordemServico.prioridade.nome", target = "prioridade")

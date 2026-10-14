@@ -5,7 +5,7 @@ import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
-import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
+import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.ModeloEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
@@ -19,7 +19,7 @@ public class AtualizarEquipamento {
     private final EquipamentoRepository repository;
     private final UsuarioRepository usuarioRepository;
     private final ModeloEquipamentoRepository modeloRepository;
-    private final LocalEnderecoRepository localRepository;
+    private final LocalUnidadeRepository localRepository;
 
     public Equipamento atualizar(EquipamentoAtualizarInputDTO dto, Long usuarioId) {
 
@@ -29,7 +29,7 @@ public class AtualizarEquipamento {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!equipamento.getUsuario().getEndereco().getId().equals(usuario.getEndereco().getId())) {
+        if (!equipamento.getUsuario().getUnidade().getId().equals(usuario.getUnidade().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }
 
@@ -38,8 +38,8 @@ public class AtualizarEquipamento {
                     .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.modeloEquipamento.notFound")));
         }
 
-        if (dto.localEnderecoId() != null) {
-            equipamento.setLocalEndereco(localRepository.findById(dto.localEnderecoId())
+        if (dto.localUnidadeId() != null) {
+            equipamento.setLocalUnidade(localRepository.findById(dto.localUnidadeId())
                     .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.local.required")));
         }
 

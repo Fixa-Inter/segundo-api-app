@@ -6,7 +6,7 @@ public record EquipamentoOutputDTO(
         Long id,
         String codigo,
         String modeloEquipamento,
-        String localEndereco,
+        String localUnidade,
         String usuario,
         LocalDate dataCriacao,
         Boolean estaAtivo

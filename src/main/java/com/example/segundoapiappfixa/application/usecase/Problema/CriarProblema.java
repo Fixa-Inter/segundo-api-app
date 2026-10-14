@@ -18,12 +18,12 @@ public class CriarProblema {
 
     private final ProblemaRepository problemaRepository;
     private final FotoRepository fotoRepository;
-    private final LocalEnderecoRepository localEnderecoRepository;
+    private final LocalUnidadeRepository localUnidadeRepository;
     private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
     private final UsuarioRepository usuarioRepository;
 
     public Problema cadastrar(ProblemaCriarInputDTO dto, Long usuarioId) {
-        LocalEndereco localEndereco = localEnderecoRepository.findById(dto.localEnderecoID()).orElse(null);
+        LocalUnidade localUnidade = localUnidadeRepository.findById(dto.localUnidadeID()).orElse(null);
 
         CategoriaEquipamento categoriaEquipamento = categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId()).orElse(null);
 
@@ -34,7 +34,7 @@ public class CriarProblema {
                 null,
                 usuario,
                 categoriaEquipamento,
-                localEndereco,
+                localUnidade,
                 dto.titulo(),
                 dto.descricaoProblema(),
                 dto.descricaoLocal(),

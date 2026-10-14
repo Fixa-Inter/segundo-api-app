@@ -12,11 +12,11 @@ public final class ObservacaoConclusaoSpecs {
     private ObservacaoConclusaoSpecs() {
     }
 
-    public static Specification<ObservacaoConclusaoEntity> findByEnderecoId(Long id) {
+    public static Specification<ObservacaoConclusaoEntity> findByUnidadeId(Long id) {
         return (r, q, c) -> c.equal(r.join("ordemServico", JoinType.INNER)
                 .join("problema", JoinType.INNER)
-                .join("localEndereco", JoinType.INNER)
-                .join("endereco", JoinType.INNER).get("id"), id);
+                .join("localUnidade", JoinType.INNER)
+                .join("unidade", JoinType.INNER).get("id"), id);
     }
 
     public static Specification<ObservacaoConclusaoEntity> findByResponsavelId(Long id) {

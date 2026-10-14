@@ -7,7 +7,7 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.repository.util
 import com.example.segundoapiappfixa.domain.model.Ocorrencia;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.CategoriaEquipamentoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalEnderecoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalUnidadeEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OcorrenciaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaOcorrenciaRepository;
@@ -43,7 +43,7 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
                 .and(OcorrenciaSpecs.findByDescricaoOcorrencia(filtros.descricaoOcorrencia()))
                 .and(OcorrenciaSpecs.findByCategoriaProblema(filtros.categoriaProblema()))
                 .and(OcorrenciaSpecs.findByPrioridade(filtros.prioridade()))
-                .and(OcorrenciaSpecs.findByLocalEndereco(filtros.localEndereco()))
+                .and(OcorrenciaSpecs.findByLocalUnidade(filtros.localUnidade()))
                 .and(OcorrenciaSpecs.findByDescricaoLocal(filtros.descricaoLocal()))
                 .and(OcorrenciaSpecs.findByCategoriaEquipamento(filtros.categoriaEquipamento()))
                 .and(OcorrenciaSpecs.findByNomeUsuario(filtros.nomeUsuario()))
@@ -77,12 +77,12 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Ocorrencia> findAllByLocalEnderecoIds(List<Long> localEnderecoIds, FiltrosOcorrenciaQueryParam filtros) {
-        if (localEnderecoIds == null || localEnderecoIds.isEmpty()) {
+    public List<Ocorrencia> findAllByLocalUnidadeIds(List<Long> localUnidadeIds, FiltrosOcorrenciaQueryParam filtros) {
+        if (localUnidadeIds == null || localUnidadeIds.isEmpty()) {
             return List.of();
         }
 
-        return buscar(OcorrenciaSpecs.findByLocalEnderecoIds(localEnderecoIds), filtros);
+        return buscar(OcorrenciaSpecs.findByLocalUnidadeIds(localUnidadeIds), filtros);
     }
 
     // Método de listar os registros persistidos no banco de dados
@@ -117,7 +117,7 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
 
         entity.usuario = reference(UsuarioEntity.class, ocorrencia.getUsuario().getId());
 
-        entity.localEndereco = reference(LocalEnderecoEntity.class, ocorrencia.getLocalEndereco().getId());
+        entity.localUnidade = reference(LocalUnidadeEntity.class, ocorrencia.getLocalUnidade().getId());
 
         if (ocorrencia.getCategoriaEquipamento() != null) {
             entity.categoriaEquipamento = reference(CategoriaEquipamentoEntity.class, ocorrencia.getCategoriaEquipamento().getId());

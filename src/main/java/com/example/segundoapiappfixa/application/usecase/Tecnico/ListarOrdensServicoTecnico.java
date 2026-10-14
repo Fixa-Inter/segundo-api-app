@@ -31,7 +31,7 @@ public class ListarOrdensServicoTecnico {
             throw new RegraProblemaException("exception.tecnico.required");
         }
 
-        if (!tecnico.getEndereco().getId().equals(usuario.getEndereco().getId())) {
+        if (!tecnico.getUnidade().getId().equals(usuario.getUnidade().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }
 

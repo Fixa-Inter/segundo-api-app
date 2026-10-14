@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Evento {
     private Long id;
     private Usuario usuario;
-    private LocalEndereco localEndereco;
+    private LocalUnidade localUnidade;
     private String titulo;
     private String descricao;
     private String descricaoLocal;

@@ -19,7 +19,7 @@ public class UsuarioDynamicMapper {
                 fields.contains("cargo") ? dto.cargo() : null,
                 fields.contains("tipoAcesso") ? dto.tipoAcesso() : null,
                 fields.contains("dataNascimento") ? dto.dataNascimento() : null,
-                fields.contains("cnpjEndereco") ? dto.cnpjEndereco() : null,
+                fields.contains("cnpjUnidade") ? dto.cnpjUnidade() : null,
                 fields.contains("dataCriacao") ? dto.dataCriacao() : null,
                 fields.contains("estaAtivo") ? dto.estaAtivo() : null,
                 fields.contains("turnos") ? dto.turnos() : null

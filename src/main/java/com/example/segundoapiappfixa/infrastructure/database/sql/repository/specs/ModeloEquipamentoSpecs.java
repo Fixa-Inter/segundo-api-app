@@ -11,11 +11,11 @@ public final class ModeloEquipamentoSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("estaAtivo"));
     }
 
-    public static Specification<ModeloEquipamentoEntity> findByEnderecoId(Long id) {
+    public static Specification<ModeloEquipamentoEntity> findByUnidadeId(Long id) {
         return (r, q, cb) -> cb.equal(
                 r.join("categoriaEquipamento", JoinType.INNER)
                         .join("usuario", JoinType.INNER)
-                        .join("endereco", JoinType.INNER)
+                        .join("unidade", JoinType.INNER)
                         .get("id"),
                 id
         );

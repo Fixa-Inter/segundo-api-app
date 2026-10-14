@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs;
 
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.CategoriaEquipamentoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.EnderecoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UnidadeEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -13,8 +13,8 @@ public class CategoriaEquipamentoSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("estaAtivo"));
     }
 
-    public static Specification<CategoriaEquipamentoEntity> findByEnderecoId(Long enderecoId) {
-        if (enderecoId == null) return Specification.unrestricted();
+    public static Specification<CategoriaEquipamentoEntity> findByUnidadeId(Long unidadeId) {
+        if (unidadeId == null) return Specification.unrestricted();
 
         return (root, query, criteriaBuilder) -> {
 
@@ -23,12 +23,12 @@ public class CategoriaEquipamentoSpecs {
                     JoinType.INNER
             );
 
-            Join<UsuarioEntity, EnderecoEntity> endereco = usuario.join(
-                    "endereco",
+            Join<UsuarioEntity, UnidadeEntity> unidade = usuario.join(
+                    "unidade",
                     JoinType.INNER
             );
 
-            return criteriaBuilder.equal(endereco.get("id"), enderecoId);
+            return criteriaBuilder.equal(unidade.get("id"), unidadeId);
         };
     }
 

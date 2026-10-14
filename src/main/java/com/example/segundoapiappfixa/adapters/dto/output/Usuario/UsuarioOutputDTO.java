@@ -14,7 +14,7 @@ public record UsuarioOutputDTO(
         String cargo,
         String tipoAcesso,
         LocalDate dataNascimento,
-        String cnpjEndereco,
+        String cnpjUnidade,
         LocalDate dataCriacao,
         Boolean estaAtivo,
         List<TurnoOutputDTO> turnos

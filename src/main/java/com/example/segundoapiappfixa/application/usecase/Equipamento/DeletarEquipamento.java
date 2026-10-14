@@ -24,7 +24,7 @@ public class DeletarEquipamento {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!equipamento.getUsuario().getEndereco().getId().equals(usuario.getEndereco().getId())) {
+        if (!equipamento.getUsuario().getUnidade().getId().equals(usuario.getUnidade().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }
 

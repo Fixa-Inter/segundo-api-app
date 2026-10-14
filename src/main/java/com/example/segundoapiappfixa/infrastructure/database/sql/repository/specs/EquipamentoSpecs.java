@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs;
 
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.EquipamentoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalEnderecoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalUnidadeEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ModeloEquipamentoEntity;
 
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
@@ -41,18 +41,18 @@ public class EquipamentoSpecs {
                 );
     }
 
-    public static Specification<EquipamentoEntity> findByLocalEndereco(String localEndereco) {
-        if (localEndereco == null || localEndereco.isBlank()) return Specification.unrestricted();
+    public static Specification<EquipamentoEntity> findByLocalUnidade(String localUnidade) {
+        if (localUnidade == null || localUnidade.isBlank()) return Specification.unrestricted();
 
         return (root, query, criteriaBuilder) -> {
-            Join<EquipamentoEntity, LocalEnderecoEntity> localEnderecoEntityJoin = root.join(
-                    "localEndereco",
+            Join<EquipamentoEntity, LocalUnidadeEntity> localUnidadeEntityJoin = root.join(
+                    "localUnidade",
                     JoinType.INNER
             );
 
             return criteriaBuilder.like(
-                    criteriaBuilder.lower(localEnderecoEntityJoin.get("nome")),
-                    "%" + localEndereco.toLowerCase() + "%"
+                    criteriaBuilder.lower(localUnidadeEntityJoin.get("nome")),
+                    "%" + localUnidade.toLowerCase() + "%"
             );
         };
     }

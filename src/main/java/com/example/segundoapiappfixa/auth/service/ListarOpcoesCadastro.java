@@ -1,8 +1,8 @@
 package com.example.segundoapiappfixa.auth.service;
 
 import com.example.segundoapiappfixa.auth.dto.CadastroNomeOutputDTO;
-import com.example.segundoapiappfixa.domain.model.Endereco;
-import com.example.segundoapiappfixa.domain.repository.EnderecoRepository;
+import com.example.segundoapiappfixa.domain.model.Unidade;
+import com.example.segundoapiappfixa.domain.repository.UnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.InstituicaoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.List;
 public class ListarOpcoesCadastro {
 
     private final InstituicaoRepository instituicaoRepository;
-    private final EnderecoRepository enderecoRepository;
+    private final UnidadeRepository unidadeRepository;
 
     @Transactional(readOnly = true)
     public List<CadastroNomeOutputDTO> listarInstituicoes() {
@@ -26,24 +26,15 @@ public class ListarOpcoesCadastro {
     }
 
     @Transactional(readOnly = true)
-    public List<CadastroNomeOutputDTO> listarEnderecos(Long instituicaoId) {
-        return enderecoRepository
+    public List<CadastroNomeOutputDTO> listarUnidades(Long instituicaoId) {
+        return unidadeRepository
                 .findAllByInstituicaoId(instituicaoId)
                 .stream()
                 .map(this::toOutput)
                 .toList();
     }
 
-    private CadastroNomeOutputDTO toOutput(Endereco endereco) {
-        String nome = String.format(
-                "%s, %s - %s, %s - %s",
-                endereco.getLogradouro(),
-                endereco.getNumero(),
-                endereco.getBairro(),
-                endereco.getCidade(),
-                endereco.getEstado()
-        );
-
-        return new CadastroNomeOutputDTO(endereco.getId(), nome);
+    private CadastroNomeOutputDTO toOutput(Unidade unidade) {
+        return new CadastroNomeOutputDTO(unidade.getId(), unidade.getNome());
     }
 }

@@ -6,7 +6,7 @@ import com.example.segundoapiappfixa.domain.model.Equipamento;
 import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.*;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.EquipamentoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalEnderecoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalUnidadeEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ModeloEquipamentoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaEquipamentoRepository;
@@ -47,7 +47,7 @@ public class EquipamentoRepositoryImpl implements EquipamentoRepository {
         Specification<EquipamentoEntity> specification = Specification.where(EquipamentoSpecs.findByEstaAtivo())
                 .and(EquipamentoSpecs.findByModeloEquipamentoId(modeloEquipamentoId))
                 .and(EquipamentoSpecs.findByCodigo(filtros.codigo()))
-                .and(EquipamentoSpecs.findByLocalEndereco(filtros.localEndereco()))
+                .and(EquipamentoSpecs.findByLocalUnidade(filtros.localUnidade()))
                 .and(EquipamentoSpecs.findByUsuario(filtros.usuario()));
 
         Sort sort = SortUtils.definirSort(
@@ -92,9 +92,9 @@ public class EquipamentoRepositoryImpl implements EquipamentoRepository {
                 equipamento.getModeloEquipamento().getId()
         );
 
-        entity.localEndereco = entityManager.getReference(
-                LocalEnderecoEntity.class,
-                equipamento.getLocalEndereco().getId()
+        entity.localUnidade = entityManager.getReference(
+                LocalUnidadeEntity.class,
+                equipamento.getLocalUnidade().getId()
         );
 
         return mapper.toModel(repository.save(entity));

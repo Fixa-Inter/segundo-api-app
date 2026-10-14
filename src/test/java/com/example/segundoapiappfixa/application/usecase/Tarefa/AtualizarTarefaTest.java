@@ -24,16 +24,16 @@ class AtualizarTarefaTest {
     @InjectMocks private AtualizarTarefa atualizarTarefa;
 
     @Test
-    void deveImpedirAtualizacaoForaDoEnderecoDaTarefa() {
-        Endereco enderecoTarefa = new Endereco();
-        enderecoTarefa.setId(10L);
-        Endereco enderecoUsuario = new Endereco();
-        enderecoUsuario.setId(20L);
+    void deveImpedirAtualizacaoForaDoUnidadeDaTarefa() {
+        Unidade unidadeTarefa = new Unidade();
+        unidadeTarefa.setId(10L);
+        Unidade unidadeUsuario = new Unidade();
+        unidadeUsuario.setId(20L);
 
-        LocalEndereco local = new LocalEndereco();
-        local.setEndereco(enderecoTarefa);
+        LocalUnidade local = new LocalUnidade();
+        local.setUnidade(unidadeTarefa);
         Problema problema = new Problema();
-        problema.setLocalEndereco(local);
+        problema.setLocalUnidade(local);
         OrdemServico os = new OrdemServico();
         os.setProblema(problema);
         Tarefa tarefa = new Tarefa();
@@ -41,7 +41,7 @@ class AtualizarTarefaTest {
         tarefa.setOrdemServico(os);
 
         Usuario usuario = new Usuario();
-        usuario.setEndereco(enderecoUsuario);
+        usuario.setUnidade(unidadeUsuario);
         when(tarefaRepository.findById(1L)).thenReturn(Optional.of(tarefa));
         when(usuarioRepository.findById(2L)).thenReturn(Optional.of(usuario));
 

@@ -22,10 +22,10 @@ public class ListarObservacaoConclusao {
     public List<ObservacaoConclusao> listar(Long usuarioId, FiltrosObservacaoConclusaoQueryParam filtros) {
         Usuario usuario = buscarUsuario(usuarioId);
 
-        if (usuario.getEndereco() == null || usuario.getEndereco().getId() == null)
-            throw new RegraProblemaException("exception.endereco.required");
+        if (usuario.getUnidade() == null || usuario.getUnidade().getId() == null)
+            throw new RegraProblemaException("exception.unidade.required");
 
-        return validarResultado(repository.findAllByEnderecoId(usuario.getEndereco().getId(), filtros));
+        return validarResultado(repository.findAllByUnidadeId(usuario.getUnidade().getId(), filtros));
     }
 
     public List<ObservacaoConclusao> listarMinhas(Long usuarioId, FiltrosObservacaoConclusaoQueryParam filtros) {
@@ -41,14 +41,14 @@ public class ListarObservacaoConclusao {
     }
 
     public void validarPermissao(OrdemServico ordemServico, Usuario usuario, boolean gestor) {
-        boolean mesmoEndereco = usuario.getEndereco().getId().equals(
-                ordemServico.getProblema().getLocalEndereco().getEndereco().getId());
+        boolean mesmoUnidade = usuario.getUnidade().getId().equals(
+                ordemServico.getProblema().getLocalUnidade().getUnidade().getId());
 
-        if (gestor && mesmoEndereco) return;
+        if (gestor && mesmoUnidade) return;
 
         boolean tecnicoResponsavel = usuario.getId().equals(ordemServico.getUsuario().getId());
 
-        if (!tecnicoResponsavel || !mesmoEndereco)
+        if (!tecnicoResponsavel || !mesmoUnidade)
             throw new RegraProblemaException("exception.access.denied");
     }
 

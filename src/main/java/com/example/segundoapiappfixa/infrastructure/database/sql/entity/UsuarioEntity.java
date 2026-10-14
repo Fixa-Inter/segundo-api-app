@@ -25,8 +25,8 @@ public class UsuarioEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "endereco_id")
-    private EnderecoEntity endereco;
+    @JoinColumn(name = "unidade_id")
+    private UnidadeEntity unidade;
 
     @Column(name = "nome_completo")
     private String nomeCompleto;

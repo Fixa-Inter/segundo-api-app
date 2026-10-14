@@ -6,7 +6,7 @@ import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
-import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
+import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.domain.repository.FotoRepository;
@@ -24,7 +24,7 @@ public class CriarOcorrencia {
 
     private final OcorrenciaRepository ocorrenciaRepository;
     private final UsuarioRepository usuarioRepository;
-    private final LocalEnderecoRepository localEnderecoRepository;
+    private final LocalUnidadeRepository localUnidadeRepository;
     private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
     private final FotoRepository fotoRepository;
 
@@ -34,7 +34,7 @@ public class CriarOcorrencia {
             throw new RegraProblemaException("exception.ocorrencia.required");
         }
 
-        LocalEndereco localEndereco = localEnderecoRepository.findById(dto.localEnderecoId())
+        LocalUnidade localUnidade = localUnidadeRepository.findById(dto.localUnidadeId())
                 .orElseThrow(() -> new RegraProblemaException("exception.local.required"));
 
         CategoriaEquipamento categoriaEquipamento = categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
@@ -46,7 +46,7 @@ public class CriarOcorrencia {
         Ocorrencia ocorrencia = new Ocorrencia(
                 null,
                 usuario,
-                localEndereco,
+                localUnidade,
                 categoriaEquipamento,
                 dto.categoriaProblemaId(),
                 dto.prioridade(),

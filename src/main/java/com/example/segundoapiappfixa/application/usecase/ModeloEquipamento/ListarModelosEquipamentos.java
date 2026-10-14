@@ -22,7 +22,7 @@ public class ListarModelosEquipamentos {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        List<ModeloEquipamento> modelos = repository.findByEnderecoId(usuario.getEndereco().getId(), filtros);
+        List<ModeloEquipamento> modelos = repository.findByUnidadeId(usuario.getUnidade().getId(), filtros);
 
         if (modelos.isEmpty()) throw new EntidadeNaoEncontradaException("exception.modeloEquipamento.notFound");
 
@@ -34,17 +34,17 @@ public class ListarModelosEquipamentos {
         ModeloEquipamento modelo = repository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.modeloEquipamento.notFound"));
 
-        validarEndereco(modelo, usuarioId);
+        validarUnidade(modelo, usuarioId);
 
         return modelo;
     }
 
-    private void validarEndereco(ModeloEquipamento modelo, Long usuarioId) {
+    private void validarUnidade(ModeloEquipamento modelo, Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!modelo.getCategoriaEquipamento().getUsuario().getEndereco().getId()
-                .equals(usuario.getEndereco().getId())
+        if (!modelo.getCategoriaEquipamento().getUsuario().getUnidade().getId()
+                .equals(usuario.getUnidade().getId())
         ) {
             throw new RegraProblemaException("exception.access.denied");
         }

@@ -49,20 +49,20 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
                 .map(mapper::toModel);
     }
 
-    // Método de listar todos os usuários de um endereço e tipo de acesso específico persistidos no banco de dados
+    // Método de listar todos os usuários de um unidade e tipo de acesso específico persistidos no banco de dados
     @Transactional(readOnly = true)
-    public List<Usuario> findByEnderecoIdAndTipoAcesso(
-            Long enderecoId,
+    public List<Usuario> findByUnidadeIdAndTipoAcesso(
+            Long unidadeId,
             TipoAcesso tipoAcesso,
             FiltrosUsuarioQueryParam filtros
     ) {
         Specification<UsuarioEntity> specification = Specification.where(UsuarioSpecs.findByEstaAtivo())
-                .and(UsuarioSpecs.findByEnderecoId(enderecoId))
+                .and(UsuarioSpecs.findByUnidadeId(unidadeId))
                 .and(UsuarioSpecs.findByTipoAcesso(tipoAcesso))
                 .and(UsuarioSpecs.findByNomeCompleto(filtros.nomeCompleto()))
                 .and(UsuarioSpecs.findByEmail(filtros.email()))
                 .and(UsuarioSpecs.findByCargo(filtros.cargo()))
-                .and(UsuarioSpecs.findByCnpjEndereco(filtros.cnpjEndereco()))
+                .and(UsuarioSpecs.findByCnpjUnidade(filtros.cnpjUnidade()))
                 .and(UsuarioSpecs.findByEstaAtivo());
 
         Sort sort = SortUtils.definirSort(
@@ -85,9 +85,9 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Usuario> findTecnicosRecomendados(Long enderecoId, CategoriaProblema categoriaProblema) {
+    public List<Usuario> findTecnicosRecomendados(Long unidadeId, CategoriaProblema categoriaProblema) {
         return repository.findTecnicosRecomendados(
-                        enderecoId,
+                        unidadeId,
                         categoriaProblema,
                         TipoAcesso.TECNICO,
                         StatusOrdemServico.CONCLUIDA

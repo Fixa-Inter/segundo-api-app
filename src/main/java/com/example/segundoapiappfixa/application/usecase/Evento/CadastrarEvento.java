@@ -3,10 +3,10 @@ package com.example.segundoapiappfixa.application.usecase.Evento;
 import com.example.segundoapiappfixa.adapters.dto.input.Evento.EventoCadastrarInputDTO;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Evento;
-import com.example.segundoapiappfixa.domain.model.LocalEndereco;
+import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.EventoRepository;
-import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
+import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ import java.time.LocalDateTime;
 public class CadastrarEvento {
     private final EventoRepository repository;
     private final UsuarioRepository usuarioRepository;
-    private final LocalEnderecoRepository localRepository;
+    private final LocalUnidadeRepository localRepository;
 
     public Evento cadastrar(EventoCadastrarInputDTO dto, Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        LocalEndereco local = localRepository.findById(dto.localEnderecoId())
+        LocalUnidade local = localRepository.findById(dto.localUnidadeId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.local.required"));
 
         Evento evento = new Evento(

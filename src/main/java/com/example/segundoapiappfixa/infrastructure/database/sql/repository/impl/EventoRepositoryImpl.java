@@ -7,7 +7,7 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.repository.util
 import com.example.segundoapiappfixa.domain.model.Evento;
 import com.example.segundoapiappfixa.domain.repository.EventoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.EventoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalEnderecoEntity;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalUnidadeEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaEventoRepository;
 import jakarta.persistence.EntityManager;
@@ -41,7 +41,7 @@ public class EventoRepositoryImpl implements EventoRepository {
         Specification<EventoEntity> specification = Specification.where(EventoSpecs.findByUsuarioId(usuarioId))
                 .and(EventoSpecs.findByTitulo(filtros.titulo()))
                 .and(EventoSpecs.findByDescricao(filtros.descricao()))
-                .and(EventoSpecs.findByLocalEndereco(filtros.localEndereco()))
+                .and(EventoSpecs.findByLocalUnidade(filtros.localUnidade()))
                 .and(EventoSpecs.findByDescricaoLocal(filtros.descricaoLocal()))
                 .and(EventoSpecs.findByDataHoraInicio(filtros.dataHoraInicio()))
                 .and(EventoSpecs.findByDataHoraFim(filtros.dataHoraFim()))
@@ -83,9 +83,9 @@ public class EventoRepositoryImpl implements EventoRepository {
                 evento.getUsuario().getId()
         );
 
-        entity.localEndereco = entityManager.getReference(
-                LocalEnderecoEntity.class,
-                evento.getLocalEndereco().getId()
+        entity.localUnidade = entityManager.getReference(
+                LocalUnidadeEntity.class,
+                evento.getLocalUnidade().getId()
         );
 
         return mapper.toModel(repository.save(entity));

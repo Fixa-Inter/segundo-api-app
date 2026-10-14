@@ -21,7 +21,7 @@ public interface CategoriaEquipamentoRepository {
 
     Optional<CategoriaEquipamento> deleteById(Long categoriaEquipamentoId);
 
-    List<CategoriaEquipamento> findByEnderecoId(
+    List<CategoriaEquipamento> findByUnidadeId(
             Long categoriaEquipamentoId,
             FiltrosCategoriaEquipamentoQueryParam filtros
     );

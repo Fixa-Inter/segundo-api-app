@@ -70,10 +70,10 @@ public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoR
     }
 
     // Método de listar os registros persistidos no banco de dados
-    public List<CategoriaEquipamento> findByEnderecoId(Long usuarioEnderecoId, FiltrosCategoriaEquipamentoQueryParam filtros) {
+    public List<CategoriaEquipamento> findByUnidadeId(Long usuarioUnidadeId, FiltrosCategoriaEquipamentoQueryParam filtros) {
 
         Specification<CategoriaEquipamentoEntity> specification = Specification.where(CategoriaEquipamentoSpecs.findByEstaAtivo())
-                .and(CategoriaEquipamentoSpecs.findByEnderecoId(usuarioEnderecoId))
+                .and(CategoriaEquipamentoSpecs.findByUnidadeId(usuarioUnidadeId))
                 .and(CategoriaEquipamentoSpecs.findByNome(filtros.nome()))
                 .and(CategoriaEquipamentoSpecs.findByDescricao(filtros.descricao()))
                 .and(CategoriaEquipamentoSpecs.findByNomeUsuario(filtros.nomeUsuario()));

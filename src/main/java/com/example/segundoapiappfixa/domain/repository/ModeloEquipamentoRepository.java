@@ -14,8 +14,8 @@ public interface ModeloEquipamentoRepository {
             "categoria", "categoriaEquipamento.nome"
     );
 
-    List<ModeloEquipamento> findByEnderecoId(
-            Long enderecoId,
+    List<ModeloEquipamento> findByUnidadeId(
+            Long unidadeId,
             FiltrosModeloEquipamentoQueryParam filtros
     );
 

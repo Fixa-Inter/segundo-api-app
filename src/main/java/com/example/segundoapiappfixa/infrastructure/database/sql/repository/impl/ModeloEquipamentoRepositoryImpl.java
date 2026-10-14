@@ -32,9 +32,9 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
     private EntityManager entityManager;
 
     // Método de listar os registros persistidos no banco de dados
-    public List<ModeloEquipamento> findByEnderecoId(Long enderecoId, FiltrosModeloEquipamentoQueryParam filtros) {
+    public List<ModeloEquipamento> findByUnidadeId(Long unidadeId, FiltrosModeloEquipamentoQueryParam filtros) {
         Specification<ModeloEquipamentoEntity> specification = Specification.where(ModeloEquipamentoSpecs.findByEstaAtivo())
-                .and(ModeloEquipamentoSpecs.findByEnderecoId(enderecoId))
+                .and(ModeloEquipamentoSpecs.findByUnidadeId(unidadeId))
                 .and(ModeloEquipamentoSpecs.findByNome(filtros.nome()))
                 .and(ModeloEquipamentoSpecs.findByDescricao(filtros.descricao()))
                 .and(ModeloEquipamentoSpecs.findByMarca(filtros.marca()))

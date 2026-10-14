@@ -31,8 +31,8 @@ public class DeletarTarefa {
         if (
                 usuario == null ||
                         tarefa == null ||
-                        !usuario.getEndereco().getId()
-                                .equals(tarefa.getOrdemServico().getProblema().getLocalEndereco().getEndereco().getId())
+                        !usuario.getUnidade().getId()
+                                .equals(tarefa.getOrdemServico().getProblema().getLocalUnidade().getUnidade().getId())
 
         ) {
             throw new RegraProblemaException("exception.access.denied");

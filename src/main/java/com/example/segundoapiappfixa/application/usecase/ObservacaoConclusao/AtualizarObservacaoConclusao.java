@@ -60,14 +60,14 @@ public class AtualizarObservacaoConclusao {
     }
 
     public void validarPermissao(OrdemServico ordemServico, Usuario usuario, boolean gestor) {
-        boolean mesmoEndereco = usuario.getEndereco().getId().equals(
-                ordemServico.getProblema().getLocalEndereco().getEndereco().getId());
+        boolean mesmoUnidade = usuario.getUnidade().getId().equals(
+                ordemServico.getProblema().getLocalUnidade().getUnidade().getId());
 
-        if (gestor && mesmoEndereco) return;
+        if (gestor && mesmoUnidade) return;
 
         boolean tecnicoResponsavel = usuario.getId().equals(ordemServico.getUsuario().getId());
 
-        if (!tecnicoResponsavel || !mesmoEndereco)
+        if (!tecnicoResponsavel || !mesmoUnidade)
             throw new RegraProblemaException("exception.access.denied");
     }
 }

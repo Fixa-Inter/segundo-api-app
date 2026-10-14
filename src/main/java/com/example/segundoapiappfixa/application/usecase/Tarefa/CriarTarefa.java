@@ -34,8 +34,8 @@ public class CriarTarefa {
 
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
-        if (usuario == null || usuario.getEndereco() == null) {
-            throw new RegraProblemaException("exception.endereco.required");
+        if (usuario == null || usuario.getUnidade() == null) {
+            throw new RegraProblemaException("exception.unidade.required");
         }
 
         List<Tarefa> tarefas = tarefaCriarInputDTOS
@@ -44,8 +44,8 @@ public class CriarTarefa {
                     OrdemServico ordemServico = ordemServicoRepository.findById(tarefaCriarInputDTO.ordemServicoId())
                             .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
 
-                    if (!usuario.getEndereco().getId().equals(
-                            ordemServico.getProblema().getLocalEndereco().getEndereco().getId())) {
+                    if (!usuario.getUnidade().getId().equals(
+                            ordemServico.getProblema().getLocalUnidade().getUnidade().getId())) {
                         throw new RegraProblemaException("exception.access.denied");
                     }
 

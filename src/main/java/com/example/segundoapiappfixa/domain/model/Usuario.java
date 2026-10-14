@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Usuario {
     private Long id;
-    private Endereco endereco;
+    private Unidade unidade;
     private String nomeCompleto;
     private String email;
     private TipoAcesso tipoAcesso;

@@ -34,8 +34,8 @@ public class CadastrarOrdemServico {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.problema.notFound"));
 
         if (
-                !gestor.getEndereco().getId().equals(responsavel.getEndereco().getId())
-                || !gestor.getEndereco().getId().equals(problema.getLocalEndereco().getEndereco().getId())
+                !gestor.getUnidade().getId().equals(responsavel.getUnidade().getId())
+                || !gestor.getUnidade().getId().equals(problema.getLocalUnidade().getUnidade().getId())
         ) {
             throw new RegraProblemaException("exception.access.denied");
         }

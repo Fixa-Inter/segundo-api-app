@@ -21,7 +21,7 @@ public record CadastroUsuarioRequestDTO(
         String senha,
 
         @NotNull
-        Long enderecoId,
+        Long unidadeId,
 
         @NotBlank
         String cargo,

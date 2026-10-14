@@ -7,7 +7,7 @@ public record EquipamentoAtualizarInputDTO (
         Long id,
 
         Long modeloEquipamentoId,
-        Long localEnderecoId,
+        Long localUnidadeId,
         String codigo
 ) {
 }

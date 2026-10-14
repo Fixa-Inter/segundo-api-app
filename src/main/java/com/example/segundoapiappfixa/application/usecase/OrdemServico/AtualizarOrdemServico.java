@@ -30,8 +30,8 @@ public class AtualizarOrdemServico {
             validarAtualizacaoDoTecnico(input, ordemServico, usuarioAutenticadoId);
         }
 
-        if (!gestor.getEndereco().getId().equals(
-                ordemServico.getProblema().getLocalEndereco().getEndereco().getId())) {
+        if (!gestor.getUnidade().getId().equals(
+                ordemServico.getProblema().getLocalUnidade().getUnidade().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }
 
@@ -44,7 +44,7 @@ public class AtualizarOrdemServico {
                 throw new RegraProblemaException("exception.responsavel.denied");
             }
 
-            if (responsavel.getEndereco() == null || !gestor.getEndereco().getId().equals(responsavel.getEndereco().getId())) {
+            if (responsavel.getUnidade() == null || !gestor.getUnidade().getId().equals(responsavel.getUnidade().getId())) {
                 throw new RegraProblemaException("exception.access.denied");
             }
 

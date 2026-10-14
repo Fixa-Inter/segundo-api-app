@@ -35,8 +35,8 @@ public class ListarTarefas {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!usuario.getEndereco().getId()
-                .equals(ordemServico.getProblema().getLocalEndereco().getEndereco().getId()) ||
+        if (!usuario.getUnidade().getId()
+                .equals(ordemServico.getProblema().getLocalUnidade().getUnidade().getId()) ||
                 (!isGestor && !Objects.equals(ordemServico.getUsuario().getId(), usuarioId))
         ) {
             throw new RegraProblemaException("exception.access.denied");
@@ -54,8 +54,8 @@ public class ListarTarefas {
 
         OrdemServico ordemServico = tarefa.getOrdemServico();
 
-        if (!usuario.getEndereco().getId()
-                .equals(ordemServico.getProblema().getLocalEndereco().getEndereco().getId()) ||
+        if (!usuario.getUnidade().getId()
+                .equals(ordemServico.getProblema().getLocalUnidade().getUnidade().getId()) ||
                 (!isGestor && !Objects.equals(ordemServico.getUsuario().getId(), usuarioId))
         ) {
             throw new RegraProblemaException("exception.access.denied");

@@ -21,8 +21,8 @@ public class TurnoEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "endereco_id")
-    public EnderecoEntity endereco;
+    @JoinColumn(name = "unidade_id")
+    public UnidadeEntity unidade;
 
     @Column(name = "nome")
     private String nome;

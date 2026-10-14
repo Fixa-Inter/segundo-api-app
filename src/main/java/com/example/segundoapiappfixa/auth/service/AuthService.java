@@ -5,8 +5,8 @@ import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.model.RecuperarSenhaCodigo;
 import com.example.segundoapiappfixa.domain.repository.RecuperarSenhaCodigoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.domain.repository.EnderecoRepository;
-import com.example.segundoapiappfixa.domain.model.Endereco;
+import com.example.segundoapiappfixa.domain.repository.UnidadeRepository;
+import com.example.segundoapiappfixa.domain.model.Unidade;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.security.JwtTokenProvider;
@@ -39,7 +39,7 @@ public class AuthService {
     private final UsuarioRepository usuarioRepository;
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
-    private final EnderecoRepository enderecoRepository;
+    private final UnidadeRepository unidadeRepository;
     private final FirebaseTokenVerifier firebaseTokenVerifier;
 
     public LoginResponseDTO cadastrar(CadastroUsuarioRequestDTO dto) {
@@ -53,10 +53,10 @@ public class AuthService {
             throw new RegraProblemaException("validation.usuario.dataNascimento.minimumAge");
         }
 
-        Endereco endereco = enderecoRepository.findById(dto.enderecoId())
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.endereco.notFound"));
+        Unidade unidade = unidadeRepository.findById(dto.unidadeId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.unidade.notFound"));
 
-        String dominio = endereco.getInstituicao().getDominioEmail().toLowerCase(Locale.ROOT);
+        String dominio = unidade.getInstituicao().getDominioEmail().toLowerCase(Locale.ROOT);
         String dominioEmail = email.substring(email.indexOf('@') + 1);
         if (!dominio.equals(dominioEmail)) {
             throw new RegraProblemaException("validation.usuario.emailDomain.invalid");
@@ -64,7 +64,7 @@ public class AuthService {
 
         Usuario usuario = new Usuario(
                 null,
-                endereco,
+                unidade,
                 dto.nomeCompleto().trim(),
                 email,
                 TipoAcesso.SOLICITANTE,

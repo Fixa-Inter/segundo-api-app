@@ -1,11 +1,11 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
 import com.example.segundoapiappfixa.application.annotation.UseCase;
-import com.example.segundoapiappfixa.domain.model.LocalEndereco;
+import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import com.example.segundoapiappfixa.domain.model.Usuario;
-import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
+import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
@@ -18,7 +18,7 @@ import java.util.List;
 public class ListarProblemas {
 
     private final UsuarioRepository usuarioRepository;
-    private final LocalEnderecoRepository localEnderecoRepository;
+    private final LocalUnidadeRepository localUnidadeRepository;
     private final ProblemaRepository problemaRepository;
 
     public List<Problema> listarMinhas(Long usuarioId, FiltrosProblemaQueryParam filtros) {
@@ -32,17 +32,17 @@ public class ListarProblemas {
     public List<Problema> listar(Long usuarioId, FiltrosProblemaQueryParam filtros) {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
-        if (usuario == null || usuario.getEndereco() == null || usuario.getEndereco().getId() == null) {
+        if (usuario == null || usuario.getUnidade() == null || usuario.getUnidade().getId() == null) {
             throw new IllegalArgumentException("exception.request.invalid");
         }
 
-        List<Long> localEnderecoIds = localEnderecoRepository
-                .findAllByEnderecoId(usuario.getEndereco().getId())
+        List<Long> localUnidadeIds = localUnidadeRepository
+                .findAllByUnidadeId(usuario.getUnidade().getId())
                 .stream()
-                .map(LocalEndereco::getId)
+                .map(LocalUnidade::getId)
                 .toList();
 
-        List<Problema> problemas = problemaRepository.findAllByLocalEnderecoIds(localEnderecoIds, filtros);
+        List<Problema> problemas = problemaRepository.findAllByLocalUnidadeIds(localUnidadeIds, filtros);
 
         if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
 
@@ -57,16 +57,16 @@ public class ListarProblemas {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || problema == null) {
-            throw new RegraProblemaException("exception.endereco.required");
+            throw new RegraProblemaException("exception.unidade.required");
         }
 
-        boolean mesmoEndereco = usuario.getEndereco().getId()
-                .equals(problema.getLocalEndereco().getEndereco().getId());
+        boolean mesmoUnidade = usuario.getUnidade().getId()
+                .equals(problema.getLocalUnidade().getUnidade().getId());
 
         boolean donoDoProblema = problema.getUsuario() != null
                 && usuarioId.equals(problema.getUsuario().getId());
 
-        if (!mesmoEndereco || (!donoDoProblema && !isGestor)) {
+        if (!mesmoUnidade || (!donoDoProblema && !isGestor)) {
             throw new RegraProblemaException("exception.access.denied");
         }
 

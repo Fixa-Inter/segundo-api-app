@@ -27,8 +27,8 @@ public class AtualizarTarefa {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!usuario.getEndereco().getId()
-                .equals(tarefa.getOrdemServico().getProblema().getLocalEndereco().getEndereco().getId())) {
+        if (!usuario.getUnidade().getId()
+                .equals(tarefa.getOrdemServico().getProblema().getLocalUnidade().getUnidade().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }
 
