@@ -68,7 +68,6 @@ public class AuthService {
                 endereco,
                 dto.nomeCompleto().trim(),
                 email,
-                dto.telefone(),
                 TipoAcesso.SOLICITANTE,
                 passwordEncoder.encode(dto.senha()),
                 dto.cargo().trim(),

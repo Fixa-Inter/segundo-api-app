@@ -20,10 +20,6 @@ public record CadastroUsuarioRequestDTO(
         @Pattern(regexp = ".{4,}")
         String senha,
 
-        @NotBlank
-        @Pattern(regexp = "\\d{11}")
-        String telefone,
-
         @NotNull
         Long enderecoId,
 
