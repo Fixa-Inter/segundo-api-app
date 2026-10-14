@@ -2,12 +2,16 @@ package com.example.segundoapiappfixa.auth.service;
 
 import com.example.segundoapiappfixa.auth.dto.LoginRequestDTO;
 import com.example.segundoapiappfixa.auth.dto.LoginResponseDTO;
+import com.example.segundoapiappfixa.auth.dto.CadastroUsuarioRequestDTO;
 import com.example.segundoapiappfixa.auth.dto.RedefinirSenhaOutputDTO;
 import com.example.segundoapiappfixa.auth.dto.RedefinirSenhaRequestDTO;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.model.RecuperarSenhaCodigo;
 import com.example.segundoapiappfixa.domain.repository.RecuperarSenhaCodigoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
+import com.example.segundoapiappfixa.domain.repository.EnderecoRepository;
+import com.example.segundoapiappfixa.domain.model.Endereco;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.security.JwtTokenProvider;
 import com.example.segundoapiappfixa.infrastructure.external.email.EmailSender;
@@ -21,6 +25,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -33,6 +41,54 @@ public class AuthService {
     private final UsuarioRepository usuarioRepository;
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
+    private final EnderecoRepository enderecoRepository;
+
+    public LoginResponseDTO cadastrar(CadastroUsuarioRequestDTO dto) {
+        String email = dto.email().trim().toLowerCase(Locale.ROOT);
+
+        if (usuarioRepository.findByEmail(email).isPresent()) {
+            throw new RegraProblemaException("exception.usuario.emailAlreadyExists");
+        }
+
+        if (dto.dataNascimento().isAfter(LocalDate.now().minusYears(12))) {
+            throw new RegraProblemaException("validation.usuario.dataNascimento.minimumAge");
+        }
+
+        Endereco endereco = enderecoRepository.findById(dto.enderecoId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.endereco.notFound"));
+
+        String dominio = endereco.getInstituicao().getDominioEmail().toLowerCase(Locale.ROOT);
+        String dominioEmail = email.substring(email.indexOf('@') + 1);
+        if (!dominio.equals(dominioEmail)) {
+            throw new RegraProblemaException("validation.usuario.emailDomain.invalid");
+        }
+
+        Usuario usuario = new Usuario(
+                null,
+                endereco,
+                dto.nomeCompleto().trim(),
+                email,
+                dto.telefone(),
+                TipoAcesso.SOLICITANTE,
+                passwordEncoder.encode(dto.senha()),
+                dto.cargo().trim(),
+                dto.dataNascimento(),
+                LocalDateTime.now(),
+                true,
+                false,
+                List.of()
+        );
+
+        Usuario salvo = usuarioRepository.save(usuario);
+        String token = jwtTokenProvider.generateAccessToken(
+                salvo.getId(),
+                salvo.getEmail(),
+                TipoAcesso.SOLICITANTE.name(),
+                new Date()
+        );
+
+        return new LoginResponseDTO(salvo.getEmail(), token);
+    }
 
     public LoginResponseDTO login(LoginRequestDTO dto) {
 

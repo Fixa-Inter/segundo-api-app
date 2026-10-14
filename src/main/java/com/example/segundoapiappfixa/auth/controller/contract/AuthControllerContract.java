@@ -11,6 +11,8 @@ public interface AuthControllerContract {
 
     ResponseEntity<LoginResponseDTO> login(LoginRequestDTO requestDTO);
 
+    ResponseEntity<LoginResponseDTO> cadastrar(CadastroUsuarioRequestDTO requestDTO);
+
     ResponseEntity<String> redefinirSenha(RedefinirSenhaRequestDTO requestDTO);
 
     public ResponseEntity<RedefinirSenhaOutputDTO> esqueceuSenha(String email);

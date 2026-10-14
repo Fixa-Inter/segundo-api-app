@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,5 +26,11 @@ public class EnderecoRepositoryImpl implements EnderecoRepository {
                 .stream()
                 .map(mapper::toModel)
                 .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Endereco> findById(Long id) {
+        return repository.findById(id).map(mapper::toModel);
     }
 }

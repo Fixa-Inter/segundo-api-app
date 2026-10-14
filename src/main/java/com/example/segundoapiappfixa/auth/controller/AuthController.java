@@ -1,16 +1,13 @@
 package com.example.segundoapiappfixa.auth.controller;
 
 import com.example.segundoapiappfixa.auth.controller.contract.AuthControllerContract;
-import com.example.segundoapiappfixa.auth.dto.LoginRequestDTO;
-import com.example.segundoapiappfixa.auth.dto.LoginResponseDTO;
-import com.example.segundoapiappfixa.auth.dto.RedefinirSenhaOutputDTO;
-import com.example.segundoapiappfixa.auth.dto.RedefinirSenhaRequestDTO;
+import com.example.segundoapiappfixa.auth.dto.*;
 import com.example.segundoapiappfixa.auth.service.AuthService;
 import com.example.segundoapiappfixa.auth.service.ListarOpcoesCadastro;
-import com.example.segundoapiappfixa.auth.dto.CadastroNomeOutputDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -21,6 +18,14 @@ public class AuthController implements AuthControllerContract {
 
     private final AuthService service;
     private final ListarOpcoesCadastro listarOpcoesCadastro;
+
+    @Override
+    @PostMapping("/cadastro")
+    public ResponseEntity<LoginResponseDTO> cadastrar(
+            @Valid @RequestBody CadastroUsuarioRequestDTO requestDTO
+    ) {
+        return ResponseEntity.status(201).body(service.cadastrar(requestDTO));
+    }
 
     @GetMapping("/instituicoes")
     public ResponseEntity<List<CadastroNomeOutputDTO>> listarInstituicoes() {

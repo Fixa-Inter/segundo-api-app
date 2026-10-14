@@ -65,6 +65,7 @@ public class SecurityConfig{
                         // Endpoints de Autenticação
                         .requestMatchers(
                                 "/api/v1/auth/login",
+                                "/api/v1/auth/cadastro",
                                 "/api/v1/auth/instituicoes",
                                 "/api/v1/auth/instituicoes/*/enderecos",
                                 "/api/v1/auth/refresh",
