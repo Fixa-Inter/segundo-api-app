@@ -54,7 +54,7 @@ public class CadastrarObservacaoConclusao {
                 ordemServico,
                 dto.dificuldade(),
                 dto.observacao(),
-                LocalDate.now(),
+                LocalDateTime.now(),
                 List.of()
         );
 

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -18,6 +18,6 @@ public class ObservacaoConclusao {
     private OrdemServico ordemServico;
     private Dificuldade dificuldade;
     private String observacao;
-    private LocalDate dataCriacao;
+    private LocalDateTime dataCriacao;
     private List<Foto> fotos;
 }
