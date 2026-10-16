@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.LocalEndereco.LocalUnidadeOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import com.example.segundoapiappfixa.adapters.controller.contract.ProblemaControllerContract;
@@ -12,7 +13,6 @@ import com.example.segundoapiappfixa.application.usecase.Problema.ListarProblema
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.ProblemaDynamicMapper;
-import com.example.segundoapiappfixa.auth.dto.AuthenticatedUser;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +30,7 @@ public class ProblemaController implements ProblemaControllerContract {
 
     // UseCases
     private final ListarProblemas listarProblemas;
+    private final ListarLocalUnidade listarLocalUnidade;
     private final CriarProblema cadastrarProblema;
     private final AtualizarStatus atualizarStatus;
 
@@ -91,6 +92,13 @@ public class ProblemaController implements ProblemaControllerContract {
         );
 
         return ResponseEntity.ok(mask(dto, campos));
+    }
+
+    @GetMapping("/local-unidade")
+    public ResponseEntity<List<LocalUnidadeOutputDTO>> listarLocalEndereco(
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(listarLocalUnidade.listar(ControllerUtils.usuarioId(authentication)));
     }
 
     // POST
