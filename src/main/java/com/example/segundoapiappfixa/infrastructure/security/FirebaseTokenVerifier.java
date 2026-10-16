@@ -26,9 +26,22 @@ public class FirebaseTokenVerifier {
     }
 
     public FirebaseToken verify(String idToken) {
+        if (idToken == null || idToken.isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "ID Token do Google/Firebase não informado"
+            );
+        }
+
         try {
             return FirebaseAuth.getInstance(getApp()).verifyIdToken(idToken);
-        } catch (FirebaseAuthException | IOException exception) {
+        } catch (FirebaseAuthException exception) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "ID Token do Google/Firebase inválido: " + exception.getAuthErrorCode(),
+                    exception
+            );
+        } catch (IOException exception) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
                     "ID Token do Google/Firebase inválido",
