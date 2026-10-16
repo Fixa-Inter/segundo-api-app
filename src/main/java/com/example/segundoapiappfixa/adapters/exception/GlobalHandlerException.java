@@ -37,7 +37,19 @@ public class GlobalHandlerException {
     }
 
     private String text(String key) {
+        if (key == null || key.isBlank()) {
+            return messages.getMessage(
+                    "exception.request.invalid",
+                    null,
+                    "Não foi possível processar a requisição.",
+                    LocaleContextHolder.getLocale()
+            );
+        }
         return messages.getMessage(key, null, key, LocaleContextHolder.getLocale());
+    }
+
+    private String validationText(String message) {
+        return text(message);
     }
 
     private ResponseEntity<?> response(HttpStatus status, String key) {
@@ -62,7 +74,9 @@ public class GlobalHandlerException {
     ResponseEntity<?> validation(MethodArgumentNotValidException e) {
         return ResponseEntity
                 .badRequest()
-                .body(Map.of("message", e.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage()).toList()));
+                .body(Map.of("message", e.getBindingResult().getFieldErrors().stream()
+                        .map(x -> validationText(x.getDefaultMessage()))
+                        .toList()));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
