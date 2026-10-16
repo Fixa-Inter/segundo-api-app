@@ -7,7 +7,7 @@ import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
-import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
+import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AtualizarOcorrencia {
     private final OcorrenciaRepository ocorrenciaRepository;
-    private final LocalEnderecoRepository localEnderecoRepository;
+    private final LocalUnidadeRepository localUnidadeRepository;
     private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
     private final FotoRepository fotoRepository;
 
@@ -35,8 +35,8 @@ public class AtualizarOcorrencia {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        if (dto.localEnderecoId() != null) {
-            atual.setLocalEndereco(localEnderecoRepository.findById(dto.localEnderecoId())
+        if (dto.localUnidadeId() != null) {
+            atual.setLocalUnidade(localUnidadeRepository.findById(dto.localUnidadeId())
                     .orElseThrow(() -> new RegraProblemaException("exception.local.required")));
         }
 

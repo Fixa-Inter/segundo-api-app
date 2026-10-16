@@ -12,8 +12,8 @@ public interface ObservacaoConclusaoRepository {
 
     Optional<ObservacaoConclusao> findById(Long id);
 
-    List<ObservacaoConclusao> findAllByEnderecoId(
-            Long enderecoId,
+    List<ObservacaoConclusao> findAllByUnidadeId(
+            Long unidadeId,
             FiltrosObservacaoConclusaoQueryParam filtros
     );
 

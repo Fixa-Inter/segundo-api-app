@@ -7,7 +7,7 @@ public record EventoAtualizarInputDTO (
         @NotNull(message = "{validation.evento.required}")
         Long id,
 
-        Long localEnderecoId,
+        Long localUnidadeId,
         String titulo,
         String descricao,
         String descricaoLocal,

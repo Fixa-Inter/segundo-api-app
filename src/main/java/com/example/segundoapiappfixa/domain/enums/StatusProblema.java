@@ -12,8 +12,8 @@ public enum StatusProblema {
     APROVADO("Aprovado", 1),
     REPROVADO("Reprovado", 2);
 
-    private String nome;
-    private int id;
+    private final String nome;
+    private final int id;
 
     public static StatusProblema fromNome(String nome) {
         for (StatusProblema statusProblema : values()) {

@@ -35,7 +35,7 @@ public class ListarAptidoes {
             throw new RegraProblemaException("exception.gestor.required");
         }
 
-        if (!tecnico.getEndereco().getId().equals(usuario.getEndereco().getId())) {
+        if (!tecnico.getUnidade().getId().equals(usuario.getUnidade().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }
 

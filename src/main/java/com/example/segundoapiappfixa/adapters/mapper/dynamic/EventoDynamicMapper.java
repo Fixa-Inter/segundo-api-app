@@ -12,7 +12,7 @@ public class EventoDynamicMapper {
                 fields.contains("id") ? dto.id() : null,
                 fields.contains("titulo") ? dto.titulo() : null,
                 fields.contains("descricao") ? dto.descricao() : null,
-                fields.contains("localEndereco") ? dto.localEndereco() : null,
+                fields.contains("localUnidade") ? dto.localUnidade() : null,
                 fields.contains("descricaoLocal") ? dto.descricaoLocal() : null,
                 fields.contains("dataHoraInicio") ? dto.dataHoraInicio() : null,
                 fields.contains("dataHoraFim") ? dto.dataHoraFim() : null,

@@ -5,6 +5,7 @@ import com.example.segundoapiappfixa.adapters.dto.output.Aptidao.AptidaoOutputDT
 import com.example.segundoapiappfixa.adapters.dto.output.OrdemServico.OrdemServicoOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Usuario.UsuarioOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
+import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
@@ -13,6 +14,8 @@ import java.util.List;
 public interface TecnicoControllerContract {
 
     ResponseEntity<List<UsuarioOutputDTO>> listar(String campos, FiltrosUsuarioQueryParam filtros, Authentication authentication);
+
+    ResponseEntity<List<UsuarioOutputDTO>> listarRecomendar(CategoriaProblema categoriaProblema, String campos, Authentication authentication);
 
     ResponseEntity<List<AptidaoOutputDTO>> listarCompetencias(Long usuarioId, String campos, Authentication authentication);
 

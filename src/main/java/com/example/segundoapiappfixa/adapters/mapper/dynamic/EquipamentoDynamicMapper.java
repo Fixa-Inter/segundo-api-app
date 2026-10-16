@@ -13,7 +13,7 @@ public class EquipamentoDynamicMapper {
                 fields.contains("id") ? dto.id() : null,
                 fields.contains("codigo") ? dto.codigo() : null,
                 fields.contains("modeloEquipamento") ? dto.modeloEquipamento() : null,
-                fields.contains("localEndereco") ? dto.localEndereco() : null,
+                fields.contains("localUnidade") ? dto.localUnidade() : null,
                 fields.contains("usuario") ? dto.usuario() : null,
                 fields.contains("dataCriacao") ? dto.dataCriacao() : null,
                 fields.contains("estaAtivo") ? dto.estaAtivo() : null

@@ -25,8 +25,8 @@ public class EventoEntity {
     public UsuarioEntity usuario;
 
     @ManyToOne
-    @JoinColumn(name = "local_endereco_id")
-    public LocalEnderecoEntity localEndereco;
+    @JoinColumn(name = "local_unidade_id")
+    public LocalUnidadeEntity localUnidade;
 
     @Column(name = "titulo")
     private String titulo;

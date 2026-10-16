@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs;
 
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.*;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OrdemServicoEntity;
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
@@ -51,6 +52,10 @@ public final class OrdemServicoSpecs {
         return enumLike("prioridade", v, Prioridade.class);
     }
 
+    public static Specification<OrdemServicoEntity> findByStatusOrdemServico(String v) {
+        return enumLike("statusOrdemServico", v, StatusOrdemServico.class);
+    }
+
     public static Specification<OrdemServicoEntity> findByDataPrevistaMin(LocalDateTime v) {
         if (v == null) return Specification.unrestricted();
         return (r, q, c) -> c.greaterThanOrEqualTo(r.get("dataPrevista"), v);
@@ -71,6 +76,7 @@ public final class OrdemServicoSpecs {
 
     private static Specification<OrdemServicoEntity> enumLike(String f, String v, Class<? extends Enum<?>> enumType) {
         if (v == null || v.isBlank()) return Specification.unrestricted();
+
         Enum<?> value = enumValue(enumType, v);
         if (value == null) return Specification.unrestricted();
         return (r, q, c) -> c.equal(r.get(f), value);
@@ -88,7 +94,9 @@ public final class OrdemServicoSpecs {
             if (enumType == CategoriaProblema.class) return CategoriaProblema.fromNome(value);
             if (enumType == Prioridade.class) return Prioridade.fromNome(value);
             if (enumType == TipoAcesso.class) return TipoAcesso.fromNome(value);
+            if (enumType == StatusOrdemServico.class) return StatusOrdemServico.fromNome(value);
             return Enum.valueOf(enumType.asSubclass(Enum.class), value);
+
         } catch (IllegalArgumentException exception) {
             return null;
         }
@@ -96,6 +104,7 @@ public final class OrdemServicoSpecs {
 
     private static Specification<OrdemServicoEntity> relationLike(String rel, String f, String v) {
         if (v == null || v.isBlank()) return Specification.unrestricted();
+
         return (r, q, c) -> c.like(c.lower(r.join(rel, JoinType.INNER).get(f)), "%" + v.toLowerCase() + "%");
     }
 }

@@ -4,7 +4,7 @@ import com.example.segundoapiappfixa.adapters.dto.input.Evento.EventoAtualizarIn
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Evento;
 import com.example.segundoapiappfixa.domain.repository.EventoRepository;
-import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
+import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AtualizarEvento {
     private final EventoRepository repository;
-    private final LocalEnderecoRepository localRepository;
+    private final LocalUnidadeRepository localRepository;
 
     public Evento atualizar(EventoAtualizarInputDTO dto, Long usuarioId) {
         Evento evento = repository.findById(dto.id())
@@ -23,7 +23,7 @@ public class AtualizarEvento {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        if (dto.localEnderecoId() != null) evento.setLocalEndereco(localRepository.findById(dto.localEnderecoId())
+        if (dto.localUnidadeId() != null) evento.setLocalUnidade(localRepository.findById(dto.localUnidadeId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.local.required")));
 
         if (dto.titulo() != null) evento.setTitulo(dto.titulo());

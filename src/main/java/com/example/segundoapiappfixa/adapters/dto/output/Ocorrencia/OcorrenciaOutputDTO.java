@@ -12,7 +12,7 @@ public record OcorrenciaOutputDTO(
         String descricaoOcorrencia,
         String categoriaProblema,
         String prioridade,
-        String localEndereco,
+        String localUnidade,
         String descricaoLocal,
         LocalDate dataCriacao,
         String categoriaEquipamento,

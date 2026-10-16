@@ -15,7 +15,7 @@ public class OcorrenciaDynamicMapper {
                 fields.contains("descricao") ? dto.descricaoOcorrencia() : null,
                 fields.contains("categoriaProblema") ? dto.categoriaProblema() : null,
                 fields.contains("prioridade") ? dto.prioridade() : null,
-                fields.contains("localEndereco") ? dto.localEndereco() : null,
+                fields.contains("localUnidade") ? dto.localUnidade() : null,
                 fields.contains("descricaoLocal") ? dto.descricaoLocal() : null,
                 fields.contains("dataCriacao") ? dto.dataCriacao() : null,
                 fields.contains("categoriaEquipamento") ? dto.categoriaEquipamento() : null,

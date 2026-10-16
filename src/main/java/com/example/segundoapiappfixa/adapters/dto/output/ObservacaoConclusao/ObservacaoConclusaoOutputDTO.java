@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.adapters.dto.output.ObservacaoConclusao;
 
 import com.example.segundoapiappfixa.adapters.dto.output.Foto.FotoOutputDTO;
 import com.example.segundoapiappfixa.domain.enums.Dificuldade;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record ObservacaoConclusaoOutputDTO(
@@ -11,7 +11,7 @@ public record ObservacaoConclusaoOutputDTO(
         String descricaoProblema,
         String categoriaProblema,
         String categoriaEquipamento,
-        String localEndereco,
+        String localUnidade,
         String descricaoLocal,
         String statusProblema,
         String prioridade,
@@ -19,6 +19,6 @@ public record ObservacaoConclusaoOutputDTO(
         String nomeResponsavel,
         String dificuldade,
         String observacao,
-        LocalDate dataCriacao,
+        LocalDateTime dataCriacao,
         List<FotoOutputDTO> fotos
 ) {}

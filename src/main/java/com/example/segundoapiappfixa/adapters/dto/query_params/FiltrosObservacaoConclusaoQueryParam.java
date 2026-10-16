@@ -15,8 +15,8 @@ public record FiltrosObservacaoConclusaoQueryParam(
         @BindParam("categoria_equipamento")
         String categoriaEquipamento,
 
-        @BindParam("local_endereco")
-        String localEndereco,
+        @BindParam("local_unidade")
+        String localUnidade,
 
         @BindParam("descricao_local")
         String descricaoLocal,
@@ -25,9 +25,6 @@ public record FiltrosObservacaoConclusaoQueryParam(
         String statusProblema,
 
         String prioridade,
-
-        @BindParam("status_ordem_servico")
-        String statusOrdemServico,
 
         @BindParam("nome_responsavel")
         String nomeResponsavel,

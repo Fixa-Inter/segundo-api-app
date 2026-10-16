@@ -21,7 +21,7 @@ public interface UsuarioMapper {
     Usuario toModel(UsuarioEntity entity);
 
     @Mapping(source = "tipoAcesso.nome", target = "tipoAcesso")
-    @Mapping(source = "endereco.cnpj", target = "cnpjEndereco")
+    @Mapping(source = "unidade.cnpj", target = "cnpjUnidade")
     @Mapping(source = "turnos", target = "turnos")
     UsuarioOutputDTO toOutputDTO(Usuario usuario);
 

@@ -17,8 +17,8 @@ public final class ProblemaSpecs {
         return (r, q, c) -> c.equal(r.join("usuario", JoinType.INNER).get("id"), v);
     }
 
-    public static Specification<ProblemaEntity> findByLocalEnderecoIds(List<Long> v) {
-        return (r, q, c) -> r.join("localEndereco", JoinType.INNER).get("id").in(v);
+    public static Specification<ProblemaEntity> findByLocalUnidadeIds(List<Long> v) {
+        return (r, q, c) -> r.join("localUnidade", JoinType.INNER).get("id").in(v);
     }
 
     public static Specification<ProblemaEntity> findByTitulo(String v) {
@@ -37,8 +37,8 @@ public final class ProblemaSpecs {
         return relationLike("categoriaEquipamento", "nome", v);
     }
 
-    public static Specification<ProblemaEntity> findByLocalEndereco(String v) {
-        return relationLike("localEndereco", "nome", v);
+    public static Specification<ProblemaEntity> findByLocalUnidade(String v) {
+        return relationLike("localUnidade", "nome", v);
     }
 
     public static Specification<ProblemaEntity> findByNomeUsuario(String v) {

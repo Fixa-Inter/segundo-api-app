@@ -7,7 +7,6 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.repository.util
 import com.example.segundoapiappfixa.domain.model.Tarefa;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OrdemServicoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.StatusOrdemServicoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.TarefaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaTarefaRepository;
 import lombok.RequiredArgsConstructor;
@@ -79,11 +78,6 @@ public class TarefaRepositoryImpl implements TarefaRepository {
                     entity.ordemServico = entityManager.getReference(
                             OrdemServicoEntity.class,
                             tarefa.getOrdemServico().getId()
-                    );
-
-                    entity.statusOrdemServico = entityManager.getReference(
-                            StatusOrdemServicoEntity.class,
-                            tarefa.getStatusOrdemServico().getId()
                     );
 
                     return entity;

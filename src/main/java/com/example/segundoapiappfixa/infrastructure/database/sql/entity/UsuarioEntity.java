@@ -25,14 +25,15 @@ public class UsuarioEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "endereco_id")
-    private EnderecoEntity endereco;
+    @JoinColumn(name = "unidade_id")
+    private UnidadeEntity unidade;
 
     @Column(name = "nome_completo")
     private String nomeCompleto;
 
     @Column(name = "email")
     private String email;
+
 
     @Convert(converter = TipoAcessoConverter.class)
     @Column(name = "tipo_acesso")

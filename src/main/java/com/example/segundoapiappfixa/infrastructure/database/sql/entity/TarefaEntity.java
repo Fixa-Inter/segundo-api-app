@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.entity;
 
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.StatusOrdemServicoConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,9 +26,9 @@ public class TarefaEntity {
     @JoinColumn(name = "ordem_servico_id")
     public OrdemServicoEntity ordemServico;
 
-    @ManyToOne
-    @JoinColumn(name = "status_ordem_servico_id")
-    public StatusOrdemServicoEntity statusOrdemServico;
+    @Convert(converter = StatusOrdemServicoConverter.class)
+    @Column(name = "status_ordem_servico")
+    public StatusOrdemServico statusOrdemServico;
 
     @Column(name = "titulo")
     private String titulo;

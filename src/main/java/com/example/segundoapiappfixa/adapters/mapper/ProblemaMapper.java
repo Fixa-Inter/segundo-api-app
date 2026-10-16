@@ -14,7 +14,7 @@ public interface ProblemaMapper {
     Problema toModel(ProblemaEntity entity);
 
     @Mapping(source = "categoriaEquipamento.nome", target = "categoriaEquipamento")
-    @Mapping(source = "localEndereco.nome", target = "localEndereco")
+    @Mapping(source = "localUnidade.nome", target = "localUnidade")
     @Mapping(source = "status.nome", target = "status")
     @Mapping(source = "usuario.nomeCompleto", target = "usuario")
     @Mapping(source = "usuario.tipoAcesso.nome", target = "tipoAcesso")

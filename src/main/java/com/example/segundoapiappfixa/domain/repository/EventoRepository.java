@@ -11,7 +11,7 @@ public interface EventoRepository {
     Map<String, String> camposNormalizados = Map.of(
             "titulo", "titulo",
             "descricao", "descricao",
-            "local_endereco", "localEndereco.nome",
+            "local_unidade", "localUnidade.nome",
             "descricao_local", "descricaoLocal",
             "observacao", "observacao",
             "usuario", "usuario.nomeCompleto"

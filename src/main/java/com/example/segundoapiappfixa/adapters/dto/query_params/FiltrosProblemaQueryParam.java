@@ -13,8 +13,8 @@ public record FiltrosProblemaQueryParam(
         @BindParam("categoria_equipamento")
         String categoriaEquipamento,
 
-        @BindParam("local_endereco")
-        String localEndereco,
+        @BindParam("local_unidade")
+        String localUnidade,
 
         @BindParam("descricao_local")
         String descricaoLocal,

@@ -9,8 +9,8 @@ public record FiltrosEventosQueryParam(
         String titulo,
         String descricao,
 
-        @BindParam("local_endereco")
-        String localEndereco,
+        @BindParam("local_unidade")
+        String localUnidade,
 
         @BindParam("descricao_local")
         String descricaoLocal,

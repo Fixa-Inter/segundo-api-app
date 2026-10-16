@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @AllArgsConstructor
-@EnableConfigurationProperties(JwtProperties.class)
+@EnableConfigurationProperties({JwtProperties.class, FirebaseProperties.class})
 public class SecurityConfig{
 
     private final CustomAcessDeniedHandler customAcessDeniedHandler;
@@ -65,6 +65,10 @@ public class SecurityConfig{
                         // Endpoints de Autenticação
                         .requestMatchers(
                                 "/api/v1/auth/login",
+                                "/api/v1/auth/login/google",
+                                "/api/v1/auth/cadastro",
+                                "/api/v1/auth/instituicoes",
+                                "/api/v1/auth/instituicoes/*/unidades",
                                 "/api/v1/auth/refresh",
                                 "/api/v1/auth/esqueceu-senha/**",
                                 "/api/v1/auth/validar-codigo",
@@ -86,7 +90,8 @@ public class SecurityConfig{
                                 "/api/v1/os/minhas",
                                 "/api/v1/tarefas/**",
                                 "/api/v1/equipamentos/**",
-                                "/api/v1/ocorrencias/**"
+                                "/api/v1/ocorrencias/**",
+                                "/api/v1/observacoes-conclusao/**"
                         ).hasAnyRole("GESTOR", "TECNICO")
 
                         // POST

@@ -25,6 +25,9 @@ public record FiltrosOrdemServicoQueryParam(
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         LocalDateTime dataPrevistaMax,
 
+        @BindParam("status_ordem_servico")
+        String statusOrdemServico,
+
         @BindParam("nome_usuario")
         String nomeUsuario,
 

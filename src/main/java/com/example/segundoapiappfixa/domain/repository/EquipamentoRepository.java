@@ -11,7 +11,7 @@ public interface EquipamentoRepository {
 
     Map<String, String> camposNormalizados = Map.of(
             "codigo", "codigo",
-            "local_endereco", "localEndereco.nome",
+            "local_unidade", "localUnidade.nome",
             "usuario", "usuario.nomeCompleto"
     );
 

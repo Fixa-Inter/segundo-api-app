@@ -13,7 +13,7 @@ public interface OcorrenciaRepository {
             "descricao_ocorrencia", "descricaoOcorrencia",
             "categoria_problema", "categoriaProblema",
             "prioridade", "prioridade",
-            "local_endereco", "localEndereco.nome",
+            "local_unidade", "localUnidade.nome",
             "descricao_local", "descricaoLocal",
             "categoria_equipamento", "categoriaEquipamento.nome",
             "nome_usuario", "usuario.nomeCompleto",
@@ -25,8 +25,8 @@ public interface OcorrenciaRepository {
             FiltrosOcorrenciaQueryParam filtros
     );
 
-    List<Ocorrencia> findAllByLocalEnderecoIds(
-            List<Long> localEnderecoIds,
+    List<Ocorrencia> findAllByLocalUnidadeIds(
+            List<Long> localUnidadeIds,
             FiltrosOcorrenciaQueryParam filtros
     );
 

@@ -13,7 +13,7 @@ public interface EquipamentoMapper {
     Equipamento toModel(EquipamentoEntity entity);
 
     @Mapping(source = "modeloEquipamento.nome", target = "modeloEquipamento")
-    @Mapping(source = "localEndereco.nome", target = "localEndereco")
+    @Mapping(source = "localUnidade.nome", target = "localUnidade")
     @Mapping(source = "usuario.nomeCompleto", target = "usuario")
     EquipamentoOutputDTO toOutputDTO(Equipamento equipamento);
 

@@ -13,8 +13,8 @@ public final class UsuarioSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("estaAtivo"));
     }
 
-    public static Specification<UsuarioEntity> findByEnderecoId(Long v) {
-        return (r, q, c) -> c.equal(r.join("endereco", JoinType.INNER).get("id"), v);
+    public static Specification<UsuarioEntity> findByUnidadeId(Long v) {
+        return (r, q, c) -> c.equal(r.join("unidade", JoinType.INNER).get("id"), v);
     }
 
     public static Specification<UsuarioEntity> findByTipoAcesso(TipoAcesso v) {
@@ -37,9 +37,9 @@ public final class UsuarioSpecs {
         return (r, q, c) -> c.equal(r.get("dataNascimento"), dataNascimento);
     }
 
-    public static Specification<UsuarioEntity> findByCnpjEndereco(String v) {
+    public static Specification<UsuarioEntity> findByCnpjUnidade(String v) {
         if (v == null || v.isBlank()) return Specification.unrestricted();
-        return (r, q, c) -> c.like(c.lower(r.join("endereco", JoinType.INNER).get("cnpj")), "%" + v.toLowerCase() + "%");
+        return (r, q, c) -> c.like(c.lower(r.join("unidade", JoinType.INNER).get("cnpj")), "%" + v.toLowerCase() + "%");
     }
 
     public static Specification<UsuarioEntity> findByEstaAtivo(Boolean v) {

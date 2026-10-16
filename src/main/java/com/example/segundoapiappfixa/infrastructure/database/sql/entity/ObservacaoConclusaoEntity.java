@@ -5,7 +5,7 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.converter.Dific
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class ObservacaoConclusaoEntity {
     private String observacao;
 
     @Column(name = "data_criacao", nullable = false)
-    private LocalDate dataCriacao;
+    private LocalDateTime dataCriacao;
 
     @OneToMany(mappedBy = "observacaoConclusao")
     private List<FotoEntity> fotos = new ArrayList<>();

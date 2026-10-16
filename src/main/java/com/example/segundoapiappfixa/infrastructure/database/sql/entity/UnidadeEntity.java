@@ -8,12 +8,12 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "Endereco")
+@Entity(name = "Unidade")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnderecoEntity {
+public class UnidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +23,9 @@ public class EnderecoEntity {
     @ManyToOne
     @JoinColumn(name = "instituicao_id")
     private InstituicaoEntity instituicao;
+
+    @Column(name = "nome", nullable = false)
+    private String nome;
 
     @Column(name = "cnpj")
     private String cnpj;

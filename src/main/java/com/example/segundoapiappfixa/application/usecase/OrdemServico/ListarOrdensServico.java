@@ -1,13 +1,13 @@
 package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
 import com.example.segundoapiappfixa.application.annotation.UseCase;
-import com.example.segundoapiappfixa.domain.model.LocalEndereco;
+import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOrdemServicoQueryParam;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.model.Usuario;
-import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
+import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
@@ -21,25 +21,25 @@ import java.util.List;
 public class ListarOrdensServico {
 
     private final UsuarioRepository usuarioRepository;
-    private final LocalEnderecoRepository localEnderecoRepository;
+    private final LocalUnidadeRepository localUnidadeRepository;
     private final ProblemaRepository problemaRepository;
     private final OrdemServicoRepository ordemServicoRepository;
 
     public List<OrdemServico> listar(Long usuarioId, FiltrosOrdemServicoQueryParam filtros) {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
-        if (usuario == null || usuario.getEndereco() == null || usuario.getEndereco().getId() == null) {
+        if (usuario == null || usuario.getUnidade() == null || usuario.getUnidade().getId() == null) {
             throw new IllegalArgumentException("exception.request.invalid");
         }
 
-        List<Long> localEnderecoIds = localEnderecoRepository
-                .findAllByEnderecoId(usuario.getEndereco().getId())
+        List<Long> localUnidadeIds = localUnidadeRepository
+                .findAllByUnidadeId(usuario.getUnidade().getId())
                 .stream()
-                .map(LocalEndereco::getId)
+                .map(LocalUnidade::getId)
                 .toList();
 
         List<Long> problemasIds = problemaRepository
-                .findAllByLocalEnderecoIds(localEnderecoIds, new FiltrosProblemaQueryParam(null, null, null, null, null, null, null, null, null, null, null, null, null))
+                .findAllByLocalUnidadeIds(localUnidadeIds, new FiltrosProblemaQueryParam(null, null, null, null, null, null, null, null, null, null, null, null, null))
                 .stream()
                 .map(Problema::getId)
                 .toList();
@@ -67,14 +67,14 @@ public class ListarOrdensServico {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.notFound"));
 
 
-        boolean mesmoEndereco = usuario.getEndereco().getId().equals(
-                ordemServico.getProblema().getLocalEndereco().getEndereco().getId()
+        boolean mesmoUnidade = usuario.getUnidade().getId().equals(
+                ordemServico.getProblema().getLocalUnidade().getUnidade().getId()
         );
 
         boolean tecnicoVinculado = ordemServico.getUsuario() != null
                 && usuarioId.equals(ordemServico.getUsuario().getId());
 
-        if (!mesmoEndereco || (!isGestor && !tecnicoVinculado)) {
+        if (!mesmoUnidade || (!isGestor && !tecnicoVinculado)) {
             throw new com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException(
                     "exception.access.denied"
             );

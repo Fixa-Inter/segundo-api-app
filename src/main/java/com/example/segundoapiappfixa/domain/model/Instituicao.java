@@ -16,6 +16,7 @@ public class Instituicao {
     private Long id;
     private String nome;
     private TipoInstituicao tipoInstituicao;
+    private String emailCorporativo;
     private String dominioEmail;
     private LocalDateTime dataCriacao;
     private Boolean estaAtivo;

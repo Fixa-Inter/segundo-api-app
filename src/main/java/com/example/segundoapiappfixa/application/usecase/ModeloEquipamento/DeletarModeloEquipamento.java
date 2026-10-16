@@ -23,8 +23,8 @@ public class DeletarModeloEquipamento {
         var usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!modelo.getCategoriaEquipamento().getUsuario().getEndereco().getId()
-                .equals(usuario.getEndereco().getId())
+        if (!modelo.getCategoriaEquipamento().getUsuario().getUnidade().getId()
+                .equals(usuario.getUnidade().getId())
         ) {
             throw new RegraProblemaException("exception.access.denied");
         }

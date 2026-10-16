@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Endereco {
+public class Unidade {
     private Long id;
     private Instituicao instituicao;
+    private String nome;
     private String cnpj;
     private String logradouro;
     private String numero;

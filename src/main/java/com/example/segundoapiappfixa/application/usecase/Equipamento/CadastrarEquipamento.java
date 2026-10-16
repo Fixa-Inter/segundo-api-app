@@ -3,11 +3,11 @@ package com.example.segundoapiappfixa.application.usecase.Equipamento;
 import com.example.segundoapiappfixa.adapters.dto.input.Equipamento.EquipamentoCadastrarInputDTO;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
-import com.example.segundoapiappfixa.domain.model.LocalEndereco;
+import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.ModeloEquipamento;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
-import com.example.segundoapiappfixa.domain.repository.LocalEnderecoRepository;
+import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.ModeloEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
@@ -22,7 +22,7 @@ public class CadastrarEquipamento {
     private final EquipamentoRepository repository;
     private final UsuarioRepository usuarioRepository;
     private final ModeloEquipamentoRepository modeloRepository;
-    private final LocalEnderecoRepository localRepository;
+    private final LocalUnidadeRepository localRepository;
 
     public Equipamento cadastrar(EquipamentoCadastrarInputDTO dto, Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -31,7 +31,7 @@ public class CadastrarEquipamento {
         ModeloEquipamento modelo = modeloRepository.findById(dto.modeloEquipamentoId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.modeloEquipamento.notFound"));
 
-        LocalEndereco local = localRepository.findById(dto.localEnderecoId())
+        LocalUnidade local = localRepository.findById(dto.localUnidadeId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.local.required"));
 
         Equipamento equipamento = new Equipamento(

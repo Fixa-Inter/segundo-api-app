@@ -4,11 +4,11 @@ import com.example.segundoapiappfixa.adapters.dto.input.OrdemServico.OrdemServic
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
-import com.example.segundoapiappfixa.domain.repository.StatusOrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +31,6 @@ class CadastrarOrdemServicoTest {
     @Mock private OrdemServicoRepository ordemServicoRepository;
     @Mock private ProblemaRepository problemaRepository;
     @Mock private UsuarioRepository usuarioRepository;
-    @Mock private StatusOrdemServicoRepository statusRepository;
-
     @InjectMocks
     private CadastrarOrdemServico cadastrarOrdemServico;
 
@@ -42,26 +40,26 @@ class CadastrarOrdemServicoTest {
 
     @BeforeEach
     void setUp() {
-        Endereco endereco = new Endereco();
-        endereco.setId(10L);
+        Unidade unidade = new Unidade();
+        unidade.setId(10L);
 
         gestor = new Usuario();
         gestor.setId(1L);
         gestor.setTipoAcesso(TipoAcesso.GESTOR);
-        gestor.setEndereco(endereco);
+        gestor.setUnidade(unidade);
 
         responsavel = new Usuario();
         responsavel.setId(2L);
         responsavel.setTipoAcesso(TipoAcesso.TECNICO);
-        responsavel.setEndereco(endereco);
+        responsavel.setUnidade(unidade);
 
-        LocalEndereco local = new LocalEndereco();
-        local.setEndereco(endereco);
+        LocalUnidade local = new LocalUnidade();
+        local.setUnidade(unidade);
 
         problema = new Problema();
         problema.setId(3L);
         problema.setStatus(StatusProblema.APROVADO);
-        problema.setLocalEndereco(local);
+        problema.setLocalUnidade(local);
     }
 
     @Test
@@ -114,7 +112,7 @@ class CadastrarOrdemServicoTest {
 
     private OrdemServicoCadastrarInputDTO input() {
         return new OrdemServicoCadastrarInputDTO(
-                3L, 2L, 4L, CategoriaProblema.ELETRICA,
+                3L, 2L, StatusOrdemServico.NAO_INICIADA, CategoriaProblema.ELETRICA,
                 LocalDate.of(2026, 10, 20), Prioridade.MEDIA);
     }
 }

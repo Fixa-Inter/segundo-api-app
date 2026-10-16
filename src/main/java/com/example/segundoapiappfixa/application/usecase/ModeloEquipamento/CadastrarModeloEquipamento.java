@@ -29,8 +29,8 @@ public class CadastrarModeloEquipamento {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.categoriaEquipamento.notFound"));
 
         if (categoria.getUsuario() == null
-                || categoria.getUsuario().getEndereco() == null
-                || !categoria.getUsuario().getEndereco().getId().equals(usuario.getEndereco().getId())) {
+                || categoria.getUsuario().getUnidade() == null
+                || !categoria.getUsuario().getUnidade().getId().equals(usuario.getUnidade().getId())) {
             throw new EntidadeNaoEncontradaException("exception.access.denied");
         }
 

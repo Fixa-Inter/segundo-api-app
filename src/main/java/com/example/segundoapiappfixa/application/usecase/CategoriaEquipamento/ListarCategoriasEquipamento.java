@@ -25,8 +25,8 @@ public class ListarCategoriasEquipamento {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
         List<CategoriaEquipamento> categoriasEquipamento = categoriaEquipamentoRepository
-                .findByEnderecoId(
-                        usuario.getEndereco().getId(),
+                .findByUnidadeId(
+                        usuario.getUnidade().getId(),
                         filtros
                 );
 
@@ -43,8 +43,8 @@ public class ListarCategoriasEquipamento {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!categoriaEquipamento.getUsuario().getEndereco().getId()
-                .equals(usuario.getEndereco().getId())) {
+        if (!categoriaEquipamento.getUsuario().getUnidade().getId()
+                .equals(usuario.getUnidade().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }
 

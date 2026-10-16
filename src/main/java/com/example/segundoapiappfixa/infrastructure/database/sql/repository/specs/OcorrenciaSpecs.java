@@ -21,8 +21,8 @@ public final class OcorrenciaSpecs {
         return (r, q, c) -> c.equal(r.join("usuario", JoinType.INNER).get("id"), v);
     }
 
-    public static Specification<OcorrenciaEntity> findByLocalEnderecoIds(List<Long> v) {
-        return (r, q, c) -> r.join("localEndereco", JoinType.INNER).get("id").in(v);
+    public static Specification<OcorrenciaEntity> findByLocalUnidadeIds(List<Long> v) {
+        return (r, q, c) -> r.join("localUnidade", JoinType.INNER).get("id").in(v);
     }
 
     public static Specification<OcorrenciaEntity> findByTitulo(String v) {
@@ -45,8 +45,8 @@ public final class OcorrenciaSpecs {
         return enumLike("prioridade", v, Prioridade.class);
     }
 
-    public static Specification<OcorrenciaEntity> findByLocalEndereco(String v) {
-        return relationLike("localEndereco", "nome", v);
+    public static Specification<OcorrenciaEntity> findByLocalUnidade(String v) {
+        return relationLike("localUnidade", "nome", v);
     }
 
     public static Specification<OcorrenciaEntity> findByCategoriaEquipamento(String v) {

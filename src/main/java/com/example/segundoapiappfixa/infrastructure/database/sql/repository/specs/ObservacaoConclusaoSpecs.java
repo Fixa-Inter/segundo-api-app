@@ -6,16 +6,17 @@ import org.springframework.data.jpa.domain.Specification;
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.enums.Dificuldade;
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 
 public final class ObservacaoConclusaoSpecs {
     private ObservacaoConclusaoSpecs() {
     }
 
-    public static Specification<ObservacaoConclusaoEntity> findByEnderecoId(Long id) {
+    public static Specification<ObservacaoConclusaoEntity> findByUnidadeId(Long id) {
         return (r, q, c) -> c.equal(r.join("ordemServico", JoinType.INNER)
                 .join("problema", JoinType.INNER)
-                .join("localEndereco", JoinType.INNER)
-                .join("endereco", JoinType.INNER).get("id"), id);
+                .join("localUnidade", JoinType.INNER)
+                .join("unidade", JoinType.INNER).get("id"), id);
     }
 
     public static Specification<ObservacaoConclusaoEntity> findByResponsavelId(Long id) {

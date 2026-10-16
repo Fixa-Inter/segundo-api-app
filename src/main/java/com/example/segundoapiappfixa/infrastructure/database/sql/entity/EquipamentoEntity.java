@@ -29,8 +29,8 @@ public class EquipamentoEntity {
     public ModeloEquipamentoEntity modeloEquipamento;
 
     @ManyToOne
-    @JoinColumn(name = "local_endereco_id")
-    public LocalEnderecoEntity localEndereco;
+    @JoinColumn(name = "local_unidade_id")
+    public LocalUnidadeEntity localUnidade;
 
     @Column(name = "codigo")
     private String codigo;

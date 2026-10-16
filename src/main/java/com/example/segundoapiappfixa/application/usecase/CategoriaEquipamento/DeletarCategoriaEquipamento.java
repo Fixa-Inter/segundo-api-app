@@ -23,8 +23,8 @@ public class DeletarCategoriaEquipamento {
         Usuario usuarioAtual = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!categoriaEquipamento.getUsuario().getEndereco().getId()
-                .equals(usuarioAtual.getEndereco().getId())) {
+        if (!categoriaEquipamento.getUsuario().getUnidade().getId()
+                .equals(usuarioAtual.getUnidade().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }
 

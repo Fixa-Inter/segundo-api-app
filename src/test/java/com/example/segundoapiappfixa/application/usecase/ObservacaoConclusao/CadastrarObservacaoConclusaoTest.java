@@ -23,13 +23,12 @@ class CadastrarObservacaoConclusaoTest {
     @Mock private OrdemServicoRepository ordemServicoRepository;
     @Mock private UsuarioRepository usuarioRepository;
     @Mock private FotoRepository fotoRepository;
-    @Mock private StatusOrdemServicoRepository statusRepository;
     @InjectMocks private CadastrarObservacaoConclusao cadastrar;
 
     @Test
     void deveRecusarObservacaoEmBrancoAntesDeAcessarPersistencia() {
         ObservacaoConclusaoCriarInputDTO dto = new ObservacaoConclusaoCriarInputDTO(
-                1L, Dificuldade.FACIL, "   ", 2L, List.of("foto.jpg"));
+                1L, Dificuldade.FACIL, "   ", List.of("foto.jpg"));
 
         RegraProblemaException exception = assertThrows(RegraProblemaException.class,
                 () -> cadastrar.cadastrar(dto, 10L, false));

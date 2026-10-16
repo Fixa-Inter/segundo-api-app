@@ -30,10 +30,10 @@ public final class EventoSpecs {
         return like("observacao", v);
     }
 
-    public static Specification<EventoEntity> findByLocalEndereco(String v) {
+    public static Specification<EventoEntity> findByLocalUnidade(String v) {
         if (v == null || v.isBlank()) return Specification.unrestricted();
         return (r, q, cb) -> cb.like(
-                cb.lower(r.join("localEndereco", JoinType.INNER).get("nome")),
+                cb.lower(r.join("localUnidade", JoinType.INNER).get("nome")),
                 "%" + v.toLowerCase() + "%"
         );
     }

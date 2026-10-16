@@ -13,7 +13,7 @@ public class ObservacaoConclusaoDynamicMapper {
                 fields.contains("descricaoProblema") ? dto.descricaoProblema() : null,
                 fields.contains("categoriaProblema") ? dto.categoriaProblema() : null,
                 fields.contains("categoriaEquipamento") ? dto.categoriaEquipamento() : null,
-                fields.contains("localEndereco") ? dto.localEndereco() : null,
+                fields.contains("localUnidade") ? dto.localUnidade() : null,
                 fields.contains("descricaoLocal") ? dto.descricaoLocal() : null,
                 fields.contains("statusProblema") ? dto.statusProblema() : null,
                 fields.contains("prioridade") ? dto.prioridade() : null,

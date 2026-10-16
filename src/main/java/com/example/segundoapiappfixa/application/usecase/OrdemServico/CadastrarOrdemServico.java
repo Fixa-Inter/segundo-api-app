@@ -6,11 +6,9 @@ import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Problema;
-import com.example.segundoapiappfixa.domain.model.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
-import com.example.segundoapiappfixa.domain.repository.StatusOrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
@@ -25,7 +23,6 @@ public class CadastrarOrdemServico {
     private final OrdemServicoRepository ordemServicoRepository;
     private final ProblemaRepository problemaRepository;
     private final UsuarioRepository usuarioRepository;
-    private final StatusOrdemServicoRepository statusRepository;
 
     @Transactional
     public OrdemServico cadastrar(OrdemServicoCadastrarInputDTO input, Long usuarioAutenticadoId) {
@@ -37,8 +34,8 @@ public class CadastrarOrdemServico {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.problema.notFound"));
 
         if (
-                !gestor.getEndereco().getId().equals(responsavel.getEndereco().getId())
-                || !gestor.getEndereco().getId().equals(problema.getLocalEndereco().getEndereco().getId())
+                !gestor.getUnidade().getId().equals(responsavel.getUnidade().getId())
+                || !gestor.getUnidade().getId().equals(problema.getLocalUnidade().getUnidade().getId())
         ) {
             throw new RegraProblemaException("exception.access.denied");
         }
@@ -56,14 +53,11 @@ public class CadastrarOrdemServico {
             throw new RegraProblemaException("exception.ordemServico.duplicate");
         }
 
-        StatusOrdemServico status = statusRepository.findById(input.statusOrdemServicoId())
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.statusOrdemServico.notFound"));
-
         OrdemServico ordemServico = new OrdemServico(
                 null,
                 problema,
                 responsavel,
-                status,
+                input.statusOrdemServico(),
                 input.categoriaProblema(),
                 input.prioridade(),
                 LocalDateTime.now(),

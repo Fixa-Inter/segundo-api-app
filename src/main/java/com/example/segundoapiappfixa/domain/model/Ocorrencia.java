@@ -17,7 +17,7 @@ import java.util.List;
 public class Ocorrencia {
     private Long id;
     private Usuario usuario;
-    private LocalEndereco localEndereco;
+    private LocalUnidade localUnidade;
     private CategoriaEquipamento categoriaEquipamento;
     private CategoriaProblema categoriaProblema;
     private Prioridade prioridade;

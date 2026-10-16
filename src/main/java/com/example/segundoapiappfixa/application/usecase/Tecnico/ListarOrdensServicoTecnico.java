@@ -31,11 +31,11 @@ public class ListarOrdensServicoTecnico {
             throw new RegraProblemaException("exception.tecnico.required");
         }
 
-        if (!tecnico.getEndereco().getId().equals(usuario.getEndereco().getId())) {
+        if (!tecnico.getUnidade().getId().equals(usuario.getUnidade().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        List<OrdemServico> ordensServico = ordemServicoRepository.findByUsuarioId(tecnicoId, new FiltrosOrdemServicoQueryParam(null, null, null, null, null, null, null, null, null, null, null, null));
+        List<OrdemServico> ordensServico = ordemServicoRepository.findByUsuarioId(tecnicoId, new FiltrosOrdemServicoQueryParam(null, null, null, null, null, null, null, null, null, null, null, null, null));
         if (ordensServico.isEmpty()) {
             throw new EntidadeNaoEncontradaException("exception.ordemServico.notFound");
         }

@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.domain.model;
 
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

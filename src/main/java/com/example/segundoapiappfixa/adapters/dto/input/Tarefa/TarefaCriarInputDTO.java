@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.adapters.dto.input.Tarefa;
 
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -8,7 +9,7 @@ public record TarefaCriarInputDTO(
         Long ordemServicoId,
 
         @NotNull(message = "{validation.tarefa.status.required}")
-        Long statusOrdemServicoId,
+        StatusOrdemServico statusOrdemServico,
 
         @NotBlank(message = "{validation.tarefa.titulo.required}")
         String titulo,

@@ -7,7 +7,7 @@ public record EventoOutputDTO(
         Long id,
         String titulo,
         String descricao,
-        String localEndereco,
+        String localUnidade,
         String descricaoLocal,
         LocalDateTime dataHoraInicio,
         LocalDateTime dataHoraFim,

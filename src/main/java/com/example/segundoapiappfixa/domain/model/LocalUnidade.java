@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.domain.model;
 
-import com.example.segundoapiappfixa.domain.enums.TipoLocalEndereco;
+import com.example.segundoapiappfixa.domain.enums.TipoLocalUnidade;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocalEndereco {
+public class LocalUnidade {
     private Long id;
-    private Endereco endereco;
+    private Unidade unidade;
     private String nome;
-    private TipoLocalEndereco tipoLocalEndereco;
+    private TipoLocalUnidade tipoLocalUnidade;
     private String descricao;
     private LocalDateTime dataCriacao;
     private Boolean estaAtivo;

@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.entity;
 
-import com.example.segundoapiappfixa.domain.enums.TipoLocalEndereco;
-import com.example.segundoapiappfixa.infrastructure.database.sql.converter.TipoLocalEnderecoConverter;
+import com.example.segundoapiappfixa.domain.enums.TipoLocalUnidade;
+import com.example.segundoapiappfixa.infrastructure.database.sql.converter.TipoLocalUnidadeConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,12 +10,12 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "LocalEndereco")
+@Entity(name = "LocalUnidade")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LocalEnderecoEntity {
+public class LocalUnidadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,15 +23,15 @@ public class LocalEnderecoEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "endereco_id")
-    private EnderecoEntity endereco;
+    @JoinColumn(name = "unidade_id")
+    private UnidadeEntity unidade;
 
     @Column(name = "nome")
     private String nome;
 
-    @Convert(converter = TipoLocalEnderecoConverter.class)
-    @Column(name = "tipo_local_endereco")
-    private TipoLocalEndereco tipoLocalEndereco;
+    @Convert(converter = TipoLocalUnidadeConverter.class)
+    @Column(name = "tipo_local_unidade")
+    private TipoLocalUnidade tipoLocalUnidade;
 
     @Column(name = "descricao")
     private String descricao;

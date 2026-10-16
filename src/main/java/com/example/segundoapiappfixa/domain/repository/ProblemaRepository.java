@@ -13,7 +13,7 @@ public interface ProblemaRepository {
             "titulo", "titulo",
             "descricao_problema", "descricaoProblema",
             "categoria_equipamento", "categoriaEquipamento.nome",
-            "local_endereco", "localEndereco.nome",
+            "local_unidade", "localUnidade.nome",
             "descricao_local", "descricaoLocal",
             "nome_usuario", "usuario.nomeCompleto",
             "tipo_acesso", "usuario.tipoAcesso"
@@ -24,8 +24,8 @@ public interface ProblemaRepository {
             FiltrosProblemaQueryParam filtros
     );
 
-    List<Problema> findAllByLocalEnderecoIds(
-            List<Long> localEnderecoIds,
+    List<Problema> findAllByLocalUnidadeIds(
+            List<Long> localUnidadeIds,
             FiltrosProblemaQueryParam filtros
     );
 

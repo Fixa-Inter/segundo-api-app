@@ -12,7 +12,7 @@ public class ProblemaDynamicMapper {
                 fields.contains("titulo") ? dto.titulo() : null,
                 fields.contains("descricaoProblema") ? dto.descricaoProblema() : null,
                 fields.contains("categoriaEquipamento") ? dto.categoriaEquipamento() : null,
-                fields.contains("localEndereco") ? dto.localEndereco() : null,
+                fields.contains("localUnidade") ? dto.localUnidade() : null,
                 fields.contains("descricaoLocal") ? dto.descricaoLocal() : null,
                 fields.contains("status") ? dto.status() : null,
                 fields.contains("usuario") ? dto.usuario() : null,

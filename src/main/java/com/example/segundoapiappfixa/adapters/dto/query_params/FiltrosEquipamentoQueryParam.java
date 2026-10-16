@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.BindParam;
 public record FiltrosEquipamentoQueryParam(
         String codigo,
 
-        @BindParam("local_endereco")
-        String localEndereco,
+        @BindParam("local_unidade")
+        String localUnidade,
 
         String usuario,
         Integer limite,
