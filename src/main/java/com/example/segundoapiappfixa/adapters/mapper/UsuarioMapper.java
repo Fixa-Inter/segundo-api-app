@@ -11,22 +11,20 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {
-        TurnoMapper.class,
-        FotoMapper.class
-})
+@Mapper(componentModel = "spring", uses = TurnoMapper.class)
 public interface UsuarioMapper {
 
     @Mapping(target = "turnos", ignore = true)
+    @Mapping(target = "foto", ignore = true)
     UsuarioEntity toEntity(Usuario model);
 
     @Mapping(source = "turnos", target = "turnos")
+    @Mapping(source = "foto.url", target = "urlFotoPerfil")
     Usuario toModel(UsuarioEntity entity);
 
     @Mapping(source = "tipoAcesso.nome", target = "tipoAcesso")
     @Mapping(source = "unidade.cnpj", target = "cnpjUnidade")
     @Mapping(source = "turnos", target = "turnos")
-    @Mapping(source = "foto.url", target = "urlFotoPerfil")
     UsuarioOutputDTO toOutputDTO(Usuario usuario);
 
     default List<Turno> mapTurnos(List<TurnoUsuarioEntity> turnos) {
