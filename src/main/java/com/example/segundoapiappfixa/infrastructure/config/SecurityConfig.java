@@ -82,6 +82,7 @@ public class SecurityConfig{
                                 "/api/v1/solicitacoes/minhas",
                                 "/api/v1/solicitacoes/selecionar/**",
                                 "/api/v1/local-unidade",
+                                "/api/v1/equipamentos/categorias",
                                 "/api/v1/eventos/**",
                                 "/api/v1/perfil/**"
                         ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
