@@ -17,7 +17,8 @@ public record UsuarioOutputDTO(
         String cnpjUnidade,
         LocalDate dataCriacao,
         Boolean estaAtivo,
-        List<TurnoOutputDTO> turnos
+        List<TurnoOutputDTO> turnos,
+        String urlFotoPerfil
 
 ) {
 }

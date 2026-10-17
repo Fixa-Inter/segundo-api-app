@@ -11,6 +11,7 @@ public enum TipoFoto {
 
     PROBLEMA(),
     OBSERVACAO_CONCLUSAO(),
-    OCORRENCIA()
+    OCORRENCIA(),
+    USUARIO()
 
 }
