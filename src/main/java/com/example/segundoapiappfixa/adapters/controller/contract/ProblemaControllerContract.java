@@ -16,8 +16,6 @@ public interface ProblemaControllerContract {
 
     ResponseEntity<ProblemaOutputDTO> listarDetalhes(Long problemaId, String campos, Authentication authentication);
 
-    ResponseEntity<List<LocalUnidadeOutputDTO>> listarLocalEndereco(Authentication authentication);
-
     ResponseEntity<ProblemaOutputDTO> cadastrar(ProblemaCriarInputDTO input, Authentication authentication);
 
     ResponseEntity<ProblemaOutputDTO> atualizaStatus(ProblemaAtualizarStatusDTO input, Authentication authentication);
