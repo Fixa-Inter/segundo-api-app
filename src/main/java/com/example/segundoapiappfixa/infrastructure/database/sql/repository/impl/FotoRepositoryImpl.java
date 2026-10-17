@@ -65,6 +65,26 @@ public class FotoRepositoryImpl implements FotoRepository {
                             ));
                 }
             }
+
+            case USUARIO -> {
+                if (foto.getUsuario() != null && foto.getUsuario().getId() != null) {
+                    UsuarioEntity usuario = entityManager.getReference(
+                            UsuarioEntity.class,
+                            foto.getUsuario().getId()
+                    );
+
+                    fotoEntity.setUsuario(usuario);
+
+                    // Foto de usuário é única: atualiza o registro existente.
+                    fotoEntity = repository.findByUsuario_Id(usuario.getId())
+                            .map(existente -> {
+                                existente.setUrl(foto.getUrl());
+                                existente.setEstaAtivo(foto.getEstaAtivo());
+                                return existente;
+                            })
+                            .orElse(fotoEntity);
+                }
+            }
         }
 
         FotoEntity fotoPersistida = repository.save(fotoEntity);
