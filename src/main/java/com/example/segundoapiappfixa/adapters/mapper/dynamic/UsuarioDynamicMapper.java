@@ -22,7 +22,8 @@ public class UsuarioDynamicMapper {
                 fields.contains("cnpjUnidade") ? dto.cnpjUnidade() : null,
                 fields.contains("dataCriacao") ? dto.dataCriacao() : null,
                 fields.contains("estaAtivo") ? dto.estaAtivo() : null,
-                fields.contains("turnos") ? dto.turnos() : null
+                fields.contains("turnos") ? dto.turnos() : null,
+                fields.contains("urlFotoPerfil") ? dto.urlFotoPerfil() : null
         );
     }
 }

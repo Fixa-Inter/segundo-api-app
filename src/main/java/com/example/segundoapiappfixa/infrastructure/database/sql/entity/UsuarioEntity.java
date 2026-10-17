@@ -59,4 +59,7 @@ public class UsuarioEntity {
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<TurnoUsuarioEntity> turnos;
+
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private FotoEntity foto;
 }

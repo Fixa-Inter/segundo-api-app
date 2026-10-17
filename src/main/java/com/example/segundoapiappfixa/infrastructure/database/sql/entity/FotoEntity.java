@@ -36,8 +36,8 @@ public class FotoEntity {
     @JoinColumn(name = "observacao_conclusao_id")
     private ObservacaoConclusaoEntity observacaoConclusao;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @OneToOne
+    @JoinColumn(name = "usuario_id", unique = true)
     private UsuarioEntity usuario;
 
     @Column(name = "url")

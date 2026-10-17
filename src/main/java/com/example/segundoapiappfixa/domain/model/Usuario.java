@@ -27,4 +27,5 @@ public class Usuario {
     private Boolean estaAtivo;
     private Boolean primeiroAcesso;
     private List<Turno> turnos;
+    private Foto foto;
 }
