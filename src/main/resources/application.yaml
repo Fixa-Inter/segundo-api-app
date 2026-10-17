@@ -49,3 +49,9 @@ jwt:
 firebase:
   credentials-path: ${FIREBASE_CREDENTIALS_PATH:}
   credentials-json: ${FIREBASE_CREDENTIALS_JSON:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
