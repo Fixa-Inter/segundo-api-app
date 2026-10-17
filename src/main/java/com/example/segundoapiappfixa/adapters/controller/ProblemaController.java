@@ -9,6 +9,7 @@ import com.example.segundoapiappfixa.adapters.controller.contract.ProblemaContro
 import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
 import com.example.segundoapiappfixa.application.usecase.Problema.AtualizarStatus;
 import com.example.segundoapiappfixa.application.usecase.Problema.CriarProblema;
+import com.example.segundoapiappfixa.application.usecase.Problema.ListarLocalUnidade;
 import com.example.segundoapiappfixa.application.usecase.Problema.ListarProblemas;
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
@@ -30,7 +31,6 @@ public class ProblemaController implements ProblemaControllerContract {
 
     // UseCases
     private final ListarProblemas listarProblemas;
-    private final ListarLocalUnidade listarLocalUnidade;
     private final CriarProblema cadastrarProblema;
     private final AtualizarStatus atualizarStatus;
 
@@ -92,13 +92,6 @@ public class ProblemaController implements ProblemaControllerContract {
         );
 
         return ResponseEntity.ok(mask(dto, campos));
-    }
-
-    @GetMapping("/local-unidade")
-    public ResponseEntity<List<LocalUnidadeOutputDTO>> listarLocalEndereco(
-            Authentication authentication
-    ) {
-        return ResponseEntity.ok(listarLocalUnidade.listar(ControllerUtils.usuarioId(authentication)));
     }
 
     // POST
