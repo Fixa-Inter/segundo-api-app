@@ -74,7 +74,9 @@ public class AuthService {
                 LocalDateTime.now(),
                 true,
                 false,
-                List.of()
+                List.of(),
+                null,
+                null
         );
 
         Usuario salvo = usuarioRepository.save(usuario);
