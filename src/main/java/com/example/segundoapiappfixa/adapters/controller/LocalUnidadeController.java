@@ -27,7 +27,7 @@ public class LocalUnidadeController {
     // Mapper
     private final LocalUnidadeMapper mapper;
 
-    @GetMapping("/local-unidade")
+    @GetMapping()
     public ResponseEntity<List<LocalUnidadeOutputDTO>> listarLocalEndereco(
             Authentication authentication
     ) {
