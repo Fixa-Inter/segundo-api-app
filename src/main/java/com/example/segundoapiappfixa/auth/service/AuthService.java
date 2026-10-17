@@ -75,7 +75,6 @@ public class AuthService {
                 true,
                 false,
                 List.of(),
-                null,
                 null
         );
 
