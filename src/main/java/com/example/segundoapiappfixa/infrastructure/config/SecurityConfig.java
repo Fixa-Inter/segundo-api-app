@@ -122,6 +122,7 @@ public class SecurityConfig{
                         .requestMatchers(
                                 "/api/v1/**"
                         ).hasRole("GESTOR")
+                        .requestMatchers("/actuator/health").permitAll() 
 
                         .anyRequest().authenticated()
 
