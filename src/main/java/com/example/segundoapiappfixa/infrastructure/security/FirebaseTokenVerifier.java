@@ -34,7 +34,8 @@ public class FirebaseTokenVerifier {
         }
 
         try {
-            return FirebaseAuth.getInstance(getApp()).verifyIdToken(idToken);
+            FirebaseApp app = getApp();
+            return FirebaseAuth.getInstance(app).verifyIdToken(idToken);
         } catch (FirebaseAuthException exception) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
@@ -57,6 +58,7 @@ public class FirebaseTokenVerifier {
 
         if (properties.credentialsJson() != null && !properties.credentialsJson().isBlank()) {
             FirebaseOptions options = FirebaseOptions.builder()
+                    .setProjectId(properties.projectId())
                     .setCredentials(GoogleCredentials.fromStream(
                             new ByteArrayInputStream(properties.credentialsJson().getBytes(StandardCharsets.UTF_8))))
                     .build();
@@ -72,6 +74,7 @@ public class FirebaseTokenVerifier {
         try (FileInputStream credentials = new FileInputStream(properties.credentialsPath())) {
             FirebaseOptions options = FirebaseOptions
                     .builder()
+                    .setProjectId(properties.projectId())
                     .setCredentials(GoogleCredentials.fromStream(credentials))
                     .build();
 

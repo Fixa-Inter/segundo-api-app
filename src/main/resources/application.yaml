@@ -47,5 +47,6 @@ jwt:
   refresh-token-expiration: 7776000000
 
 firebase:
+  project-id: ${FIREBASE_PROJECT_ID:fixa-fead2}
   credentials-path: ${FIREBASE_CREDENTIALS_PATH:}
   credentials-json: ${FIREBASE_CREDENTIALS_JSON:}
