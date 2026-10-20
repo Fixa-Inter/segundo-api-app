@@ -29,15 +29,18 @@ public class ObservacaoConclusaoRepositoryImpl implements ObservacaoConclusaoRep
     private EntityManager entityManager;
 
     @Override
-    public ObservacaoConclusao save(ObservacaoConclusao model) {
-        ObservacaoConclusaoEntity observacaoConclusaoEntity = mapper.toEntity(model);
-        observacaoConclusaoEntity.setOrdemServico(entityManager.getReference(
-                OrdemServicoEntity.class, model.getOrdemServico().getId()));
-
-        ObservacaoConclusaoEntity observacaoConclusaoPersistido = repository
-                .save(observacaoConclusaoEntity);
-
-        return mapper.toModel(observacaoConclusaoPersistido);
+    public Long save(
+            Long ordemServicoId,
+            Integer dificuldade,
+            String observacao,
+            List<String> fotos
+    ) {
+        return repository.cadastrarObservacaoConclusao(
+                ordemServicoId,
+                dificuldade,
+                observacao,
+                fotos
+        );
     }
 
     @Override

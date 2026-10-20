@@ -10,13 +10,9 @@ import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.domain.repository.FotoRepository;
-import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @UseCase
 @RequiredArgsConstructor
@@ -26,7 +22,6 @@ public class CriarOcorrencia {
     private final UsuarioRepository usuarioRepository;
     private final LocalUnidadeRepository localUnidadeRepository;
     private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
-    private final FotoRepository fotoRepository;
 
     public Ocorrencia cadastrar(OcorrenciaCadastrarInputDTO dto, Long usuarioId) {
 
@@ -43,39 +38,19 @@ public class CriarOcorrencia {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RegraProblemaException("exception.usuario.required"));
 
-        Ocorrencia ocorrencia = new Ocorrencia(
-                null,
-                usuario,
-                localUnidade,
-                categoriaEquipamento,
-                dto.categoriaProblemaId(),
-                dto.prioridade(),
+        Long ocorrenciaId = ocorrenciaRepository.save(
+                usuarioId,
+                dto.localUnidadeId(),
+                dto.categoriaEquipamentoId(),
+                dto.categoriaProblemaId().getId(),
+                dto.prioridade().getId(),
                 dto.titulo(),
                 dto.descricaoOcorrencia(),
                 dto.descricaoLocal(),
-                LocalDateTime.now(),
-                true,
-                List.of()
+                dto.urlsFoto()
         );
 
-        Ocorrencia persistida = ocorrenciaRepository.save(ocorrencia);
-        List<Foto> fotos = new ArrayList<>();
-        for (String url : dto.urlsFoto()) {
-            Foto foto = new Foto(
-                    null,
-                    null,
-                    persistida,
-                    null,
-                    null,
-                    usuario,
-                    url,
-                    true,
-                    LocalDateTime.now()
-            );
-
-            fotos.add(fotoRepository.save(foto, TipoFoto.OCORRENCIA));
-        }
-        persistida.setFotos(fotos);
-        return persistida;
+        return ocorrenciaRepository.findById(ocorrenciaId)
+                .orElseThrow(() -> new RegraProblemaException("exception.ocorrencia.notFound"));
     }
 }

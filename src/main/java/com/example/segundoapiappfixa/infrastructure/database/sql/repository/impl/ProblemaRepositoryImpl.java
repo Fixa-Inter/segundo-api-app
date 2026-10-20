@@ -1,7 +1,9 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
+import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
+import com.example.segundoapiappfixa.domain.model.Foto;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.ProblemaSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Problema;
@@ -9,6 +11,7 @@ import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaProblemaRepositiory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.PageRequest;
@@ -84,11 +87,24 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
 
     // Método de salvar no banco de dados
     @Override
-    public Problema save(Problema problema) {
-        ProblemaEntity problemaEntity = mapper.toEntity(problema);
-
-        ProblemaEntity problemaPersistido = repository.save(problemaEntity);
-        return mapper.toModel(problemaPersistido);
+    public Long save(
+            Long usuarioId,
+            Long localUnidadeId,
+            Long categoriaEquipamentoId,
+            String titulo,
+            String descricaoProblema,
+            String descricaoLocal,
+            List<String> fotos
+    ) {
+        return repository.cadastrarProblema(
+                usuarioId,
+                localUnidadeId,
+                categoriaEquipamentoId,
+                titulo,
+                descricaoProblema,
+                descricaoLocal,
+                fotos
+        );
     }
 
     @Override

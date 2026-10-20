@@ -94,11 +94,29 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
                 .map(mapper::toModel);
     }
 
-    // Método de salvar no banco de dados
     @Override
-    public Ocorrencia save(Ocorrencia ocorrencia) {
-        OcorrenciaEntity entity = toEntityWithReferences(ocorrencia);
-        return mapper.toModel(jpaRepository.save(entity));
+    public Long save(
+            Long usuarioId,
+            Long localUnidadeId,
+            Long categoriaEquipamentoId,
+            Integer categoriaProblema,
+            Integer prioridade,
+            String titulo,
+            String descricaoOcorrencia,
+            String descricaoLocal,
+            List<String> fotos
+    ) {
+        return jpaRepository.cadastrarOcorrencia(
+                usuarioId,
+                localUnidadeId,
+                categoriaEquipamentoId,
+                categoriaProblema,
+                prioridade,
+                titulo,
+                descricaoOcorrencia,
+                descricaoLocal,
+                fotos
+        );
     }
 
     // Método de deletar dados persistidos no banco de dados
