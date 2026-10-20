@@ -122,6 +122,11 @@ public class SecurityConfig{
                         // DELETE
                         .requestMatchers(
                                 HttpMethod.DELETE,
+                                "/api/v1/solicitacoes/**"
+                        ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
                                 "/api/v1/ocorrencias/**"
                         ).hasAnyRole("GESTOR", "TECNICO")
 
