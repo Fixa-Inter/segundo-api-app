@@ -91,4 +91,9 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
         return mapper.toModel(problemaPersistido);
     }
 
+    @Override
+    public void deleteById(Long problemaId) {
+        repository.deleteById(problemaId);
+    }
+
 }

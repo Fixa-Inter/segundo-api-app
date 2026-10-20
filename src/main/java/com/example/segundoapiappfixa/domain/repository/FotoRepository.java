@@ -9,4 +9,8 @@ public interface FotoRepository {
 
     Foto save(Foto foto, TipoFoto tipoFoto);
 
+    void deleteById(Long id);
+
+    void deleteByProblemaId(Long problemaId);
+
 }

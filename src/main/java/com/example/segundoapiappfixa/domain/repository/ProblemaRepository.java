@@ -33,4 +33,6 @@ public interface ProblemaRepository {
 
     Problema save(Problema problema);
 
+    void deleteById(Long problemaId);
+
 }
