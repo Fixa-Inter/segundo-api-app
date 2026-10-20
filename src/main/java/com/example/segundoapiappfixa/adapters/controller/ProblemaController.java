@@ -2,15 +2,13 @@ package com.example.segundoapiappfixa.adapters.controller;
 
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
+import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.LocalEndereco.LocalUnidadeOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import com.example.segundoapiappfixa.adapters.controller.contract.ProblemaControllerContract;
 import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
-import com.example.segundoapiappfixa.application.usecase.Problema.AtualizarStatus;
-import com.example.segundoapiappfixa.application.usecase.Problema.CriarProblema;
-import com.example.segundoapiappfixa.application.usecase.Problema.ListarLocalUnidade;
-import com.example.segundoapiappfixa.application.usecase.Problema.ListarProblemas;
+import com.example.segundoapiappfixa.application.usecase.Problema.*;
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.ProblemaDynamicMapper;
@@ -32,7 +30,9 @@ public class ProblemaController implements ProblemaControllerContract {
     // UseCases
     private final ListarProblemas listarProblemas;
     private final CriarProblema cadastrarProblema;
+    private final AtualizarProblema atualizarProblema;
     private final AtualizarStatus atualizarStatus;
+    private final DeletarProblema deletarProblema;
 
     // Mappers
     private final ProblemaMapper mapper;
@@ -111,6 +111,17 @@ public class ProblemaController implements ProblemaControllerContract {
     }
 
     // PATCH
+    @PatchMapping()
+    public ResponseEntity<ProblemaOutputDTO> atualizarProblema(
+            @Valid @RequestBody
+            ProblemaAtualizarInputDTO dto,
+
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(mapper.toOutputDTO(atualizarProblema.atualizar(
+                dto, ControllerUtils.usuarioId(authentication))));
+    }
+
     @PatchMapping("/status")
     public ResponseEntity<ProblemaOutputDTO> atualizaStatus(
             @Valid @RequestBody
@@ -119,6 +130,19 @@ public class ProblemaController implements ProblemaControllerContract {
             Authentication authentication
     ) {
         return ResponseEntity.ok(mapper.toOutputDTO(atualizarStatus.atualizar(input)));
+    }
+
+    @DeleteMapping("/{problemaId}")
+    public ResponseEntity<ProblemaOutputDTO> deletar(
+            @PathVariable
+            Long problemaId,
+
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(mapper.toOutputDTO(deletarProblema.deletar(
+                problemaId,
+                ControllerUtils.usuarioId(authentication)
+        )));
     }
 
 

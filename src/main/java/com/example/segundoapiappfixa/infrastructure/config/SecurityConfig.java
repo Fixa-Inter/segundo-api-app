@@ -110,7 +110,8 @@ public class SecurityConfig{
                         // PATCH
                         .requestMatchers(
                                 HttpMethod.PATCH,
-                                "/api/v1/perfil"
+                                "/api/v1/perfil",
+                                "/api/v1/solicitacoes"
                         ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
 
                         .requestMatchers(

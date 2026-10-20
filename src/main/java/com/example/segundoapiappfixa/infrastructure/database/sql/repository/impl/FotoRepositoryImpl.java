@@ -90,4 +90,14 @@ public class FotoRepositoryImpl implements FotoRepository {
         FotoEntity fotoPersistida = repository.save(fotoEntity);
         return mapper.toModel(fotoPersistida);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByProblemaId(Long problemaId) {
+        repository.deleteByProblema_Id(problemaId);
+    }
 }

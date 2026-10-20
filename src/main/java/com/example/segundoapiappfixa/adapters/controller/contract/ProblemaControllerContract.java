@@ -6,6 +6,7 @@ import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutput
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -18,5 +19,9 @@ public interface ProblemaControllerContract {
 
     ResponseEntity<ProblemaOutputDTO> cadastrar(ProblemaCriarInputDTO input, Authentication authentication);
 
+    ResponseEntity<ProblemaOutputDTO> atualizarProblema(ProblemaAtualizarInputDTO dto, Authentication authentication);
+
     ResponseEntity<ProblemaOutputDTO> atualizaStatus(ProblemaAtualizarStatusDTO input, Authentication authentication);
+
+    ResponseEntity<ProblemaOutputDTO> deletar(Long problemaId, Authentication authentication);
 }
