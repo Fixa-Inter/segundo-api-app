@@ -1,19 +1,18 @@
 package com.example.segundoapiappfixa.adapters.controller;
 
+import com.example.segundoapiappfixa.adapters.dto.input.Usuario.UsuarioAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Usuario.UsuarioOutputDTO;
 import com.example.segundoapiappfixa.adapters.controller.contract.PerfilControllerContract;
 import com.example.segundoapiappfixa.adapters.mapper.UsuarioMapper;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.DynamicFieldFilter;
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.UsuarioDynamicMapper;
 import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
+import com.example.segundoapiappfixa.application.usecase.Perfil.AtualizarPerfil;
 import com.example.segundoapiappfixa.application.usecase.Perfil.DetalhesPerfil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +23,7 @@ public class PerfilController implements PerfilControllerContract {
 
     // UseCases
     private final DetalhesPerfil detalhesPerfil;
+    private final AtualizarPerfil atualizarPerfil;
 
     // Mappers
     private final UsuarioMapper mapper;
@@ -43,6 +43,18 @@ public class PerfilController implements PerfilControllerContract {
                  ),
                  campos
          ));
+    }
+
+    // PATCH
+    @PatchMapping
+    public ResponseEntity<UsuarioOutputDTO> atualizarPerfil(
+            @RequestBody UsuarioAtualizarInputDTO dto,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(mapper.toOutputDTO(atualizarPerfil.atualizar(
+                dto,
+                ControllerUtils.usuarioId(authentication)
+        )));
     }
 
     // Aplicação do Mapper Dinâmico
