@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.domain.repository;
 
 import com.example.segundoapiappfixa.domain.model.Ocorrencia;
+import java.util.List;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOcorrenciaQueryParam;
 import java.util.Map;
 
@@ -32,7 +33,17 @@ public interface OcorrenciaRepository {
 
     Optional<Ocorrencia> findById(Long ocorrenciaId);
 
-    Ocorrencia save(Ocorrencia ocorrencia);
+    Long save(
+            Long usuarioId,
+            Long localUnidadeId,
+            Long categoriaEquipamentoId,
+            Integer categoriaProblema,
+            Integer prioridade,
+            String titulo,
+            String descricaoOcorrencia,
+            String descricaoLocal,
+            List<String> fotos
+    );
 
     Optional<Ocorrencia> deleteById(Long ocorrenciaId);
 }

@@ -3,11 +3,18 @@ package com.example.segundoapiappfixa.domain.repository;
 import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosObservacaoConclusaoQueryParam;
 import java.util.List;
+import java.util.List;
 import java.util.Optional;
 
 public interface ObservacaoConclusaoRepository {
 
-    ObservacaoConclusao save(ObservacaoConclusao observacao);
+    Long save(
+            Long ordemServicoId,
+            Integer dificuldade,
+            String observacao,
+            List<String> fotos
+    );
+
     boolean existsByOrdemServicoId(Long ordemServicoId);
 
     Optional<ObservacaoConclusao> findById(Long id);

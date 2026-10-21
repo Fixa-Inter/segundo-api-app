@@ -8,15 +8,11 @@ import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.domain.repository.ObservacaoConclusaoRepository;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @UseCase
 @RequiredArgsConstructor
@@ -25,7 +21,6 @@ public class CadastrarObservacaoConclusao {
     private final ObservacaoConclusaoRepository observacaoConclusaoRepository;
     private final OrdemServicoRepository ordemServicoRepository;
     private final UsuarioRepository usuarioRepository;
-    private final FotoRepository fotoRepository;
 
     public ObservacaoConclusao cadastrar(
             ObservacaoConclusaoCriarInputDTO dto,
@@ -49,35 +44,15 @@ public class CadastrarObservacaoConclusao {
         ordemServico.setStatusOrdemServico(StatusOrdemServico.CONCLUIDA);
         ordemServicoRepository.save(ordemServico);
 
-        ObservacaoConclusao observacaoConclusao = new ObservacaoConclusao(
-                null,
-                ordemServico,
-                dto.dificuldade(),
+        Long observacaoId = observacaoConclusaoRepository.save(
+                ordemServico.getId(),
+                dto.dificuldade().getId(),
                 dto.observacao(),
-                LocalDateTime.now(),
-                List.of()
+                dto.fotos()
         );
 
-        observacaoConclusao = observacaoConclusaoRepository.save(observacaoConclusao);
-        List<Foto> fotos = new ArrayList<>();
-
-        for (String url : dto.fotos()) {
-            Foto foto = new Foto(
-                    null,
-                    null,
-                    null,
-                    null,
-                    observacaoConclusao,
-                    null,
-                    url,
-                    true,
-                    LocalDateTime.now()
-            );
-
-            fotos.add(fotoRepository.save(foto, TipoFoto.OBSERVACAO_CONCLUSAO));
-        }
-
-        return observacaoConclusao;
+        return observacaoConclusaoRepository.findById(observacaoId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.observacaoConclusao.notFound"));
     }
 
     private void validarPermissao(Usuario usuario, OrdemServico ordemServico, boolean gestor) {

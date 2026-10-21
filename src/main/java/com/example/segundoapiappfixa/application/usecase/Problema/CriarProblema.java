@@ -6,6 +6,7 @@ import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -23,49 +24,27 @@ public class CriarProblema {
     private final UsuarioRepository usuarioRepository;
 
     public Problema cadastrar(ProblemaCriarInputDTO dto, Long usuarioId) {
-        LocalUnidade localUnidade = localUnidadeRepository.findById(dto.localUnidadeID()).orElse(null);
+        LocalUnidade localUnidade = localUnidadeRepository.findById(dto.localUnidadeID())
+                .orElseThrow(() -> new EntityNotFoundException("validation.local.required"));
 
-        CategoriaEquipamento categoriaEquipamento = categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId()).orElse(null);
+        CategoriaEquipamento categoriaEquipamento = categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
+                .orElseThrow(() -> new EntityNotFoundException("validation.categoria.required"));
 
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new EntityNotFoundException("validation.usuario.required"));
 
         // Cadastro do Problema
-        Problema problema = new Problema(
-                null,
-                usuario,
-                categoriaEquipamento,
-                localUnidade,
+        Long problemaId = problemaRepository.save(
+                usuarioId,
+                dto.localUnidadeID(),
+                dto.categoriaEquipamentoId(),
                 dto.titulo(),
                 dto.descricaoProblema(),
                 dto.descricaoLocal(),
-                null,
-                LocalDateTime.now(),
-                StatusProblema.PENDENTE,
-                List.of()
+                dto.urlsFoto()
         );
 
-        Problema problemaPersistido = problemaRepository.save(problema);
-        List<Foto> fotos = new ArrayList<>();
-
-        // Cadastro Imagens
-        for (String url : dto.urlsFoto()) {
-            Foto foto = new Foto(
-                    null,
-                    problemaPersistido,
-                    null,
-                    null,
-                    null,
-                    null,
-                    url,
-                    true,
-                    LocalDateTime.now()
-            );
-
-            fotos.add(fotoRepository.save(foto, TipoFoto.PROBLEMA));
-        }
-
-        problemaPersistido.setFotos(fotos);
-
-        return problemaPersistido;
+        return problemaRepository.findById(problemaId)
+                .orElseThrow(() -> new EntityNotFoundException("Problema cadastrado não foi encontrado."));
     }
 }
