@@ -18,6 +18,8 @@ public interface AuthControllerContract {
 
     ResponseEntity<String> redefinirSenha(RedefinirSenhaRequestDTO requestDTO);
 
+    ResponseEntity<Boolean> validarCodigo(ValidarCodigoRequestDTO requestDTO);
+
     public ResponseEntity<RedefinirSenhaOutputDTO> esqueceuSenha(String email);
 
     ResponseEntity<List<CadastroNomeOutputDTO>> listarInstituicoes();

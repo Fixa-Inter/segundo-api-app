@@ -67,4 +67,14 @@ public class AuthController implements AuthControllerContract {
     ) {
         return ResponseEntity.ok(service.redefinirSenha(requestDTO));
     }
+
+    @Override
+    @PostMapping("/validar-codigo")
+    public ResponseEntity<Boolean> validarCodigo(
+            @Valid
+            @RequestBody
+            ValidarCodigoRequestDTO requestDTO
+    ) {
+        return ResponseEntity.ok(service.validarCodigo(requestDTO.email(), requestDTO.codigo()));
+    }
 }
