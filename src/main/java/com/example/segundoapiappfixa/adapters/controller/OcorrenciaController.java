@@ -106,7 +106,8 @@ public class OcorrenciaController implements OcorrenciaControllerContract {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(mapper.toOutputDTO(criarOcorrencia.cadastrar(
-                        input,
+                        mapper.toModel(input),
+                        input.urlsFoto(),
                         ControllerUtils.usuarioId(authentication)
                 )));
     }

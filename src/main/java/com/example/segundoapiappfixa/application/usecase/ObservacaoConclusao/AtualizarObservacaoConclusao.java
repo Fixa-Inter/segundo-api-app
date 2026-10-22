@@ -33,7 +33,7 @@ public class AtualizarObservacaoConclusao {
         if (dto.dificuldade() != null) atual.setDificuldade(dto.dificuldade());
         if (dto.observacao() != null) atual.setObservacao(dto.observacao());
 
-        atual = repository.save(atual);
+        atual = repository.update(atual);
 
         if (dto.fotos() != null) {
             List<Foto> fotos = new ArrayList<>();

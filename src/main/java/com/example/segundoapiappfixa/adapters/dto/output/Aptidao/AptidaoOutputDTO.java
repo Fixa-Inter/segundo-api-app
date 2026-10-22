@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.output.Aptidao;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDate;
@@ -8,7 +10,7 @@ import java.time.LocalDate;
 public record AptidaoOutputDTO (
         Long id,
         String categoriaProblema,
-        Double nota,
+        BigDecimal nota,
         LocalDate dataCriacao,
         Boolean estaAtivo
 ) {

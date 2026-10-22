@@ -81,7 +81,8 @@ public class ObservacaoConclusaoController implements ObservacaoConclusaoControl
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(mapper.toOutputDTO(cadastrar.cadastrar(
-                        dto,
+                        mapper.toModel(dto),
+                        dto.fotos(),
                         ControllerUtils.usuarioId(authentication),
                         ControllerUtils.isGestor(authentication)
                 )));

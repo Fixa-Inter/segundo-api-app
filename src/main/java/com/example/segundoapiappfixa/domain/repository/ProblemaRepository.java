@@ -31,15 +31,9 @@ public interface ProblemaRepository {
 
     Optional<Problema> findById(Long problemaId);
 
-    Long save(
-            Long usuarioId,
-            Long localUnidadeId,
-            Long categoriaEquipamentoId,
-            String titulo,
-            String descricaoProblema,
-            String descricaoLocal,
-            List<String> fotos
-    );
+    Long save(Problema problema, List<String> fotos);
+
+    Problema update(Problema problema);
 
     void deleteById(Long problemaId);
 

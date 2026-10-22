@@ -105,7 +105,8 @@ public class ProblemaController implements ProblemaControllerContract {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(mapper.toOutputDTO(cadastrarProblema.cadastrar(
-                        input,
+                        mapper.toModel(input),
+                        input.urlsFoto(),
                         ControllerUtils.usuarioId(authentication)
                 )));
     }

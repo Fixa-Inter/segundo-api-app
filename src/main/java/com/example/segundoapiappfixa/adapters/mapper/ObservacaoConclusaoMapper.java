@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.adapters.mapper;
 
 import com.example.segundoapiappfixa.adapters.dto.output.ObservacaoConclusao.ObservacaoConclusaoOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.input.ObservacaoConclusao.ObservacaoConclusaoCriarInputDTO;
 import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ObservacaoConclusaoEntity;
 import org.mapstruct.Mapper;
@@ -11,6 +12,12 @@ public interface ObservacaoConclusaoMapper {
 
     ObservacaoConclusaoEntity toEntity(ObservacaoConclusao model);
     ObservacaoConclusao toModel(ObservacaoConclusaoEntity entity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "ordemServicoId", target = "ordemServico.id")
+    @Mapping(target = "dataCriacao", ignore = true)
+    @Mapping(target = "fotos", ignore = true)
+    ObservacaoConclusao toModel(ObservacaoConclusaoCriarInputDTO input);
 
     @Mapping(source = "ordemServico.problema.titulo", target = "titulo")
     @Mapping(source = "ordemServico.problema.descricaoProblema", target = "descricaoProblema")

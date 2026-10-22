@@ -55,7 +55,8 @@ public class AtualizarOcorrencia {
 
         if (dto.descricaoLocal() != null) atual.setDescricaoLocal(dto.descricaoLocal());
 
-        atual = ocorrenciaRepository.save(atual);
+        atual = ocorrenciaRepository.update(atual);
+
         if (dto.urlsFoto() != null) {
             List<Foto> fotos = new ArrayList<>();
 
