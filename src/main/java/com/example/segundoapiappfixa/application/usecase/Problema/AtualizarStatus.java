@@ -38,6 +38,6 @@ public class AtualizarStatus {
         problema.setStatus(dto.statusProblema());
         problema.setMotivoRecusa(possuiMotivoRecusa ? dto.motivoRecusa().trim() : null);
 
-        return problemaRepository.save(problema);
+        return problemaRepository.update(problema);
     }
 }

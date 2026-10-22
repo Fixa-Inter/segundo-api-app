@@ -8,12 +8,9 @@ import java.util.Optional;
 
 public interface ObservacaoConclusaoRepository {
 
-    Long save(
-            Long ordemServicoId,
-            Integer dificuldade,
-            String observacao,
-            List<String> fotos
-    );
+    Long save(ObservacaoConclusao observacaoConclusao, List<String> fotos);
+
+    ObservacaoConclusao update(ObservacaoConclusao observacaoConclusao);
 
     boolean existsByOrdemServicoId(Long ordemServicoId);
 

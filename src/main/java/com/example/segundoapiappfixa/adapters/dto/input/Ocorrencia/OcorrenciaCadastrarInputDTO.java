@@ -8,9 +8,6 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 
 public record OcorrenciaCadastrarInputDTO (
-        @NotNull(message = "{validation.usuario.required}")
-        Long usuarioId,
-
         @NotNull(message = "{validation.local.required}")
         Long localUnidadeId,
 
@@ -31,6 +28,7 @@ public record OcorrenciaCadastrarInputDTO (
 
         @NotNull(message = "{validation.prioridade.required}")
         Prioridade prioridade,
+
         @NotEmpty(message = "{validation.fotos.required}")
         List<@NotBlank(message = "{validation.foto.required}") String> urlsFoto
 ) {

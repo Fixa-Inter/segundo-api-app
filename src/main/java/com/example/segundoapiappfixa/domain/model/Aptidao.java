@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.domain.model;
 
+import java.math.BigDecimal;
+
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +18,7 @@ public class Aptidao {
     private Long id;
     private Usuario usuario;
     private CategoriaProblema categoriaProblema;
-    private Double nota;
+    private BigDecimal nota;
     private LocalDateTime dataCriacao;
     private Boolean estaAtivo;
 }

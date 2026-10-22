@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.sql.Array;
+import java.sql.CallableStatement;
+import java.sql.Types;
 
 @Repository
 @Transactional
@@ -29,18 +32,33 @@ public class ObservacaoConclusaoRepositoryImpl implements ObservacaoConclusaoRep
     private EntityManager entityManager;
 
     @Override
-    public Long save(
-            Long ordemServicoId,
-            Integer dificuldade,
-            String observacao,
-            List<String> fotos
-    ) {
-        return repository.cadastrarObservacaoConclusao(
-                ordemServicoId,
-                dificuldade,
-                observacao,
-                fotos
-        );
+    public Long save(ObservacaoConclusao observacaoConclusao, List<String> fotos) {
+        return entityManager
+                .unwrap(org.hibernate.Session.class)
+                .doReturningWork(connection -> {
+                    Array urls = connection.createArrayOf("varchar", fotos.toArray(String[]::new));
+
+                    try (CallableStatement statement = connection.prepareCall(
+                            "CALL cadastrar_observacao_conclusao(?, ?, ?, ?, ?)")
+                    ) {
+                        statement.setLong(1, observacaoConclusao.getOrdemServico().getId());
+                        statement.setInt(2, observacaoConclusao.getDificuldade().getId());
+                        statement.setString(3, observacaoConclusao.getObservacao());
+                        statement.registerOutParameter(4, Types.BIGINT);
+                        statement.setArray(5, urls);
+                        statement.execute();
+
+                        return statement.getLong(4);
+
+                    } finally {
+                        urls.free();
+                    }
+                });
+    }
+
+    public ObservacaoConclusao update(ObservacaoConclusao observacaoConclusao) {
+        ObservacaoConclusaoEntity entity = mapper.toEntity(observacaoConclusao);
+        return mapper.toModel(repository.save(entity));
     }
 
     @Override

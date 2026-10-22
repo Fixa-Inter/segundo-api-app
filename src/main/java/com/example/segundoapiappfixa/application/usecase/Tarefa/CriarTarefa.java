@@ -24,7 +24,6 @@ public class CriarTarefa {
     private final TarefaRepository tarefaRepository;
     private final OrdemServicoRepository ordemServicoRepository;
     private final UsuarioRepository usuarioRepository;
-    private final TarefaMapper tarefaMapper;
 
     @Transactional
     public List<Tarefa> criarTarefas(

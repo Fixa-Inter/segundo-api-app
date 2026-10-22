@@ -33,17 +33,9 @@ public interface OcorrenciaRepository {
 
     Optional<Ocorrencia> findById(Long ocorrenciaId);
 
-    Long save(
-            Long usuarioId,
-            Long localUnidadeId,
-            Long categoriaEquipamentoId,
-            Integer categoriaProblema,
-            Integer prioridade,
-            String titulo,
-            String descricaoOcorrencia,
-            String descricaoLocal,
-            List<String> fotos
-    );
+    Long save(Ocorrencia ocorrencia, List<String> fotos);
+
+    Ocorrencia update(Ocorrencia ocorrencia);
 
     Optional<Ocorrencia> deleteById(Long ocorrenciaId);
 }

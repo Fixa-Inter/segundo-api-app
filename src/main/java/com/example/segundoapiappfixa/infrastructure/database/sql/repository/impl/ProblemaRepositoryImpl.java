@@ -1,9 +1,10 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import com.example.segundoapiappfixa.domain.model.Foto;
+import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ObservacaoConclusaoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.ProblemaSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Problema;
@@ -11,7 +12,8 @@ import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaProblemaRepositiory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +23,9 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
+import java.sql.Array;
+import java.sql.CallableStatement;
+import java.sql.Types;
 
 @Repository
 @Transactional
@@ -30,6 +35,9 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
     // Dependências
     private final JpaProblemaRepositiory repository;
     private final ProblemaMapper mapper;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
     // Método de listar os registros persistidos no banco de dados
@@ -87,24 +95,34 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
 
     // Método de salvar no banco de dados
     @Override
-    public Long save(
-            Long usuarioId,
-            Long localUnidadeId,
-            Long categoriaEquipamentoId,
-            String titulo,
-            String descricaoProblema,
-            String descricaoLocal,
-            List<String> fotos
-    ) {
-        return repository.cadastrarProblema(
-                usuarioId,
-                localUnidadeId,
-                categoriaEquipamentoId,
-                titulo,
-                descricaoProblema,
-                descricaoLocal,
-                fotos
-        );
+    public Long save(Problema problema, List<String> fotos) {
+        return entityManager.unwrap(org.hibernate.Session.class).doReturningWork(connection -> {
+            Array urls = connection.createArrayOf("varchar", fotos.toArray(String[]::new));
+
+            try (CallableStatement statement = connection.prepareCall(
+                    "CALL cadastrar_problema(?, ?, ?, ?, ?, ?, ?, ?)")
+            ) {
+                statement.setLong(1, problema.getUsuario().getId());
+                statement.setLong(2, problema.getLocalUnidade().getId());
+                statement.setLong(3, problema.getCategoriaEquipamento().getId());
+                statement.setString(4, problema.getTitulo());
+                statement.setString(5, problema.getDescricaoProblema());
+                statement.setString(6, problema.getDescricaoLocal());
+                statement.registerOutParameter(7, Types.BIGINT);
+                statement.setArray(8, urls);
+                statement.execute();
+
+                return statement.getLong(7);
+
+            } finally {
+                urls.free();
+            }
+        });
+    }
+
+    public Problema update(Problema problema) {
+        ProblemaEntity entity = mapper.toEntity(problema);
+        return mapper.toModel(repository.save(entity));
     }
 
     @Override

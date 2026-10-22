@@ -10,7 +10,8 @@ import lombok.Getter;
 public enum StatusProblema {
     PENDENTE("Pendente", 0),
     APROVADO("Aprovado", 1),
-    REPROVADO("Reprovado", 2);
+    REPROVADO("Reprovado", 2),
+    CONCLUIDO("Concluído", 3);
 
     private final String nome;
     private final int id;

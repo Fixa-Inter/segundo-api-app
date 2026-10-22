@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.entity;
 
+import java.math.BigDecimal;
+
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.infrastructure.database.sql.converter.CategoriaProblemaConverter;
 import jakarta.persistence.*;
@@ -31,7 +33,7 @@ public class AptidaoEntity {
     private CategoriaProblema categoriaProblema;
 
     @Column(name = "nota")
-    private Double nota;
+    private BigDecimal nota;
 
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;

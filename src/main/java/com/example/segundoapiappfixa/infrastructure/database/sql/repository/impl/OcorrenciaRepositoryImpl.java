@@ -2,14 +2,12 @@ package com.example.segundoapiappfixa.infrastructure.database.sql.repository.imp
 
 import com.example.segundoapiappfixa.adapters.mapper.OcorrenciaMapper;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOcorrenciaQueryParam;
+import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
+import com.example.segundoapiappfixa.infrastructure.database.sql.entity.*;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.OcorrenciaSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Ocorrencia;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.CategoriaEquipamentoEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalUnidadeEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OcorrenciaEntity;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaOcorrenciaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -23,6 +21,9 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
+import java.sql.Array;
+import java.sql.CallableStatement;
+import java.sql.Types;
 
 @Repository
 @Transactional
@@ -95,28 +96,38 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
     }
 
     @Override
-    public Long save(
-            Long usuarioId,
-            Long localUnidadeId,
-            Long categoriaEquipamentoId,
-            Integer categoriaProblema,
-            Integer prioridade,
-            String titulo,
-            String descricaoOcorrencia,
-            String descricaoLocal,
-            List<String> fotos
-    ) {
-        return jpaRepository.cadastrarOcorrencia(
-                usuarioId,
-                localUnidadeId,
-                categoriaEquipamentoId,
-                categoriaProblema,
-                prioridade,
-                titulo,
-                descricaoOcorrencia,
-                descricaoLocal,
-                fotos
-        );
+    public Long save(Ocorrencia ocorrencia, List<String> fotos) {
+        return entityManager
+                .unwrap(org.hibernate.Session.class)
+                .doReturningWork(connection -> {
+                    Array urls = connection.createArrayOf("varchar", fotos.toArray(String[]::new));
+
+                    try (CallableStatement statement = connection.prepareCall(
+                            "CALL cadastrar_ocorrencia(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+                    ) {
+                        statement.setLong(1, ocorrencia.getUsuario().getId());
+                        statement.setLong(2, ocorrencia.getLocalUnidade().getId());
+                        statement.setLong(3, ocorrencia.getCategoriaEquipamento().getId());
+                        statement.setInt(4, ocorrencia.getCategoriaProblema().getId());
+                        statement.setInt(5, ocorrencia.getPrioridade().getId());
+                        statement.setString(6, ocorrencia.getTitulo());
+                        statement.setString(7, ocorrencia.getDescricaoOcorrencia());
+                        statement.setString(8, ocorrencia.getDescricaoLocal());
+                        statement.registerOutParameter(9, Types.BIGINT);
+                        statement.setArray(10, urls);
+                        statement.execute();
+
+                        return statement.getLong(9);
+
+                    } finally {
+                        urls.free();
+                    }
+                });
+    }
+
+    public Ocorrencia update(Ocorrencia ocorrencia) {
+        OcorrenciaEntity entity = mapper.toEntity(ocorrencia);
+        return mapper.toModel(jpaRepository.save(entity));
     }
 
     // Método de deletar dados persistidos no banco de dados

@@ -44,7 +44,7 @@ public class AtualizarProblema {
                 categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
                     .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.categoriaEquipamento.notFound")));
 
-        Problema salvo = problemaRepository.save(problema);
+        Problema salvo = problemaRepository.update(problema);
         if (dto.fotosExcluir() != null) dto.fotosExcluir().forEach(fotoRepository::deleteById);
 
         if (dto.fotosAdicionar() != null) {
