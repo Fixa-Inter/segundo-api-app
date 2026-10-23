@@ -9,8 +9,8 @@ import lombok.Getter;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum StatusProblema {
     PENDENTE("Pendente", 0),
-    APROVADO("Aprovado", 1),
-    REPROVADO("Reprovado", 2),
+    REPROVADO("Reprovado", 1),
+    APROVADO("Aprovado", 2),
     CONCLUIDO("Concluído", 3);
 
     private final String nome;
