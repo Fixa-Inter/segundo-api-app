@@ -52,6 +52,9 @@ firebase:
   credentials-json: ${FIREBASE_CREDENTIALS_JSON:}
 
 management:
+  health:
+      mail:
+        enabled: false
   endpoints:
     web:
       exposure:
