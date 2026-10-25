@@ -5,6 +5,7 @@ import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQuer
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.TarefaSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OrdemServicoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.TarefaEntity;
@@ -16,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -66,6 +70,17 @@ public class TarefaRepositoryImpl implements TarefaRepository {
                 .stream()
                 .map(tarefaMapper::toModel)
                 .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Long, Long> countEmAndamentoByTecnicoIds(Collection<Long> tecnicoIds) {
+        if (tecnicoIds == null || tecnicoIds.isEmpty()) return Map.of();
+
+        Map<Long, Long> totais = new LinkedHashMap<>();
+        jpaTarefaRepository.countByTecnicoIdsAndStatus(tecnicoIds, StatusOrdemServico.EM_ANDAMENTO)
+                .forEach(resultado -> totais.put((Long) resultado[0], (Long) resultado[1]));
+        return totais;
     }
 
     // Método de salvar no banco de dados
