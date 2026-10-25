@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.output.Usuario;
 
 import com.example.segundoapiappfixa.adapters.dto.output.Turno.TurnoOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.Aptidao.AptidaoOutputDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDate;
@@ -18,7 +19,8 @@ public record UsuarioOutputDTO(
         LocalDate dataCriacao,
         Boolean estaAtivo,
         List<TurnoOutputDTO> turnos,
-        String urlFotoPerfil
-
+        String urlFotoPerfil,
+        AptidaoOutputDTO competenciaVencedora,
+        Long tarefasEmAndamento
 ) {
 }

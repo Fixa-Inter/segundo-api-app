@@ -13,6 +13,7 @@ import com.example.segundoapiappfixa.adapters.mapper.dynamic.AptidaoDynamicMappe
 import com.example.segundoapiappfixa.adapters.mapper.dynamic.UsuarioDynamicMapper;
 import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
 import com.example.segundoapiappfixa.application.usecase.Tecnico.ListarTecnicos;
+import com.example.segundoapiappfixa.application.usecase.Tecnico.TecnicoResumo;
 import com.example.segundoapiappfixa.application.usecase.Tecnico.ListarAptidoes;
 import com.example.segundoapiappfixa.application.usecase.Tecnico.AtualizarAptidao;
 import com.example.segundoapiappfixa.application.usecase.Tecnico.ListarOrdensServicoTecnico;
@@ -149,7 +150,7 @@ public class TecnicoController implements TecnicoControllerContract {
     }
 
     // Mapper para DTO de saída em lote
-    private List<UsuarioOutputDTO> toTecnicoOutputDTO(List<Usuario> tecnicos) {
+    private List<UsuarioOutputDTO> toTecnicoOutputDTO(List<TecnicoResumo> tecnicos) {
         return tecnicos.stream().map(usuarioMapper::toOutputDTO).toList();
     }
 

@@ -22,7 +22,7 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Long>
                 u
             FROM
                 Usuario u
-            JOIN
+            LEFT JOIN
                 Aptidao a
                 ON a.usuario = u
                 AND a.categoriaProblema = :categoria
@@ -30,22 +30,24 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Long>
             LEFT JOIN
                 Tarefa t
                 ON t.ordemServico.usuario = u
-                AND t.statusOrdemServico <> :concluida
+                AND t.statusOrdemServico = :emAndamento
             WHERE
                 u.unidade.id = :unidadeId
                 AND u.tipoAcesso = :tecnico
                 AND u.estaAtivo = true
             GROUP BY
-                u, a.nota
+                u
             ORDER BY
-                a.nota DESC,
-                COUNT(t.id) ASC
+                CASE WHEN MAX(a.nota) IS NULL THEN 1 ELSE 0 END ASC,
+                MAX(a.nota) DESC,
+                COUNT(DISTINCT t.id) ASC,
+                u.id ASC
             """)
     List<UsuarioEntity> findTecnicosRecomendados(
             @Param("unidadeId") Long unidadeId,
             @Param("categoria") CategoriaProblema categoria,
             @Param("tecnico") TipoAcesso tecnico,
-            @Param("concluida") StatusOrdemServico concluida
+            @Param("emAndamento") StatusOrdemServico emAndamento
     );
 
 }
