@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaAtualizarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaCriarInputDTO;
+import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefasCriarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Tarefa.TarefaOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
 import com.example.segundoapiappfixa.adapters.controller.contract.TarefaControllerContract;
@@ -84,15 +85,14 @@ public class TarefaController implements TarefaControllerContract {
     // POST
     @PostMapping()
     public ResponseEntity<List<TarefaOutputDTO>> cadastrar(
-            @RequestBody
-            List<@Valid TarefaCriarInputDTO> tarefaCriarInputDTOS,
+            @RequestBody @Valid TarefasCriarInputDTO request,
 
             Authentication authentication
     ) {
        return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(toOutputDTO(criarTarefa.criarTarefas(
-                                tarefaCriarInputDTOS,
+                                request.tarefas(),
                                 ControllerUtils.usuarioId(authentication)
                         ))
                 );
