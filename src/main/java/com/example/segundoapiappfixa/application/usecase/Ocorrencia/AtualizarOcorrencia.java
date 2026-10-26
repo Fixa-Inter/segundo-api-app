@@ -13,6 +13,7 @@ import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class AtualizarOcorrencia {
     private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
     private final FotoRepository fotoRepository;
 
+    @Transactional
     public Ocorrencia atualizar(OcorrenciaAtualizarInputDTO dto, Long usuarioId) {
 
         Long id = dto.id();
@@ -57,10 +59,21 @@ public class AtualizarOcorrencia {
 
         atual = ocorrenciaRepository.update(atual);
 
-        if (dto.urlsFoto() != null) {
-            List<Foto> fotos = new ArrayList<>();
+        if (dto.fotosExcluir() != null) {
+            Long ocorrenciaId = atual.getId();
+            List<Long> idsPertencentes = atual.getFotos() == null ? List.of() : atual.getFotos().stream()
+                    .map(Foto::getId)
+                    .filter(idFoto -> idFoto != null && dto.fotosExcluir().contains(idFoto))
+                    .toList();
+            idsPertencentes.forEach(idFoto -> fotoRepository.deleteByIdAndOcorrenciaId(idFoto, ocorrenciaId));
+            if (atual.getFotos() != null) {
+                atual.getFotos().removeIf(foto -> foto.getId() != null && idsPertencentes.contains(foto.getId()));
+            }
+        }
 
-            for (String url : dto.urlsFoto()) {
+        if (dto.fotosAdicionar() != null && !dto.fotosAdicionar().isEmpty()) {
+            if (atual.getFotos() == null) atual.setFotos(new ArrayList<>());
+            for (String url : dto.fotosAdicionar()) {
                 Foto foto = new Foto(
                         null,
                         null,
@@ -73,9 +86,8 @@ public class AtualizarOcorrencia {
                         LocalDateTime.now()
                 );
 
-                fotos.add(fotoRepository.save(foto, TipoFoto.OCORRENCIA));
+                atual.getFotos().add(fotoRepository.save(foto, TipoFoto.OCORRENCIA));
             }
-            atual.setFotos(fotos);
         }
         return atual;
     }

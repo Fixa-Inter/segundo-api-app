@@ -17,6 +17,10 @@ public interface JpaFotoRepository extends JpaRepository<FotoEntity, Long> {
 
     void deleteByProblema_Id(Long problemaId);
 
+    void deleteByOcorrencia_Id(Long ocorrenciaId);
+
+    void deleteByIdAndOcorrencia_Id(Long fotoId, Long ocorrenciaId);
+
     List<FotoEntity> findByObservacaoConclusao_Id(Long observacaoConclusaoId);
 
     @Modifying
