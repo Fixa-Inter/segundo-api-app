@@ -15,7 +15,6 @@ import com.example.segundoapiappfixa.application.usecase.Tarefa.DeletarTarefa;
 import com.example.segundoapiappfixa.application.usecase.Tarefa.ListarTarefas;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,8 +85,6 @@ public class TarefaController implements TarefaControllerContract {
     @PostMapping()
     public ResponseEntity<List<TarefaOutputDTO>> cadastrar(
             @RequestBody
-            @Valid
-            @NotEmpty(message = "{validation.tarefa.lista.required}")
             List<@Valid TarefaCriarInputDTO> tarefaCriarInputDTOS,
 
             Authentication authentication

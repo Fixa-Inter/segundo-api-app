@@ -3,6 +3,8 @@ package com.example.segundoapiappfixa.adapters.controller.contract;
 import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.*;
 import com.example.segundoapiappfixa.adapters.dto.output.Tarefa.TarefaOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
@@ -13,7 +15,11 @@ public interface TarefaControllerContract {
 
     ResponseEntity<TarefaOutputDTO> listarDetalhes(Long tarefaId, String campos, Authentication authentication);
 
-    ResponseEntity<List<TarefaOutputDTO>> cadastrar(List<TarefaCriarInputDTO> tarefaCriarInputDTOS, Authentication authentication);
+    ResponseEntity<List<TarefaOutputDTO>> cadastrar(
+            @Valid
+            @NotEmpty(message = "{validation.tarefa.lista.required}")
+            List<@Valid TarefaCriarInputDTO> tarefaCriarInputDTOS,
+            Authentication authentication);
 
     ResponseEntity<TarefaOutputDTO> atualizar(TarefaAtualizarInputDTO atualizarInputDTO, Authentication authentication);
 
