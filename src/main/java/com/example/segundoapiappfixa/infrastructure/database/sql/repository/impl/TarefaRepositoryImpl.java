@@ -108,6 +108,12 @@ public class TarefaRepositoryImpl implements TarefaRepository {
     // Método de salvar no banco de dados
     public Tarefa save(Tarefa tarefa) {
         TarefaEntity tarefaEntity = tarefaMapper.toEntity(tarefa);
+        if (tarefa.getOrdemServico() != null && tarefa.getOrdemServico().getId() != null) {
+            tarefaEntity.setOrdemServico(entityManager.getReference(
+                    OrdemServicoEntity.class,
+                    tarefa.getOrdemServico().getId()
+            ));
+        }
 
         TarefaEntity problemaPersistido = jpaTarefaRepository.save(tarefaEntity);
         return tarefaMapper.toModel(problemaPersistido);
