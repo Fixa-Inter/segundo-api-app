@@ -27,4 +27,6 @@ public interface ObservacaoConclusaoRepository {
     );
 
     void delete(Long id);
+
+    void deleteByOrdemServicoId(Long ordemServicoId);
 }

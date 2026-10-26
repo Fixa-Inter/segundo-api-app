@@ -10,6 +10,9 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OrdemSer
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaOrdemServicoRepository;
+import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaTarefaRepository;
+import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaFotoRepository;
+import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaObservacaoConclusaoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,9 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
     // Dependências
     private final JpaOrdemServicoRepository jpaOrdemServicoRepository;
     private final OrdemServicoMapper ordemServicoMapper;
+    private final JpaTarefaRepository jpaTarefaRepository;
+    private final JpaFotoRepository jpaFotoRepository;
+    private final JpaObservacaoConclusaoRepository jpaObservacaoConclusaoRepository;
 
     @PersistenceContext
     private EntityManager entityManager;

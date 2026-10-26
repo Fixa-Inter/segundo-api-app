@@ -2,8 +2,7 @@ package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
-import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
-import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
+import com.example.segundoapiappfixa.domain.repository.*;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
@@ -15,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class DeletarOrdemServico {
 
     private final OrdemServicoRepository ordemServicoRepository;
+    private final ObservacaoConclusaoRepository observacaoConclusaoRepository;
+    private final TarefaRepository tarefaRepository;
+    private final FotoRepository fotoRepository;
     private final UsuarioRepository usuarioRepository;
 
     @Transactional
@@ -41,6 +43,9 @@ public class DeletarOrdemServico {
             throw new RegraProblemaException("exception.access.denied");
         }
 
+        fotoRepository.deleteByOrdemServicoId(ordemServicoId);
+        observacaoConclusaoRepository.deleteByOrdemServicoId(ordemServicoId);
+        tarefaRepository.deleteByOrdemServicoId(ordemServicoId);
         ordemServicoRepository.delete(ordemServicoId);
         return ordemServico;
     }

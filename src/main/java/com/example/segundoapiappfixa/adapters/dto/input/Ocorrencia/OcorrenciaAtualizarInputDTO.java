@@ -22,6 +22,7 @@ public record OcorrenciaAtualizarInputDTO(
         String descricaoLocal,
 
         Prioridade prioridade,
-        List<@NotBlank(message = "{validation.foto.required}") String> urlsFoto
+        List<Long> fotosExcluir,
+        List<@NotBlank(message = "{validation.foto.required}") String> fotosAdicionar
 ) {
 }

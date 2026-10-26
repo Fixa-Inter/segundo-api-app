@@ -121,4 +121,8 @@ public class TarefaRepositoryImpl implements TarefaRepository {
         jpaTarefaRepository.deleteById(id);
         return Optional.of(tarefaMapper.toModel(tarefaEntity));
     }
+
+    public void deleteByOrdemServicoId(Long ordemServicoId) {
+        jpaTarefaRepository.deleteByOrdemServico_Id(ordemServicoId);
+    }
 }
