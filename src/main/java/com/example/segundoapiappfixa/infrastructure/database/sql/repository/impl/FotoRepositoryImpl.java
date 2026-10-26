@@ -100,4 +100,8 @@ public class FotoRepositoryImpl implements FotoRepository {
     public void deleteByProblemaId(Long problemaId) {
         repository.deleteByProblema_Id(problemaId);
     }
+
+    public void deleteByOrdemServicoId(Long ordemServicoId) {
+        repository.deleteByOrdemServico_Id(ordemServicoId);
+    }
 }

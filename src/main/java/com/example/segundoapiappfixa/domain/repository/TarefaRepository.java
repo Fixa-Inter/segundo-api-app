@@ -28,4 +28,6 @@ public interface TarefaRepository {
     Optional<Tarefa> findById(Long tarefaId);
 
     Optional<Tarefa> deleteById(Long tarefaId);
+
+    void deleteByOrdemServicoId(Long ordemServicoId);
 }

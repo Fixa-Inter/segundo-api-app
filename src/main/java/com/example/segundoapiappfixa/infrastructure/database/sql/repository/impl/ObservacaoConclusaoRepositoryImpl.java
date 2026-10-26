@@ -103,4 +103,8 @@ public class ObservacaoConclusaoRepositoryImpl implements ObservacaoConclusaoRep
         }
         return repository.findAll(base).stream().map(mapper::toModel).toList();
     }
+
+    public void deleteByOrdemServicoId(Long ordemServicoById) {
+        repository.deleteByOrdemServico_Id(ordemServicoById);
+    }
 }

@@ -14,6 +14,8 @@ import java.util.List;
 @Repository
 public interface JpaTarefaRepository extends JpaRepository<TarefaEntity, Long>, JpaSpecificationExecutor<TarefaEntity> {
 
+    void deleteByOrdemServico_Id(Long ordemServicoId);
+
     @Query("""
             SELECT t.ordemServico.usuario.id, COUNT(t.id)
             FROM Tarefa t
