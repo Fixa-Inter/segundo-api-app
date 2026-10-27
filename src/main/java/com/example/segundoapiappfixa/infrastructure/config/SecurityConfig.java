@@ -85,7 +85,7 @@ public class SecurityConfig{
                                 "/api/v1/equipamentos/categorias",
                                 "/api/v1/eventos/**",
                                 "/api/v1/perfil/**"
-                        ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO", "SOLICITANTE")
 
                         .requestMatchers(
                                 HttpMethod.GET,
@@ -94,45 +94,45 @@ public class SecurityConfig{
                                 "/api/v1/equipamentos/**",
                                 "/api/v1/ocorrencias/**",
                                 "/api/v1/observacoes-conclusao/**"
-                        ).hasAnyRole("GESTOR", "TECNICO")
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO")
 
                         // POST
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/v1/solicitacoes"
-                        ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO", "SOLICITANTE")
 
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/v1/ocorrencias/**"
-                        ).hasAnyRole("GESTOR", "TECNICO")
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO")
 
                         // PATCH
                         .requestMatchers(
                                 HttpMethod.PATCH,
                                 "/api/v1/perfil",
                                 "/api/v1/solicitacoes"
-                        ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO", "SOLICITANTE")
 
                         .requestMatchers(
                                 HttpMethod.PATCH,
                                 "/api/v1/ocorrencias/**"
-                        ).hasAnyRole("GESTOR", "TECNICO")
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO")
 
                         // DELETE
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/v1/solicitacoes/**"
-                        ).hasAnyRole("GESTOR", "TECNICO", "SOLICITANTE")
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO", "SOLICITANTE")
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/v1/ocorrencias/**"
-                        ).hasAnyRole("GESTOR", "TECNICO")
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO")
 
                         .requestMatchers(
                                 "/api/v1/**"
-                        ).hasRole("GESTOR")
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR")
                         .requestMatchers("/actuator/health").permitAll() 
 
                         .anyRequest().authenticated()

@@ -25,6 +25,14 @@ public class AtualizarAptidao {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
+        boolean administrador = TipoAcesso.ADMINISTRADOR.equals(usuario.getTipoAcesso());
+        boolean alvoPermitido = TipoAcesso.TECNICO.equals(aptidao.getUsuario().getTipoAcesso())
+                || (administrador && TipoAcesso.GESTOR.equals(aptidao.getUsuario().getTipoAcesso()));
+
+        if ((!TipoAcesso.GESTOR.equals(usuario.getTipoAcesso()) && !administrador) || !alvoPermitido) {
+            throw new RegraProblemaException("exception.gestor.required");
+        }
+
         if (!aptidao.getUsuario().getUnidade().getId().equals(usuario.getUnidade().getId())) {
             throw new RegraProblemaException("exception.access.denied");
         }

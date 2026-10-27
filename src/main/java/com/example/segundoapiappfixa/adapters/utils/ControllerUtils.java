@@ -15,9 +15,12 @@ public final class ControllerUtils {
         return authentication
                 .getAuthorities()
                 .stream()
-                .anyMatch(
-                        authority -> "ROLE_GESTOR"
-                                .equals(authority.getAuthority())
-                );
+                .anyMatch(authority -> "ROLE_GESTOR".equals(authority.getAuthority())
+                        || "ROLE_ADMINISTRADOR".equals(authority.getAuthority()));
+    }
+
+    public static boolean isAdministrador(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_ADMINISTRADOR".equals(authority.getAuthority()));
     }
 }

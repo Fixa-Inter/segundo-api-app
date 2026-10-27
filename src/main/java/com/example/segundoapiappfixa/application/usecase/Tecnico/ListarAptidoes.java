@@ -27,11 +27,15 @@ public class ListarAptidoes {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!TipoAcesso.TECNICO.equals(tecnico.getTipoAcesso())) {
+        boolean administrador = TipoAcesso.ADMINISTRADOR.equals(usuario.getTipoAcesso());
+        boolean alvoPermitido = TipoAcesso.TECNICO.equals(tecnico.getTipoAcesso())
+                || (administrador && TipoAcesso.GESTOR.equals(tecnico.getTipoAcesso()));
+
+        if (!alvoPermitido) {
             throw new RegraProblemaException("exception.tecnico.required");
         }
 
-        if (!TipoAcesso.GESTOR.equals(usuario.getTipoAcesso())) {
+        if (!TipoAcesso.GESTOR.equals(usuario.getTipoAcesso()) && !administrador) {
             throw new RegraProblemaException("exception.gestor.required");
         }
 

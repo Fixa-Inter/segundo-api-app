@@ -12,6 +12,7 @@ import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,11 @@ public class ListarTecnicos {
     private final AptidaoRepository aptidaoRepository;
     private final TarefaRepository tarefaRepository;
 
-    public List<TecnicoResumo> listar(Long usuarioId, FiltrosUsuarioQueryParam filtros) {
+    public List<TecnicoResumo> listar(
+            Long usuarioId,
+            FiltrosUsuarioQueryParam filtros,
+            boolean incluirGestores
+    ) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
@@ -32,6 +37,15 @@ public class ListarTecnicos {
                 TipoAcesso.TECNICO,
                 filtros
         );
+
+        if (incluirGestores) {
+            usuarios = new ArrayList<>(usuarios);
+            usuarios.addAll(usuarioRepository.findByUnidadeIdAndTipoAcesso(
+                    usuario.getUnidade().getId(),
+                    TipoAcesso.GESTOR,
+                    filtros
+            ));
+        }
 
         if (usuarios.isEmpty()) throw new EntidadeNaoEncontradaException("exception.usuario.required");
 

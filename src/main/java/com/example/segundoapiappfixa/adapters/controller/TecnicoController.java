@@ -64,7 +64,9 @@ public class TecnicoController implements TecnicoControllerContract {
     ) {
         return ResponseEntity.ok(maskTecnicos(
                 toTecnicoOutputDTO(listarTecnicos.listar(
-                        ControllerUtils.usuarioId(authentication), filtros
+                        ControllerUtils.usuarioId(authentication),
+                        filtros,
+                        ControllerUtils.isAdministrador(authentication)
                 )),
 
                 campos
