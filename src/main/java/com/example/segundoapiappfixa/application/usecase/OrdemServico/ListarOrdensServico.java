@@ -39,7 +39,7 @@ public class ListarOrdensServico {
                 .toList();
 
         List<Long> problemasIds = problemaRepository
-                .findAllByLocalUnidadeIds(localUnidadeIds, new FiltrosProblemaQueryParam(null, null, null, null, null, null, null, null, null, null, null, null, null))
+                .findAllByLocalUnidadeIds(localUnidadeIds, new FiltrosProblemaQueryParam(null, null, null, null, null, null, null, null, null, null, null, null, null, null))
                 .stream()
                 .map(Problema::getId)
                 .toList();

@@ -66,6 +66,7 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
                 .and(ProblemaSpecs.findByDescricaoLocal(filtros.descricaoLocal()))
                 .and(ProblemaSpecs.findByNomeUsuario(filtros.nomeUsuario()))
                 .and(ProblemaSpecs.findByTipoAcesso(filtros.tipoAcesso()))
+                .and(ProblemaSpecs.findByStatusProblema(filtros.statusProblema()))
                 .and(ProblemaSpecs.findByDataCriacaoMin(filtros.dataCriacaoMin()))
                 .and(ProblemaSpecs.findByDataCriacaoMax(filtros.dataCriacaoMax()));
 
