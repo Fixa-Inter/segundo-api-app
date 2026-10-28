@@ -6,6 +6,7 @@ import com.example.segundoapiappfixa.domain.model.Equipamento;
 import java.util.Map;
 import java.util.Optional;
 import java.util.List;
+import java.util.Collection;
 
 public interface EquipamentoRepository {
 
@@ -25,5 +26,7 @@ public interface EquipamentoRepository {
     Equipamento save(Equipamento equipamento);
 
     Optional<Equipamento> deleteById(Long equipamentoId);
+
+    Map<Long, Long> countAtivosByModeloIds(Collection<Long> modeloIds);
 
 }

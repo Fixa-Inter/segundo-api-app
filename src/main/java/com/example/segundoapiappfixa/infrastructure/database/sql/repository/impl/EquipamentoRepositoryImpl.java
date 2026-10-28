@@ -23,6 +23,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.List;
 
 @Repository
@@ -109,6 +112,17 @@ public class EquipamentoRepositoryImpl implements EquipamentoRepository {
         entity.setEstaAtivo(false);
         repository.save(entity);
         return Optional.of(mapper.toModel(entity));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Long, Long> countAtivosByModeloIds(Collection<Long> modeloIds) {
+        if (modeloIds == null || modeloIds.isEmpty()) return Map.of();
+
+        Map<Long, Long> totais = new LinkedHashMap<>();
+        repository.countAtivosByModeloIds(modeloIds)
+                .forEach(resultado -> totais.put((Long) resultado[0], (Long) resultado[1]));
+        return totais;
     }
 
 }

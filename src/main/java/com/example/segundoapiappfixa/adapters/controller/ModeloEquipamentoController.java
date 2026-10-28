@@ -13,7 +13,7 @@ import com.example.segundoapiappfixa.application.usecase.ModeloEquipamento.Atual
 import com.example.segundoapiappfixa.application.usecase.ModeloEquipamento.CadastrarModeloEquipamento;
 import com.example.segundoapiappfixa.application.usecase.ModeloEquipamento.DeletarModeloEquipamento;
 import com.example.segundoapiappfixa.application.usecase.ModeloEquipamento.ListarModelosEquipamentos;
-import com.example.segundoapiappfixa.domain.model.ModeloEquipamento;
+import com.example.segundoapiappfixa.application.usecase.ModeloEquipamento.ModeloEquipamentoResumo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,7 +35,7 @@ public class ModeloEquipamentoController implements ModeloEquipamentoControllerC
 
     // Mappers
     private final ModeloEquipamentoMapper mapper;
-    private final ModeloEquipamentoDynamicMapper dynamicMapper;
+        private final ModeloEquipamentoDynamicMapper dynamicMapper;
 
     // GET
     @GetMapping
@@ -121,7 +121,7 @@ public class ModeloEquipamentoController implements ModeloEquipamentoControllerC
     }
 
     // Mapper para DTO de saída em lote
-    private List<ModeloEquipamentoOutputDTO> toOutputDTO(List<ModeloEquipamento> modelos) {
+    private List<ModeloEquipamentoOutputDTO> toOutputDTO(List<ModeloEquipamentoResumo> modelos) {
         return modelos.stream().map(mapper::toOutputDTO).toList();
     }
 
