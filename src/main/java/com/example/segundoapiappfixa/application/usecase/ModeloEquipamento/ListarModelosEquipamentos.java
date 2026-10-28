@@ -5,6 +5,7 @@ import com.example.segundoapiappfixa.domain.model.ModeloEquipamento;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosModeloEquipamentoQueryParam;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.ModeloEquipamentoRepository;
+import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
@@ -15,9 +16,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ListarModelosEquipamentos {
     private final ModeloEquipamentoRepository repository;
+    private final EquipamentoRepository equipamentoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public List<ModeloEquipamento> listar(Long usuarioId, FiltrosModeloEquipamentoQueryParam filtros) {
+    public List<ModeloEquipamentoResumo> listar(Long usuarioId, FiltrosModeloEquipamentoQueryParam filtros) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
@@ -26,17 +28,27 @@ public class ListarModelosEquipamentos {
 
         if (modelos.isEmpty()) throw new EntidadeNaoEncontradaException("exception.modeloEquipamento.notFound");
 
-        return modelos;
+        return criarResumo(modelos);
     }
 
-    public ModeloEquipamento listar(Long id, Long usuarioId) {
+    public ModeloEquipamentoResumo listar(Long id, Long usuarioId) {
 
         ModeloEquipamento modelo = repository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.modeloEquipamento.notFound"));
 
         validarUnidade(modelo, usuarioId);
 
-        return modelo;
+        return criarResumo(List.of(modelo)).getFirst();
+    }
+
+    private List<ModeloEquipamentoResumo> criarResumo(List<ModeloEquipamento> modelos) {
+        List<Long> ids = modelos.stream().map(ModeloEquipamento::getId).toList();
+        var quantidades = equipamentoRepository.countAtivosByModeloIds(ids);
+        return modelos.stream()
+                .map(modelo -> new ModeloEquipamentoResumo(
+                        modelo,
+                        quantidades.getOrDefault(modelo.getId(), 0L)))
+                .toList();
     }
 
     private void validarUnidade(ModeloEquipamento modelo, Long usuarioId) {
