@@ -14,7 +14,8 @@ public class ModeloEquipamentoDynamicMapper {
                 fields.contains("marca") ? dto.marca() : null,
                 fields.contains("categoria") ? dto.categoria() : null,
                 fields.contains("dataCriacao") ? dto.dataCriacao() : null,
-                fields.contains("estaAtivo") ? dto.estaAtivo() : null
+                fields.contains("estaAtivo") ? dto.estaAtivo() : null,
+                fields.contains("quantidadeAparelhos") ? dto.quantidadeAparelhos() : null
         );
     }
 }
