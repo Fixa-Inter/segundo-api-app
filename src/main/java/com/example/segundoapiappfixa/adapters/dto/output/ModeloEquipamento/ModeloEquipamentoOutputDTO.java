@@ -12,6 +12,7 @@ public record ModeloEquipamentoOutputDTO(
         String marca,
         String categoria,
         LocalDate dataCriacao,
-        Boolean estaAtivo
+        Boolean estaAtivo,
+        Long quantidadeAparelhos
 ) {
 }
