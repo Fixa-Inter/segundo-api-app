@@ -17,5 +17,6 @@ public record OrdemServicoOutputDTO (
         String status,
         String nomeUsuario,
         String tipoAcesso,
-        LocalDate dataCriacao
+        LocalDate dataCriacao,
+        String localUnidade
 ) { }

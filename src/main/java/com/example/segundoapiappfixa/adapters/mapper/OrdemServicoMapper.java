@@ -23,5 +23,6 @@ public interface OrdemServicoMapper {
     @Mapping(source = "statusOrdemServico.nome", target = "status")
     @Mapping(source = "usuario.nomeCompleto", target = "nomeUsuario")
     @Mapping(source = "usuario.tipoAcesso.nome", target = "tipoAcesso")
+    @Mapping(source = "problema.localUnidade.nome", target = "localUnidade")
     OrdemServicoOutputDTO toOutputDTO(OrdemServico ordemServico);
 }
