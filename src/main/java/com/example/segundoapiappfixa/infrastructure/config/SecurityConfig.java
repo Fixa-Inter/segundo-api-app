@@ -90,6 +90,7 @@ public class SecurityConfig{
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/v1/os/minhas",
+                                "/api/v1/os/*",
                                 "/api/v1/tarefas/**",
                                 "/api/v1/equipamentos/**",
                                 "/api/v1/ocorrencias/**",
@@ -107,6 +108,11 @@ public class SecurityConfig{
                                 "/api/v1/ocorrencias/**"
                         ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO")
 
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/v1/observacoes-conclusao"
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO")
+
                         // PATCH
                         .requestMatchers(
                                 HttpMethod.PATCH,
@@ -117,6 +123,11 @@ public class SecurityConfig{
                         .requestMatchers(
                                 HttpMethod.PATCH,
                                 "/api/v1/ocorrencias/**"
+                        ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO")
+
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/v1/tarefas"
                         ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO")
 
                         // DELETE

@@ -110,7 +110,8 @@ public class TarefaController implements TarefaControllerContract {
         return ResponseEntity.ok(
                         mapper.toOutputDTO(atualizarTarefa.atualizar(
                         atualizarInputDTO,
-                        ControllerUtils.usuarioId(authentication)
+                        ControllerUtils.usuarioId(authentication),
+                        ControllerUtils.isGestor(authentication)
                 ))
         );
     }

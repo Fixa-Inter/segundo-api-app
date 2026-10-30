@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.adapters.controller.contract;
 
-import com.example.segundoapiappfixa.adapters.dto.output.LocalEndereco.LocalUnidadeOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.LocalUnidade.LocalUnidadeOutputDTO;
 import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
 import com.example.segundoapiappfixa.application.usecase.Problema.ListarLocalUnidade;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface LocalUnidadeControllerContract {
 
-    public ResponseEntity<List<LocalUnidadeOutputDTO>> listarLocalEndereco(
+    public ResponseEntity<List<LocalUnidadeOutputDTO>> listarLocalUnidade(
             Authentication authentication
     );
 

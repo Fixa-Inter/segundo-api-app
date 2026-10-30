@@ -1,4 +1,4 @@
-package com.example.segundoapiappfixa.adapters.dto.output.LocalEndereco;
+package com.example.segundoapiappfixa.adapters.dto.output.LocalUnidade;
 
 public record LocalUnidadeOutputDTO(
         Long id,

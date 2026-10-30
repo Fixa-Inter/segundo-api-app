@@ -3,7 +3,7 @@ package com.example.segundoapiappfixa.adapters.controller;
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaCriarInputDTO;
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarInputDTO;
-import com.example.segundoapiappfixa.adapters.dto.output.LocalEndereco.LocalUnidadeOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.LocalUnidade.LocalUnidadeOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import com.example.segundoapiappfixa.adapters.controller.contract.ProblemaControllerContract;
