@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.adapters.mapper;
 
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalUnidadeEntity;
-import com.example.segundoapiappfixa.adapters.dto.output.LocalEndereco.LocalUnidadeOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.LocalUnidade.LocalUnidadeOutputDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

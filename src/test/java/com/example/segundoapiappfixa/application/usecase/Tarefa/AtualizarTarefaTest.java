@@ -46,7 +46,7 @@ class AtualizarTarefaTest {
         when(usuarioRepository.findById(2L)).thenReturn(Optional.of(usuario));
 
         RegraProblemaException exception = assertThrows(RegraProblemaException.class,
-                () -> atualizarTarefa.atualizar(new TarefaAtualizarInputDTO(1L, "novo", null, null), 2L));
+                () -> atualizarTarefa.atualizar(new TarefaAtualizarInputDTO(1L, "novo", null, null), 2L, false));
 
         assertEquals("exception.access.denied", exception.getMessage());
     }

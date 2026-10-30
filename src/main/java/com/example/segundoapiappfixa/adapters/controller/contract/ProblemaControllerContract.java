@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.adapters.controller.contract;
 
 import com.example.segundoapiappfixa.adapters.dto.input.Problema.*;
-import com.example.segundoapiappfixa.adapters.dto.output.LocalEndereco.LocalUnidadeOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.LocalUnidade.LocalUnidadeOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
 import org.springframework.http.ResponseEntity;

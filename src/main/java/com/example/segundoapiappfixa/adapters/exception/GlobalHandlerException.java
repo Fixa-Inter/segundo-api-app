@@ -56,8 +56,14 @@ public class GlobalHandlerException {
         return ResponseEntity.status(status).body(Map.of("message", text(key)));
     }
 
+    private void printError(Exception e) {
+        System.out.println("[API ERROR] " + e.getClass().getName() + ": " + e.getMessage());
+        e.printStackTrace(System.out);
+    }
+
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     ResponseEntity<?> notFound(EntidadeNaoEncontradaException e) {
+        printError(e);
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(Map.of("message", text(e.getMessage())));
@@ -65,6 +71,7 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(RegraProblemaException.class)
     ResponseEntity<?> rule(RegraProblemaException e) {
+        printError(e);
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(Map.of("message", text(e.getMessage())));
@@ -72,6 +79,7 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<?> validation(MethodArgumentNotValidException e) {
+        printError(e);
         return ResponseEntity
                 .badRequest()
                 .body(Map.of("message", e.getBindingResult().getFieldErrors().stream()
@@ -81,53 +89,63 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     ResponseEntity<?> unreadable(HttpMessageNotReadableException e) {
+        printError(e);
         return response(HttpStatus.BAD_REQUEST, "exception.request.invalid");
     }
 
     @ExceptionHandler({BindException.class, MethodArgumentTypeMismatchException.class})
     ResponseEntity<?> invalidParameter(Exception e) {
+        printError(e);
         return response(HttpStatus.BAD_REQUEST, "exception.parameter.invalid");
     }
 
     @ExceptionHandler({ConstraintViolationException.class, ConversionFailedException.class,
             IllegalArgumentException.class})
     ResponseEntity<?> invalidInput(Exception e) {
+        printError(e);
         return response(HttpStatus.BAD_REQUEST, "exception.request.invalid");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<?> integrity(DataIntegrityViolationException e) {
+        printError(e);
         return response(HttpStatus.CONFLICT, e.getMessage());
     }
 
     @ExceptionHandler(OptimisticLockingFailureException.class)
     ResponseEntity<?> optimisticLock(OptimisticLockingFailureException e) {
+        printError(e);
         return response(HttpStatus.CONFLICT, "exception.database.concurrent");
     }
 
     @ExceptionHandler({CannotAcquireLockException.class, PessimisticLockingFailureException.class})
     ResponseEntity<?> databaseLock(Exception e) {
+        printError(e);
         return response(HttpStatus.LOCKED, "exception.database.lock");
     }
 
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
     ResponseEntity<?> invalidDataAccess(InvalidDataAccessApiUsageException e) {
+        printError(e);
         return response(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler({JpaSystemException.class, TransactionSystemException.class})
     ResponseEntity<?> persistence(Exception e) {
+        printError(e);
         return response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
     @ExceptionHandler({EntityNotFoundException.class, NoSuchElementException.class,
             EmptyResultDataAccessException.class})
     ResponseEntity<?> notFound(Exception e) {
+        printError(e);
         return response(HttpStatus.NOT_FOUND, "exception.entity.notFound");
     }
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<?> generic(Exception e) {
+        printError(e);
         return response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }

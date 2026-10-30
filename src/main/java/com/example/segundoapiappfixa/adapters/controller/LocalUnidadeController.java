@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.adapters.controller;
 
-import com.example.segundoapiappfixa.adapters.dto.output.LocalEndereco.LocalUnidadeOutputDTO;
+import com.example.segundoapiappfixa.adapters.dto.output.LocalUnidade.LocalUnidadeOutputDTO;
 import com.example.segundoapiappfixa.adapters.dto.output.Problema.ProblemaOutputDTO;
 import com.example.segundoapiappfixa.adapters.mapper.LocalUnidadeMapper;
 import com.example.segundoapiappfixa.adapters.utils.ControllerUtils;
@@ -28,7 +28,7 @@ public class LocalUnidadeController {
     private final LocalUnidadeMapper mapper;
 
     @GetMapping()
-    public ResponseEntity<List<LocalUnidadeOutputDTO>> listarLocalEndereco(
+    public ResponseEntity<List<LocalUnidadeOutputDTO>> listarLocalUnidade(
             Authentication authentication
     ) {
         return ResponseEntity.ok(toOutputDTO(listarLocalUnidade.listar(ControllerUtils.usuarioId(authentication))));

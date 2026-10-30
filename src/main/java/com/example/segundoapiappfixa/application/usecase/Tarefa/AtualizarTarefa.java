@@ -9,6 +9,7 @@ import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
+import java.util.Objects;
 
 @UseCase
 @RequiredArgsConstructor
@@ -19,7 +20,8 @@ public class AtualizarTarefa {
 
     public Tarefa atualizar(
             TarefaAtualizarInputDTO tarefaAtualizarInputDTO,
-            Long usuarioId
+            Long usuarioId,
+            boolean isGestor
     ) {
         Tarefa tarefa = tarefaRepository.findById(tarefaAtualizarInputDTO.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.tarefa.notFound"));
@@ -27,13 +29,23 @@ public class AtualizarTarefa {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!usuario.getUnidade().getId()
-                .equals(tarefa.getOrdemServico().getProblema().getLocalUnidade().getUnidade().getId())) {
+        boolean mesmaUnidade = usuario.getUnidade() != null
+                && tarefa.getOrdemServico().getProblema() != null
+                && tarefa.getOrdemServico().getProblema().getLocalUnidade() != null
+                && tarefa.getOrdemServico().getProblema().getLocalUnidade().getUnidade() != null
+                && Objects.equals(usuario.getUnidade().getId(),
+                tarefa.getOrdemServico().getProblema().getLocalUnidade().getUnidade().getId());
+
+        boolean tecnicoResponsavel = tarefa.getOrdemServico().getUsuario() != null
+                && Objects.equals(tarefa.getOrdemServico().getUsuario().getId(), usuarioId);
+
+        if (!mesmaUnidade || (!isGestor && !tecnicoResponsavel)) {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        if (tarefaAtualizarInputDTO.titulo() != null) tarefa.setTitulo(tarefaAtualizarInputDTO.titulo());
-        if (tarefaAtualizarInputDTO.descricao() != null) tarefa.setDescricao(tarefaAtualizarInputDTO.descricao());
+        if (isGestor && tarefaAtualizarInputDTO.titulo() != null) tarefa.setTitulo(tarefaAtualizarInputDTO.titulo());
+
+        if (isGestor && tarefaAtualizarInputDTO.descricao() != null) tarefa.setDescricao(tarefaAtualizarInputDTO.descricao());
 
         if (tarefaAtualizarInputDTO.statusOrdemServico() != null) tarefa.setStatusOrdemServico(tarefaAtualizarInputDTO.statusOrdemServico());
 
