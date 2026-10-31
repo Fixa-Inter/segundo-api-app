@@ -141,6 +141,9 @@ public class SecurityConfig{
                                 "/api/v1/ocorrencias/**"
                         ).hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO")
 
+                        .requestMatchers("/api/v1/notificacao/**")
+                        .hasAnyRole("ADMINISTRADOR", "GESTOR", "TECNICO", "SOLICITANTE")
+
                         .requestMatchers(
                                 "/api/v1/**"
                         ).hasAnyRole("ADMINISTRADOR", "GESTOR")

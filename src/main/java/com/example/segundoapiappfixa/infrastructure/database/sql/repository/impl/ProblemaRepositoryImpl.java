@@ -2,15 +2,15 @@ package com.example.segundoapiappfixa.infrastructure.database.sql.repository.imp
 
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
-import com.example.segundoapiappfixa.domain.model.Foto;
-import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
-import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ObservacaoConclusaoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.ProblemaSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Problema;
+import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
+import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaProblemaRepositiory;
+import com.example.segundoapiappfixa.infrastructure.external.notification.NotificacaoInfrastructureService;
 import lombok.RequiredArgsConstructor;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -35,6 +35,7 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
     // Dependências
     private final JpaProblemaRepositiory repository;
     private final ProblemaMapper mapper;
+    private final NotificacaoInfrastructureService notificacoes;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -122,8 +123,19 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
     }
 
     public Problema update(Problema problema) {
+        StatusProblema statusAnterior = repository.findById(problema.getId())
+                .map(ProblemaEntity::getStatus).orElse(null);
+
         ProblemaEntity entity = mapper.toEntity(problema);
-        return mapper.toModel(repository.save(entity));
+        Problema atualizado = mapper.toModel(repository.save(entity));
+
+        if (statusAnterior != null && statusAnterior != atualizado.getStatus() && atualizado.getUsuario() != null) {
+            notificacoes.notificarAposPersistencia(atualizado.getUsuario().getId(),
+                    TipoNotificacao.SOLICITACAO.getId(), atualizado.getId(),
+                    "O status da sua solicitação \"" + atualizado.getTitulo() + "\" foi atualizado para "
+                            + atualizado.getStatus().getNome() + ".");
+        }
+        return atualizado;
     }
 
     @Override
