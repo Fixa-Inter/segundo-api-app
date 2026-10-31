@@ -5,11 +5,14 @@ import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEventosQue
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.EventoSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Evento;
+import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
 import com.example.segundoapiappfixa.domain.repository.EventoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.EventoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalUnidadeEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaEventoRepository;
+import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaUsuarioRepository;
+import com.example.segundoapiappfixa.infrastructure.external.notification.NotificacaoInfrastructureService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,8 @@ public class EventoRepositoryImpl implements EventoRepository {
     // Dependências
     private final JpaEventoRepository repository;
     private final EventoMapper mapper;
+    private final JpaUsuarioRepository usuarios;
+    private final NotificacaoInfrastructureService notificacoes;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -88,7 +93,22 @@ public class EventoRepositoryImpl implements EventoRepository {
                 evento.getLocalUnidade().getId()
         );
 
-        return mapper.toModel(repository.save(entity));
+        EventoEntity salvo = repository.save(entity);
+        Evento criado = mapper.toModel(salvo);
+
+        if (evento.getId() == null) {
+            String mensagem = "Novo evento: " + criado.getTitulo() + ".";
+            usuarios.findAllByUnidade_IdAndEstaAtivoTrue(criado.getLocalUnidade().getUnidade().getId())
+                    .forEach(destinatario ->
+                    notificacoes.notificarAposPersistencia(
+                            destinatario.getId(),
+                            TipoNotificacao.EVENTO.getId(),
+                            criado.getId(),
+                            mensagem)
+                    );
+        }
+
+        return criado;
     }
 
     // Método de deletar dados persistidos no banco de dados

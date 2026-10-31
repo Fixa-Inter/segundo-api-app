@@ -17,6 +17,8 @@ public interface JpaUsuarioRepository extends JpaRepository<UsuarioEntity, Long>
 
     UsuarioEntity findUsuarioByEmail(String email);
 
+    List<UsuarioEntity> findAllByUnidade_IdAndEstaAtivoTrue(Long unidadeId);
+
     @Query("""
             SELECT
                 u
