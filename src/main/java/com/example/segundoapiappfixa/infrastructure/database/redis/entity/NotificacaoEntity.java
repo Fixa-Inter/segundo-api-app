@@ -23,7 +23,7 @@ public class NotificacaoEntity {
     private Long usuarioId;
 
     private Integer tipoNotificacao;
-    private Long referenciaId;
+    private String referenciaId;
     private String mensagem;
     private LocalDateTime dataCriacao;
     private Boolean visualizada;

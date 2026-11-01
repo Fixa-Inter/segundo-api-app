@@ -29,7 +29,8 @@ public class NotificacaoInfrastructureService {
     ) {
         if (usuarioId == null || mensagem == null || mensagem.isBlank()) return;
 
-        Runnable dispatch = () -> persistirEEnviar(usuarioId, tipo, referenciaId, mensagem);
+        String referencia = referenciaId == null ? null : String.valueOf(referenciaId);
+        Runnable dispatch = () -> persistirEEnviar(usuarioId, tipo, referencia, mensagem);
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                 @Override public void afterCommit() { dispatch.run(); }
@@ -42,7 +43,7 @@ public class NotificacaoInfrastructureService {
     private void persistirEEnviar(
             Long usuarioId,
             int tipo,
-            Long referenciaId,
+            String referenciaId,
             String mensagem
     ) {
         Notificacao notificacao = new Notificacao(

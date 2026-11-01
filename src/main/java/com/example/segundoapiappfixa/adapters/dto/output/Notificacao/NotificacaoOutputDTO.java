@@ -6,7 +6,7 @@ public record NotificacaoOutputDTO(
         String id,
         Long usuarioId,
         Integer tipoNotificacao,
-        Long referenciaId,
+        String referenciaId,
         String mensagem,
         LocalDateTime dataCriacao,
         Boolean visualizada
