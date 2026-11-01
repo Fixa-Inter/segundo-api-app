@@ -6,6 +6,7 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.repository.spec
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
+import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OrdemServicoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
@@ -27,6 +28,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Repository
 @Transactional
@@ -102,6 +104,12 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
     @Override
     public OrdemServico save(OrdemServico ordemServico) {
         boolean novaOs = ordemServico.getId() == null;
+        StatusOrdemServico statusAnterior = novaOs
+                ? null
+                : jpaOrdemServicoRepository.findById(ordemServico.getId())
+                    .map(OrdemServicoEntity::getStatusOrdemServico)
+                    .orElse(null);
+
         Long responsavelAnteriorId = novaOs
                 ? null
                 : jpaOrdemServicoRepository
@@ -132,6 +140,17 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
                             + ordemServico.getProblema().getTitulo() + ".");
         }
 
+        if (statusAnterior != null
+                && statusAnterior != StatusOrdemServico.ATRASADA
+                && salvo.getStatusOrdemServico() == StatusOrdemServico.ATRASADA) {
+
+            notificacoes.notificarAposPersistencia(
+                    salvo.usuario.getId(),
+                    TipoNotificacao.ORDEM_SERVICO.getId(),
+                    salvo.getId(),
+                    "A OS \"" + ordemServico.getProblema().getTitulo() + "\" está atrasada.");
+        }
+
         return resultado;
     }
 
@@ -147,5 +166,16 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
         return buscar(OrdemServicoSpecs.findByUsuarioId(usuarioId), filtros);
 
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrdemServico> findAtrasadas(LocalDateTime inicioDoDiaAtual) {
+        return jpaOrdemServicoRepository.findAllByDataPrevistaBeforeAndStatusOrdemServicoNotIn(
+                        inicioDoDiaAtual,
+                        List.of(StatusOrdemServico.CONCLUIDA, StatusOrdemServico.ATRASADA))
+                .stream()
+                .map(ordemServicoMapper::toModel)
+                .toList();
     }
 }
