@@ -32,7 +32,14 @@ public class FirebasePushNotificationSender implements PushNotificationSender {
     @Override
     public void enviar(Notificacao notificacao) {
         Set<String> registeredTokens = tokenRepository.listarPorUsuario(notificacao.getUsuarioId());
-        if (registeredTokens.isEmpty()) return;
+        if (registeredTokens.isEmpty()) {
+            log.warn("Push {} não enviado: nenhum token FCM registrado para usuário {}.",
+                    notificacao.getId(), notificacao.getUsuarioId());
+            return;
+        }
+
+        log.info("Enviando push {} para usuário {} em {} dispositivo(s).",
+                notificacao.getId(), notificacao.getUsuarioId(), registeredTokens.size());
 
         List<String> tokens = new ArrayList<>(registeredTokens);
         for (int start = 0; start < tokens.size(); start += MAX_TOKENS_PER_BATCH) {
@@ -61,6 +68,9 @@ public class FirebasePushNotificationSender implements PushNotificationSender {
                         .getInstance(firebaseAppProvider.getApp())
                         .sendEachForMulticast(message);
 
+                log.info("Resultado FCM da notificação {}: {} sucesso(s), {} falha(s).",
+                        notificacao.getId(), response.getSuccessCount(), response.getFailureCount());
+
                 for (int i = 0; i < response.getResponses().size(); i++) {
                     SendResponse send = response.getResponses().get(i);
 
@@ -72,7 +82,9 @@ public class FirebasePushNotificationSender implements PushNotificationSender {
                                     .filter(token -> notificacao.getUsuarioId().equals(token.getUsuarioId()))
                                     .ifPresent(token -> tokenRepository.remover(token.getToken()));
                         } else {
-                            log.warn("Falha ao enviar push para usuário {}: {}", notificacao.getUsuarioId(), send.getException().getMessage());
+                            log.warn("Falha FCM da notificação {} para usuário {} ({}): {}",
+                                    notificacao.getId(), notificacao.getUsuarioId(), code,
+                                    send.getException().getMessage());
                         }
                     }
                 }
@@ -80,7 +92,7 @@ public class FirebasePushNotificationSender implements PushNotificationSender {
             } catch (Exception exception) {
                 log.warn(
                         "Não foi possível enviar push da notificação {} para usuário {}.",
-                        notificacao.getUsuarioId(),
+                        notificacao.getId(),
                         notificacao.getUsuarioId(),
                         exception
                 );

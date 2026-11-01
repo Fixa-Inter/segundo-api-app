@@ -7,10 +7,13 @@ import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @UseCase
 @RequiredArgsConstructor
 public class RegistrarTokenDispositivo {
+    private static final Logger log = LoggerFactory.getLogger(RegistrarTokenDispositivo.class);
     private final TokenDispositivoRepository repository;
     private final UsuarioRepository usuarioRepository;
 
@@ -25,5 +28,6 @@ public class RegistrarTokenDispositivo {
         });
 
         repository.adicionar(new TokenDispositivo(usuarioId, token));
+        log.info("Token FCM registrado para usuário {}.", usuarioId);
     }
 }
