@@ -20,7 +20,7 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.function.IntSupplier;
 
-/** Daily entry point for detecting overdue service orders. Redis prevents duplicate runs across ECS tasks. */
+/** Sends the daily overdue-order reminders; Redis prevents duplicate runs across ECS tasks. */
 @Component
 @RequiredArgsConstructor
 public class OrdemServicoAtrasadaScheduler {
@@ -37,7 +37,7 @@ public class OrdemServicoAtrasadaScheduler {
         executarJob("09h", this::atualizarENotificarOrdensAtrasadas);
     }
 
-    @Scheduled(cron = "${app.jobs.os-atrasadas.segundo-cron:0 0 15 * * *}", zone = "America/Sao_Paulo")
+    @Scheduled(cron = "${app.jobs.os-atrasadas.segundo-cron:0 40 16 * * *}", zone = "America/Sao_Paulo")
     public void enviarSegundaNotificacao() {
         executarJob("15h", () -> notificarOrdensJaAtrasadas("continua atrasada"));
     }
