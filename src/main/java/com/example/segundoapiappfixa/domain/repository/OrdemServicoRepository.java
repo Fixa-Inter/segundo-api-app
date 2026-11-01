@@ -41,4 +41,6 @@ public interface OrdemServicoRepository {
     );
 
     List<OrdemServico> findAtrasadas(LocalDateTime inicioDoDiaAtual);
+
+    List<OrdemServico> findTodasAtrasadas();
 }

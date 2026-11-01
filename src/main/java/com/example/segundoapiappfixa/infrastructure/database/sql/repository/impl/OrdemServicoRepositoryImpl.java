@@ -104,12 +104,6 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
     @Override
     public OrdemServico save(OrdemServico ordemServico) {
         boolean novaOs = ordemServico.getId() == null;
-        StatusOrdemServico statusAnterior = novaOs
-                ? null
-                : jpaOrdemServicoRepository.findById(ordemServico.getId())
-                    .map(OrdemServicoEntity::getStatusOrdemServico)
-                    .orElse(null);
-
         Long responsavelAnteriorId = novaOs
                 ? null
                 : jpaOrdemServicoRepository
@@ -140,17 +134,6 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
                             + ordemServico.getProblema().getTitulo() + ".");
         }
 
-        if (statusAnterior != null
-                && statusAnterior != StatusOrdemServico.ATRASADA
-                && salvo.getStatusOrdemServico() == StatusOrdemServico.ATRASADA) {
-
-            notificacoes.notificarAposPersistencia(
-                    salvo.usuario.getId(),
-                    TipoNotificacao.ORDEM_SERVICO.getId(),
-                    salvo.getId(),
-                    "A OS \"" + ordemServico.getProblema().getTitulo() + "\" está atrasada.");
-        }
-
         return resultado;
     }
 
@@ -174,6 +157,15 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
         return jpaOrdemServicoRepository.findAllByDataPrevistaBeforeAndStatusOrdemServicoNotIn(
                         inicioDoDiaAtual,
                         List.of(StatusOrdemServico.CONCLUIDA, StatusOrdemServico.ATRASADA))
+                .stream()
+                .map(ordemServicoMapper::toModel)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrdemServico> findTodasAtrasadas() {
+        return jpaOrdemServicoRepository.findAllByStatusOrdemServico(StatusOrdemServico.ATRASADA)
                 .stream()
                 .map(ordemServicoMapper::toModel)
                 .toList();
