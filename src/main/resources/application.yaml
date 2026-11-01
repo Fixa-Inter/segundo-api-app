@@ -55,7 +55,7 @@ app:
   jobs:
     os-atrasadas:
       cron: ${JOB_OS_ATRASADAS_CRON:0 0 9 * * *}
-      segundo-cron: ${JOB_OS_ATRASADAS_SEGUNDO_CRON:0 10 20 * * *}
+      segundo-cron: ${JOB_OS_ATRASADAS_SEGUNDO_CRON:0 15 20 * * *}
 
 management:
   health:
