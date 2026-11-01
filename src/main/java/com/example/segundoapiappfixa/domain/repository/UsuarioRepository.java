@@ -29,6 +29,8 @@ public interface UsuarioRepository {
             FiltrosUsuarioQueryParam filtros
     );
 
+    List<Usuario> findGestoresAtivosByUnidadeId(Long unidadeId);
+
     List<Usuario> findTecnicosRecomendados(
             Long unidadeId,
             CategoriaProblema categoriaProblema

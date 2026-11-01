@@ -8,12 +8,14 @@ import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
+import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaProblemaRepositiory;
 import com.example.segundoapiappfixa.infrastructure.external.notification.NotificacaoInfrastructureService;
 import lombok.RequiredArgsConstructor;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +38,7 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
     private final JpaProblemaRepositiory repository;
     private final ProblemaMapper mapper;
     private final NotificacaoInfrastructureService notificacoes;
+    private final UsuarioRepository usuarios;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -98,7 +101,7 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
     // Método de salvar no banco de dados
     @Override
     public Long save(Problema problema, List<String> fotos) {
-        return entityManager.unwrap(org.hibernate.Session.class).doReturningWork(connection -> {
+        Long problemaId = entityManager.unwrap(Session.class).doReturningWork(connection -> {
             Array urls = connection.createArrayOf("varchar", fotos.toArray(String[]::new));
 
             try (CallableStatement statement = connection.prepareCall(
@@ -120,6 +123,19 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
                 urls.free();
             }
         });
+
+        Long unidadeId = problema.getLocalUnidade().getUnidade().getId();
+        String mensagem = "Nova solicitação registrada: " + problema.getTitulo() + ".";
+        usuarios.findGestoresAtivosByUnidadeId(unidadeId).forEach(gestor ->
+                notificacoes.notificarAposPersistencia(
+                        gestor.getId(),
+                        TipoNotificacao.SOLICITACAO.getId(),
+                        problemaId,
+                        mensagem
+                )
+        );
+
+        return problemaId;
     }
 
     public Problema update(Problema problema) {
