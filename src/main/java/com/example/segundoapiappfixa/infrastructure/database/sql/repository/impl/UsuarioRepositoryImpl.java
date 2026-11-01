@@ -85,6 +85,18 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Usuario> findGestoresAtivosByUnidadeId(Long unidadeId) {
+        Specification<UsuarioEntity> specification = Specification.where(UsuarioSpecs.findByEstaAtivo())
+                .and(UsuarioSpecs.findByUnidadeId(unidadeId))
+                .and(UsuarioSpecs.findByTipoAcesso(TipoAcesso.GESTOR));
+
+        return repository.findAll(specification).stream()
+                .map(mapper::toModel)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Usuario> findTecnicosRecomendados(Long unidadeId, CategoriaProblema categoriaProblema) {
         return repository.findTecnicosRecomendados(
                         unidadeId,

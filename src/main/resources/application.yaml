@@ -51,6 +51,11 @@ firebase:
   credentials-path: ${FIREBASE_CREDENTIALS_PATH:}
   credentials-json: ${FIREBASE_CREDENTIALS_JSON:}
 
+app:
+  jobs:
+    os-atrasadas:
+      cron: ${JOB_OS_ATRASADAS_CRON:0 5 0 * * *}
+
 management:
   health:
       mail:

@@ -6,6 +6,7 @@ import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOrdemServi
 import java.util.Map;
 
 import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface OrdemServicoRepository {
@@ -38,4 +39,6 @@ public interface OrdemServicoRepository {
             Long usuarioId,
             FiltrosOrdemServicoQueryParam filtros
     );
+
+    List<OrdemServico> findAtrasadas(LocalDateTime inicioDoDiaAtual);
 }
