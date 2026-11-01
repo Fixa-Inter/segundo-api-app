@@ -37,9 +37,9 @@ public class OrdemServicoAtrasadaScheduler {
         executarJob("09h", this::atualizarENotificarOrdensAtrasadas);
     }
 
-    @Scheduled(cron = "${app.jobs.os-atrasadas.segundo-cron:0 15 18 * * *}", zone = "America/Sao_Paulo")
+    @Scheduled(cron = "${app.jobs.os-atrasadas.segundo-cron:0 10 20 * * *}", zone = "America/Sao_Paulo")
     public void enviarSegundaNotificacao() {
-        executarJob("18h15min", () -> notificarOrdensJaAtrasadas("continua atrasada"));
+        executarJob("20h10min", () -> notificarOrdensJaAtrasadas("continua atrasada"));
     }
 
     private int notificarOrdensJaAtrasadas(String situacao) {
