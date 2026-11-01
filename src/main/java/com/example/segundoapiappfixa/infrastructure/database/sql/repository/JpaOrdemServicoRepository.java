@@ -18,4 +18,6 @@ public interface JpaOrdemServicoRepository extends JpaRepository<OrdemServicoEnt
             LocalDateTime inicioDoDiaAtual,
             List<StatusOrdemServico> statusIgnorados
     );
+
+    List<OrdemServicoEntity> findAllByStatusOrdemServico(StatusOrdemServico statusOrdemServico);
 }

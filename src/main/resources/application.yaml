@@ -54,7 +54,8 @@ firebase:
 app:
   jobs:
     os-atrasadas:
-      cron: ${JOB_OS_ATRASADAS_CRON:0 5 0 * * *}
+      cron: ${JOB_OS_ATRASADAS_CRON:0 0 9 * * *}
+      segundo-cron: ${JOB_OS_ATRASADAS_SEGUNDO_CRON:0 0 15 * * *}
 
 management:
   health:
@@ -62,6 +63,7 @@ management:
         enabled: false
       redis:
         enabled: false
+
   endpoints:
     web:
       exposure:

@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum TipoNotificacao {
     EVENTO(1),
     SOLICITACAO(2),
-    ORDEM_SERVICO(3),
-    CHECKLIST(4);
+    ORDEM_SERVICO(3);
 
     private final int id;
 
