@@ -40,7 +40,6 @@ public interface OrdemServicoRepository {
             FiltrosOrdemServicoQueryParam filtros
     );
 
-    List<OrdemServico> findAtrasadas(LocalDateTime inicioDoDiaAtual);
+    List<OrdemServico> findVencidasNaoConcluidas(LocalDateTime inicioDoDiaAtual);
 
-    List<OrdemServico> findTodasAtrasadas();
 }

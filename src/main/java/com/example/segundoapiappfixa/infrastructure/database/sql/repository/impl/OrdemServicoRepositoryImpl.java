@@ -153,21 +153,13 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrdemServico> findAtrasadas(LocalDateTime inicioDoDiaAtual) {
-        return jpaOrdemServicoRepository.findAllByDataPrevistaBeforeAndStatusOrdemServicoNotIn(
+    public List<OrdemServico> findVencidasNaoConcluidas(LocalDateTime inicioDoDiaAtual) {
+        return jpaOrdemServicoRepository.findAllByDataPrevistaBeforeAndStatusOrdemServicoNot(
                         inicioDoDiaAtual,
-                        List.of(StatusOrdemServico.CONCLUIDA, StatusOrdemServico.ATRASADA))
+                        StatusOrdemServico.CONCLUIDA)
                 .stream()
                 .map(ordemServicoMapper::toModel)
                 .toList();
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<OrdemServico> findTodasAtrasadas() {
-        return jpaOrdemServicoRepository.findAllByStatusOrdemServico(StatusOrdemServico.ATRASADA)
-                .stream()
-                .map(ordemServicoMapper::toModel)
-                .toList();
-    }
 }

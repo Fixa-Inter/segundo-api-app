@@ -37,34 +37,47 @@ public class OrdemServicoAtrasadaScheduler {
         executarJob("09h", this::atualizarENotificarOrdensAtrasadas);
     }
 
-    @Scheduled(cron = "${app.jobs.os-atrasadas.segundo-cron:0 50 0 * * *}", zone = "America/Sao_Paulo")
+    @Scheduled(cron = "${app.jobs.os-atrasadas.segundo-cron:0 30 1 * * *}", zone = "America/Sao_Paulo")
     public void enviarSegundaNotificacao() {
-        executarJob("20h40min", () -> notificarOrdensJaAtrasadas("continua atrasada"));
+        executarJob("15h", this::atualizarENotificarOrdensAtrasadas);
     }
 
-    private int notificarOrdensJaAtrasadas(String situacao) {
-        List<OrdemServico> atrasadas = ordensServico.findTodasAtrasadas();
+    private int notificarOrdensVencidasNaoConcluidas() {
+        LocalDateTime inicioDoDiaAtual = LocalDate.now(ZONE_ID).atStartOfDay();
+        List<OrdemServico> atrasadas = ordensServico.findVencidasNaoConcluidas(inicioDoDiaAtual);
+        int notificacoesEnfileiradas = 0;
+
+        log.info("Foram encontradas {} OS(s) vencidas e não concluídas para notificação.", atrasadas.size());
 
         for (OrdemServico ordem : atrasadas) {
-            if (ordem.getUsuario() == null || ordem.getUsuario().getId() == null) continue;
+            if (ordem.getUsuario() == null || ordem.getUsuario().getId() == null) {
+                log.warn("Notificação de atraso ignorada para OS {}: não há usuário responsável associado.",
+                        ordem.getId());
+                continue;
+            }
 
             String tituloProblema = ordem.getProblema() == null ? "OS " + ordem.getId()
                     : ordem.getProblema().getTitulo();
+            Long usuarioId = ordem.getUsuario().getId();
 
             notificacoes.notificarAposPersistencia(
-                    ordem.getUsuario().getId(),
+                    usuarioId,
                     TipoNotificacao.ORDEM_SERVICO.getId(),
                     ordem.getId(),
-                    "A OS \"" + tituloProblema + "\" " + situacao + "."
+                    "A OS \"" + tituloProblema + "\" está atrasada."
             );
+            notificacoesEnfileiradas++;
+            log.info("Notificação de atraso da OS {} enfileirada para o usuário {}.", ordem.getId(), usuarioId);
         }
 
-        return atrasadas.size();
+        log.info("OS vencidas e não concluídas: {} encontrada(s), {} notificação(ões) enfileirada(s).",
+                atrasadas.size(), notificacoesEnfileiradas);
+        return notificacoesEnfileiradas;
     }
 
     private int atualizarENotificarOrdensAtrasadas() {
         verificarOrdensAtrasadas.executar();
-        return notificarOrdensJaAtrasadas("está atrasada");
+        return notificarOrdensVencidasNaoConcluidas();
     }
 
     private void executarJob(String horario, IntSupplier rotina) {
@@ -94,7 +107,7 @@ public class OrdemServicoAtrasadaScheduler {
             execucao.setRegistrosProcessados(registrosProcessados);
             execucoes.atualizar(execucao);
 
-            log.info("Job de OS atrasadas das {} concluído: {} registro(s) processado(s).",
+            log.info("Job de OS atrasadas das {} concluído: {} notificação(ões) enfileirada(s).",
                     horario, registrosProcessados);
         } catch (RuntimeException exception) {
             execucao.setFinalizadoEm(LocalDateTime.now(ZONE_ID));
