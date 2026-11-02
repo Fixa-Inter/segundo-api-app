@@ -1,15 +1,15 @@
-package com.example.segundoapiappfixa.auth.service;
+package com.example.segundoapiappfixa.auth.usecase;
 
-import com.example.segundoapiappfixa.auth.dto.IssuedTokens;
+import com.example.segundoapiappfixa.domain.model.auth.TokensAutenticacao;
 import com.example.segundoapiappfixa.domain.model.RefreshToken;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.RefreshTokenRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.application.exception.RefreshTokenInvalidoException;
-import com.example.segundoapiappfixa.infrastructure.security.JwtTokenProvider;
+import com.example.segundoapiappfixa.domain.service.auth.EmissorAccessToken;
+import com.example.segundoapiappfixa.application.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.stereotype.Service;
+import com.example.segundoapiappfixa.application.exception.UsuarioInativoException;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -23,22 +23,22 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
+@UseCase
 @RequiredArgsConstructor
-public class TokenSessionService {
+public class GerenciarSessao {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private final ConcurrentMap<String, TokenLock> refreshTokenLocks = new ConcurrentHashMap<>();
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final EmissorAccessToken jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public IssuedTokens criarSessao(Usuario usuario) {
+    public TokensAutenticacao criarSessao(Usuario usuario) {
         return emitirPar(usuario, UUID.randomUUID().toString());
     }
 
-    public IssuedTokens renovar(String tokenOriginal) {
+    public TokensAutenticacao renovar(String tokenOriginal) {
         if (tokenOriginal == null || tokenOriginal.isBlank()) {
             throw new RefreshTokenInvalidoException();
         }
@@ -53,7 +53,7 @@ public class TokenSessionService {
         }
     }
 
-    private IssuedTokens renovarComLock(String hash) {
+    private TokensAutenticacao renovarComLock(String hash) {
         RefreshToken tokenAtual = refreshTokenRepository.buscarPorHash(hash)
                 .orElseThrow(RefreshTokenInvalidoException::new);
 
@@ -67,7 +67,7 @@ public class TokenSessionService {
 
         if (!Boolean.TRUE.equals(usuario.getEstaAtivo())) {
             refreshTokenRepository.revogarFamilia(tokenAtual.getFamiliaId());
-            throw new DisabledException("Usuário inativo");
+            throw new UsuarioInativoException();
         }
 
         refreshTokenRepository.consumir(tokenAtual);
@@ -108,7 +108,7 @@ public class TokenSessionService {
         });
     }
 
-    private IssuedTokens emitirPar(Usuario usuario, String familiaId) {
+    private TokensAutenticacao emitirPar(Usuario usuario, String familiaId) {
         String refreshToken = gerarRefreshToken();
         RefreshToken registro = new RefreshToken(
                 hash(refreshToken),
@@ -126,7 +126,7 @@ public class TokenSessionService {
         );
 
         refreshTokenRepository.salvar(registro);
-        return new IssuedTokens(accessToken, refreshToken);
+        return new TokensAutenticacao(accessToken, refreshToken);
     }
 
     private String gerarRefreshToken() {

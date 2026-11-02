@@ -2,8 +2,12 @@ package com.example.segundoapiappfixa.auth.controller;
 
 import com.example.segundoapiappfixa.auth.controller.contract.AuthControllerContract;
 import com.example.segundoapiappfixa.auth.dto.*;
-import com.example.segundoapiappfixa.auth.service.AuthService;
-import com.example.segundoapiappfixa.auth.service.ListarOpcoesCadastro;
+import com.example.segundoapiappfixa.auth.usecase.*;
+import com.example.segundoapiappfixa.domain.model.auth.CadastroDados;
+import com.example.segundoapiappfixa.domain.model.auth.LoginResultado;
+import com.example.segundoapiappfixa.domain.model.auth.LoginGoogleResultado;
+import com.example.segundoapiappfixa.domain.model.auth.RecuperacaoSenhaResultado;
+import com.example.segundoapiappfixa.domain.model.auth.TokensAutenticacao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +20,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthController implements AuthControllerContract {
 
-    private final AuthService service;
+    private final Cadastrar cadastrar;
+    private final Login login;
+    private final RenovarToken renovarToken;
+    private final Logout logout;
+    private final EsqueciSenha esqueciSenha;
+    private final RedefinirSenha redefinirSenha;
     private final ListarOpcoesCadastro listarOpcoesCadastro;
 
     @Override
@@ -24,19 +33,23 @@ public class AuthController implements AuthControllerContract {
     public ResponseEntity<LoginResponseDTO> cadastrar(
             @Valid @RequestBody CadastroUsuarioRequestDTO requestDTO
     ) {
-        return ResponseEntity.status(201).body(service.cadastrar(requestDTO));
+        LoginResultado resultado = cadastrar.cadastrar(new CadastroDados(requestDTO.nomeCompleto(), requestDTO.email(),
+                requestDTO.senha(), requestDTO.unidadeId(), requestDTO.cargo(), requestDTO.dataNascimento()));
+        return ResponseEntity.status(201).body(toLoginResponse(resultado));
     }
 
     @GetMapping("/instituicoes")
     public ResponseEntity<List<CadastroNomeOutputDTO>> listarInstituicoes() {
-        return ResponseEntity.ok(listarOpcoesCadastro.listarInstituicoes());
+        return ResponseEntity.ok(listarOpcoesCadastro.listarInstituicoes().stream()
+                .map(instituicao -> new CadastroNomeOutputDTO(instituicao.getId(), instituicao.getNome())).toList());
     }
 
     @GetMapping("/instituicoes/{instituicaoId}/unidades")
     public ResponseEntity<List<CadastroNomeOutputDTO>> listarUnidades(
             @PathVariable Long instituicaoId
     ) {
-        return ResponseEntity.ok(listarOpcoesCadastro.listarUnidades(instituicaoId));
+        return ResponseEntity.ok(listarOpcoesCadastro.listarUnidades(instituicaoId).stream()
+                .map(unidade -> new CadastroNomeOutputDTO(unidade.getId(), unidade.getNome())).toList());
     }
 
     @Override
@@ -44,7 +57,7 @@ public class AuthController implements AuthControllerContract {
     public ResponseEntity<LoginResponseDTO> login(
             @RequestBody LoginRequestDTO requestDTO
     ) {
-        return ResponseEntity.ok(service.login(requestDTO));
+        return ResponseEntity.ok(toLoginResponse(login.login(requestDTO.email(), requestDTO.senha())));
     }
 
     @Override
@@ -52,7 +65,8 @@ public class AuthController implements AuthControllerContract {
     public ResponseEntity<RefreshTokenResponseDTO> refresh(
             @Valid @RequestBody RefreshTokenRequestDTO requestDTO
     ) {
-        return ResponseEntity.ok(service.renovarToken(requestDTO.refreshToken()));
+        TokensAutenticacao tokens = renovarToken.renovar(requestDTO.refreshToken());
+        return ResponseEntity.ok(new RefreshTokenResponseDTO(tokens.accessToken(), tokens.refreshToken()));
     }
 
     @Override
@@ -61,7 +75,7 @@ public class AuthController implements AuthControllerContract {
             @RequestBody(required = false)
             RefreshTokenRequestDTO requestDTO
     ) {
-        service.logout(requestDTO == null ? null : requestDTO.refreshToken());
+        logout.executar(requestDTO == null ? null : requestDTO.refreshToken());
         return ResponseEntity.noContent().build();
     }
 
@@ -69,21 +83,25 @@ public class AuthController implements AuthControllerContract {
     public ResponseEntity<GoogleLoginResponseDTO> loginGoogle(
             @Valid @RequestBody GoogleLoginRequestDTO requestDTO
     ) {
-        return ResponseEntity.ok(service.loginWithGoogle(requestDTO));
+        LoginGoogleResultado resultado = login.loginGoogle(requestDTO.idToken());
+        TokensAutenticacao tokens = resultado.tokens();
+        return ResponseEntity.ok(new GoogleLoginResponseDTO(resultado.status(), resultado.email(), resultado.nome(),
+                tokens == null ? null : tokens.accessToken(), tokens == null ? null : tokens.refreshToken()));
     }
 
     @PostMapping("/esqueceu-senha/{email}")
     public ResponseEntity<RedefinirSenhaOutputDTO> esqueceuSenha(
             @PathVariable String email
     ) {
-        return ResponseEntity.ok(service.esqueceuSenha(email));
+        RecuperacaoSenhaResultado resultado = esqueciSenha.solicitar(email);
+        return ResponseEntity.ok(new RedefinirSenhaOutputDTO(resultado.nome(), resultado.email(), resultado.mensagem()));
     }
 
     @PostMapping("/redefinir-senha")
     public ResponseEntity<String> redefinirSenha(
             @RequestBody RedefinirSenhaRequestDTO requestDTO
     ) {
-        return ResponseEntity.ok(service.redefinirSenha(requestDTO));
+        return ResponseEntity.ok(redefinirSenha.redefinir(requestDTO.email(), requestDTO.codigo(), requestDTO.novaSenha()));
     }
 
     @Override
@@ -93,6 +111,10 @@ public class AuthController implements AuthControllerContract {
             @RequestBody
             ValidarCodigoRequestDTO requestDTO
     ) {
-        return ResponseEntity.ok(service.validarCodigo(requestDTO.email(), requestDTO.codigo()));
+        return ResponseEntity.ok(esqueciSenha.validarCodigo(requestDTO.email(), requestDTO.codigo()));
+    }
+
+    private LoginResponseDTO toLoginResponse(LoginResultado resultado) {
+        return new LoginResponseDTO(resultado.email(), resultado.tokens().accessToken(), resultado.tokens().refreshToken());
     }
 }
