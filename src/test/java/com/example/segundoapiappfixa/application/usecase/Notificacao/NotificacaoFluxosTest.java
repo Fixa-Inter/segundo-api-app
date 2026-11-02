@@ -59,14 +59,21 @@ class NotificacaoFluxosTest {
     @Test
     void statusNotificaAutorDepoisDeSalvar() {
         ProblemaRepository repository = mock(ProblemaRepository.class);
+        UsuarioRepository usuarios = mock(UsuarioRepository.class);
         NotificacaoSender sender = mock(NotificacaoSender.class);
         Usuario autor = new Usuario(); autor.setId(7L);
+        Unidade unidade = new Unidade(); unidade.setId(10L);
+        LocalUnidade local = new LocalUnidade(); local.setUnidade(unidade);
+        Usuario gestor = new Usuario(); gestor.setId(2L); gestor.setUnidade(unidade);
         Problema problema = new Problema(); problema.setId(5L); problema.setUsuario(autor);
+        problema.setLocalUnidade(local);
         problema.setTitulo("Luz"); problema.setStatus(StatusProblema.PENDENTE);
         when(repository.findById(5L)).thenReturn(Optional.of(problema));
+        when(usuarios.findById(2L)).thenReturn(Optional.of(gestor));
         when(repository.update(any())).thenAnswer(call -> call.getArgument(0));
 
-        new AtualizarStatus(repository, sender).atualizar(new ProblemaAtualizarStatusDados(5L, StatusProblema.APROVADO, null));
+        new AtualizarStatus(repository, sender, usuarios).atualizar(
+                new ProblemaAtualizarStatusDados(5L, StatusProblema.APROVADO, null), 2L, TipoAcesso.GESTOR);
 
         var ordem = inOrder(repository, sender);
         ordem.verify(repository).update(problema);

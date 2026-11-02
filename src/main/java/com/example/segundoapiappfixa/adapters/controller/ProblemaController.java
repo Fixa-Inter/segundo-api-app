@@ -130,7 +130,8 @@ public class ProblemaController implements ProblemaControllerContract {
 
             Authentication authentication
     ) {
-        return ResponseEntity.ok(mapper.toOutputDTO(atualizarStatus.atualizar(input.toDomain())));
+        return ResponseEntity.ok(mapper.toOutputDTO(atualizarStatus.atualizar(
+                input.toDomain(), ControllerUtils.usuarioId(authentication), ControllerUtils.tipoAcesso(authentication))));
     }
 
     @DeleteMapping("/{problemaId}")
