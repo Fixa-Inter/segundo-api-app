@@ -8,8 +8,8 @@ import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class ListarProblemas {
     public List<Problema> listarMinhas(Long usuarioId, FiltrosProblemaQueryParam filtros) {
         List<Problema> problemas = problemaRepository.findAllByUsuarioId(usuarioId, filtros);
 
-        if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
+        if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
 
         return problemas;
     }
@@ -44,7 +44,7 @@ public class ListarProblemas {
 
         List<Problema> problemas = problemaRepository.findAllByLocalUnidadeIds(localUnidadeIds, filtros);
 
-        if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
+        if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
 
         return problemas;
     }

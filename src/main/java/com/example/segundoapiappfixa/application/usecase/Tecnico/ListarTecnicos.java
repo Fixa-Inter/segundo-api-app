@@ -9,7 +9,7 @@ import com.example.segundoapiappfixa.domain.repository.AptidaoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;

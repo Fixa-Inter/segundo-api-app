@@ -11,7 +11,7 @@ import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -75,7 +75,7 @@ public class ListarOrdensServico {
                 && usuarioId.equals(ordemServico.getUsuario().getId());
 
         if (!mesmoUnidade || (!isGestor && !tecnicoVinculado)) {
-            throw new com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException(
+            throw new com.example.segundoapiappfixa.application.exception.RegraProblemaException(
                     "exception.access.denied"
             );
         }

@@ -5,8 +5,8 @@ import com.example.segundoapiappfixa.domain.model.Evento;
 import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEventosQueryParam;
 import com.example.segundoapiappfixa.domain.repository.EventoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

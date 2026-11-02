@@ -5,7 +5,7 @@ import com.example.segundoapiappfixa.domain.model.RefreshToken;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.RefreshTokenRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.RefreshTokenInvalidoException;
+import com.example.segundoapiappfixa.application.exception.RefreshTokenInvalidoException;
 import com.example.segundoapiappfixa.infrastructure.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.DisabledException;

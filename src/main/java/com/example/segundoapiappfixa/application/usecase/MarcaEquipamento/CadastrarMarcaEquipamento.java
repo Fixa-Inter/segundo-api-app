@@ -4,7 +4,7 @@ import com.example.segundoapiappfixa.adapters.dto.input.MarcaEquipamento.MarcaEq
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.MarcaEquipamento;
 import com.example.segundoapiappfixa.domain.repository.MarcaEquipamentoRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.Locale;

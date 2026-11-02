@@ -4,9 +4,8 @@ import com.example.segundoapiappfixa.adapters.dto.input.ObservacaoConclusao.Obse
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.domain.model.*;
-import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.repository.*;
-import com.example.segundoapiappfixa.infrastructure.exception.*;
+import com.example.segundoapiappfixa.application.exception.*;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
