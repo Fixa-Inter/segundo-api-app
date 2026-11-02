@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.application.usecase.ModeloEquipamento;
 
 import com.example.segundoapiappfixa.domain.model.input.ModeloEquipamento.ModeloEquipamentoCadastrarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.*;
 import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
@@ -28,11 +29,7 @@ public class CadastrarModeloEquipamento {
         CategoriaEquipamento categoria = categoriaRepository.findById(dto.categoriaEquipamentoId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.categoriaEquipamento.notFound"));
 
-        if (categoria.getUsuario() == null
-                || categoria.getUsuario().getUnidade() == null
-                || !categoria.getUsuario().getUnidade().getId().equals(usuario.getUnidade().getId())) {
-            throw new EntidadeNaoEncontradaException("exception.access.denied");
-        }
+        UnidadeAcesso.validarCategoria(usuario, categoria);
 
         ModeloEquipamento modeloEquipamento = new ModeloEquipamento(
                 null,

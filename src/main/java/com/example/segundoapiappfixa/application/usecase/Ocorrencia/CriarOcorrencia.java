@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.application.usecase.Ocorrencia;
 
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
@@ -37,6 +38,9 @@ public class CriarOcorrencia {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RegraProblemaException("exception.usuario.required"));
+
+        UnidadeAcesso.validarLocal(usuario, localUnidade);
+        UnidadeAcesso.validarCategoria(usuario, categoriaEquipamento);
 
         ocorrencia.setUsuario(usuario);
         ocorrencia.setLocalUnidade(localUnidade);

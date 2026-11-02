@@ -2,14 +2,16 @@ package com.example.segundoapiappfixa.application.usecase.Equipamento;
 
 import com.example.segundoapiappfixa.domain.model.input.Equipamento.EquipamentoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
+import com.example.segundoapiappfixa.domain.model.LocalUnidade;
+import com.example.segundoapiappfixa.domain.model.ModeloEquipamento;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.ModeloEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
 @UseCase
@@ -29,18 +31,20 @@ public class AtualizarEquipamento {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!equipamento.getUsuario().getUnidade().getId().equals(usuario.getUnidade().getId())) {
-            throw new RegraProblemaException("exception.access.denied");
-        }
+        UnidadeAcesso.validarUsuario(usuario, equipamento.getUsuario());
 
         if (dto.modeloEquipamentoId() != null) {
-            equipamento.setModeloEquipamento(modeloRepository.findById(dto.modeloEquipamentoId())
-                    .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.modeloEquipamento.notFound")));
+            ModeloEquipamento modelo = modeloRepository.findById(dto.modeloEquipamentoId())
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.modeloEquipamento.notFound"));
+            UnidadeAcesso.validarModelo(usuario, modelo);
+            equipamento.setModeloEquipamento(modelo);
         }
 
         if (dto.localUnidadeId() != null) {
-            equipamento.setLocalUnidade(localRepository.findById(dto.localUnidadeId())
-                    .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.local.required")));
+            LocalUnidade local = localRepository.findById(dto.localUnidadeId())
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.local.required"));
+            UnidadeAcesso.validarLocal(usuario, local);
+            equipamento.setLocalUnidade(local);
         }
 
         if (dto.codigo() != null) equipamento.setCodigo(dto.codigo());

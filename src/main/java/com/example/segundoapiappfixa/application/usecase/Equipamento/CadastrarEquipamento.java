@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.application.usecase.Equipamento;
 
 import com.example.segundoapiappfixa.domain.model.input.Equipamento.EquipamentoCadastrarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.ModeloEquipamento;
@@ -33,6 +34,9 @@ public class CadastrarEquipamento {
 
         LocalUnidade local = localRepository.findById(dto.localUnidadeId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.local.required"));
+
+        UnidadeAcesso.validarModelo(usuario, modelo);
+        UnidadeAcesso.validarLocal(usuario, local);
 
         Equipamento equipamento = new Equipamento(
                 null,

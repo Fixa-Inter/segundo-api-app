@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.application.usecase.Ocorrencia;
 
 import com.example.segundoapiappfixa.domain.model.input.Ocorrencia.OcorrenciaAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
@@ -36,13 +37,17 @@ public class AtualizarOcorrencia {
         }
 
         if (dto.localUnidadeId() != null) {
-            atual.setLocalUnidade(localUnidadeRepository.findById(dto.localUnidadeId())
-                    .orElseThrow(() -> new RegraProblemaException("exception.local.required")));
+            LocalUnidade local = localUnidadeRepository.findById(dto.localUnidadeId())
+                    .orElseThrow(() -> new RegraProblemaException("exception.local.required"));
+            UnidadeAcesso.validarLocal(atual.getUsuario(), local);
+            atual.setLocalUnidade(local);
         }
 
         if (dto.categoriaEquipamentoId() != null) {
-            atual.setCategoriaEquipamento(categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
-                    .orElseThrow(() -> new RegraProblemaException("exception.categoriaEquipamento.required")));
+            CategoriaEquipamento categoria = categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
+                    .orElseThrow(() -> new RegraProblemaException("exception.categoriaEquipamento.required"));
+            UnidadeAcesso.validarCategoria(atual.getUsuario(), categoria);
+            atual.setCategoriaEquipamento(categoria);
         }
 
         if (dto.categoriaProblemaId() != null) atual.setCategoriaProblema(dto.categoriaProblemaId());

@@ -38,7 +38,8 @@ class NotificacaoFluxosTest {
         Unidade unidade = new Unidade(); unidade.setId(10L);
         LocalUnidade local = new LocalUnidade(); local.setId(2L); local.setUnidade(unidade);
         CategoriaEquipamento categoria = new CategoriaEquipamento(); categoria.setId(3L);
-        Usuario autor = new Usuario(); autor.setId(1L);
+        Usuario autor = new Usuario(); autor.setId(1L); autor.setUnidade(unidade);
+        categoria.setUsuario(autor);
         Usuario gestor = new Usuario(); gestor.setId(4L);
         Problema problema = new Problema(); problema.setLocalUnidade(local);
         problema.setCategoriaEquipamento(categoria); problema.setTitulo("Luz");
@@ -73,7 +74,7 @@ class NotificacaoFluxosTest {
         when(repository.update(any())).thenAnswer(call -> call.getArgument(0));
 
         new AtualizarStatus(repository, sender, usuarios).atualizar(
-                new ProblemaAtualizarStatusDados(5L, StatusProblema.APROVADO, null), 2L, TipoAcesso.GESTOR);
+                new ProblemaAtualizarStatusDados(5L, StatusProblema.APROVADO, null), 2L);
 
         var ordem = inOrder(repository, sender);
         ordem.verify(repository).update(problema);
@@ -89,7 +90,7 @@ class NotificacaoFluxosTest {
         NotificacaoSender sender = mock(NotificacaoSender.class);
         Unidade unidade = new Unidade(); unidade.setId(10L);
         LocalUnidade local = new LocalUnidade(); local.setId(2L); local.setUnidade(unidade);
-        Usuario autor = new Usuario(); autor.setId(1L);
+        Usuario autor = new Usuario(); autor.setId(1L); autor.setUnidade(unidade);
         when(usuarios.findById(1L)).thenReturn(Optional.of(autor));
         when(locais.findById(2L)).thenReturn(Optional.of(local));
         when(eventos.save(any())).thenAnswer(call -> { Evento e = call.getArgument(0); e.setId(8L); return e; });

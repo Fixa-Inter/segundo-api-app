@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.application.usecase.Evento;
 
 import com.example.segundoapiappfixa.domain.model.input.Evento.EventoCadastrarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.model.Evento;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.Usuario;
@@ -31,6 +32,8 @@ public class CadastrarEvento {
 
         LocalUnidade local = localRepository.findById(dto.localUnidadeId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.local.required"));
+
+        UnidadeAcesso.validarLocal(usuario, local);
 
         Evento evento = new Evento(
                 null,

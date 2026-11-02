@@ -2,7 +2,6 @@ package com.example.segundoapiappfixa.application.usecase.Problema;
 
 import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
-import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.model.Unidade;
@@ -31,17 +30,15 @@ class AtualizarStatusTest {
     @InjectMocks private AtualizarStatus atualizarStatus;
 
     @Test
-    void gestorEAdministradorDaMesmaUnidadePodemAlterarStatus() {
+    void usuarioDaMesmaUnidadePodeAlterarStatus() {
         Usuario gestor = usuario(10L);
         when(usuarioRepository.findById(2L)).thenReturn(Optional.of(gestor));
         when(problemaRepository.update(any())).thenAnswer(call -> call.getArgument(0));
-        for (TipoAcesso acesso : new TipoAcesso[]{TipoAcesso.GESTOR, TipoAcesso.ADMINISTRADOR}) {
-            Problema problema = problemaPendente(10L);
-            when(problemaRepository.findById(1L)).thenReturn(Optional.of(problema));
-            Problema resultado = atualizarStatus.atualizar(dados(StatusProblema.APROVADO, null), 2L, acesso);
-            assertEquals(StatusProblema.APROVADO, resultado.getStatus());
-        }
-        verify(problemaRepository, times(2)).update(any());
+        Problema problema = problemaPendente(10L);
+        when(problemaRepository.findById(1L)).thenReturn(Optional.of(problema));
+        Problema resultado = atualizarStatus.atualizar(dados(StatusProblema.APROVADO, null), 2L);
+        assertEquals(StatusProblema.APROVADO, resultado.getStatus());
+        verify(problemaRepository).update(any());
     }
 
     @Test
@@ -49,17 +46,10 @@ class AtualizarStatusTest {
         when(problemaRepository.findById(1L)).thenReturn(Optional.of(problemaPendente(10L)));
         when(usuarioRepository.findById(2L)).thenReturn(Optional.of(usuario(20L)));
         RegraProblemaException erro = assertThrows(RegraProblemaException.class,
-                () -> atualizarStatus.atualizar(dados(StatusProblema.APROVADO, null), 2L, TipoAcesso.GESTOR));
+                () -> atualizarStatus.atualizar(dados(StatusProblema.APROVADO, null), 2L));
         assertEquals("exception.access.denied", erro.getMessage());
         verify(problemaRepository, never()).update(any());
         verifyNoInteractions(notificacoes);
-    }
-
-    @Test
-    void tecnicoNaoPodeAlterarMesmoNaMesmaUnidade() {
-        assertThrows(RegraProblemaException.class,
-                () -> atualizarStatus.atualizar(dados(StatusProblema.APROVADO, null), 2L, TipoAcesso.TECNICO));
-        verifyNoInteractions(problemaRepository, usuarioRepository, notificacoes);
     }
 
     @Test
@@ -67,7 +57,7 @@ class AtualizarStatusTest {
         when(problemaRepository.findById(1L)).thenReturn(Optional.of(problemaPendente(10L)));
         when(usuarioRepository.findById(2L)).thenReturn(Optional.of(new Usuario()));
         assertThrows(RegraProblemaException.class,
-                () -> atualizarStatus.atualizar(dados(StatusProblema.APROVADO, null), 2L, TipoAcesso.ADMINISTRADOR));
+                () -> atualizarStatus.atualizar(dados(StatusProblema.APROVADO, null), 2L));
         verify(problemaRepository, never()).update(any());
         verifyNoInteractions(notificacoes);
     }
@@ -79,7 +69,7 @@ class AtualizarStatusTest {
         when(problemaRepository.findById(1L)).thenReturn(Optional.of(problema));
         when(usuarioRepository.findById(2L)).thenReturn(Optional.of(usuario(10L)));
         assertThrows(RegraProblemaException.class,
-                () -> atualizarStatus.atualizar(dados(StatusProblema.APROVADO, null), 2L, TipoAcesso.GESTOR));
+                () -> atualizarStatus.atualizar(dados(StatusProblema.APROVADO, null), 2L));
         verify(problemaRepository, never()).update(any());
         verifyNoInteractions(notificacoes);
     }
@@ -88,7 +78,7 @@ class AtualizarStatusTest {
     void gestorDaUnidadePodeReprovarComMotivo() {
         permitirAcesso();
         when(problemaRepository.update(any())).thenAnswer(call -> call.getArgument(0));
-        Problema resultado = atualizarStatus.atualizar(dados(StatusProblema.REPROVADO, "  motivo  "), 2L, TipoAcesso.GESTOR);
+        Problema resultado = atualizarStatus.atualizar(dados(StatusProblema.REPROVADO, "  motivo  "), 2L);
         assertEquals(StatusProblema.REPROVADO, resultado.getStatus());
         assertEquals("motivo", resultado.getMotivoRecusa());
     }
@@ -97,7 +87,7 @@ class AtualizarStatusTest {
     void deveExigirMotivoAoReprovarProblema() {
         permitirAcesso();
         RegraProblemaException erro = assertThrows(RegraProblemaException.class,
-                () -> atualizarStatus.atualizar(dados(StatusProblema.REPROVADO, "   "), 2L, TipoAcesso.GESTOR));
+                () -> atualizarStatus.atualizar(dados(StatusProblema.REPROVADO, "   "), 2L));
         assertEquals("exception.recusa.required", erro.getMessage());
     }
 
@@ -105,7 +95,7 @@ class AtualizarStatusTest {
     void deveImpedirMotivoQuandoProblemaForAprovado() {
         permitirAcesso();
         RegraProblemaException erro = assertThrows(RegraProblemaException.class,
-                () -> atualizarStatus.atualizar(dados(StatusProblema.APROVADO, "motivo indevido"), 2L, TipoAcesso.GESTOR));
+                () -> atualizarStatus.atualizar(dados(StatusProblema.APROVADO, "motivo indevido"), 2L));
         assertEquals("exception.recusa.transition", erro.getMessage());
     }
 

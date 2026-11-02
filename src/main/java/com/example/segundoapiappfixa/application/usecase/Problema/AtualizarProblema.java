@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.application.usecase.Problema;
 
 import com.example.segundoapiappfixa.domain.model.input.Problema.ProblemaAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.domain.model.*;
@@ -37,13 +38,19 @@ public class AtualizarProblema {
         if (dto.descricaoProblema() != null && !dto.descricaoProblema().isBlank()) problema.setDescricaoProblema(dto.descricaoProblema());
         if (dto.descricaoLocal() != null && !dto.descricaoLocal().isBlank()) problema.setDescricaoLocal(dto.descricaoLocal());
 
-        if (dto.localUnidadeId() != null) problema.setLocalUnidade(
-                localUnidadeRepository.findById(dto.localUnidadeId())
-                        .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.localUnidade.notFound")));
+        if (dto.localUnidadeId() != null) {
+            LocalUnidade local = localUnidadeRepository.findById(dto.localUnidadeId())
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.localUnidade.notFound"));
+            UnidadeAcesso.validarLocal(problema.getUsuario(), local);
+            problema.setLocalUnidade(local);
+        }
 
-        if (dto.categoriaEquipamentoId() != null) problema.setCategoriaEquipamento(
-                categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
-                    .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.categoriaEquipamento.notFound")));
+        if (dto.categoriaEquipamentoId() != null) {
+            CategoriaEquipamento categoria = categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.categoriaEquipamento.notFound"));
+            UnidadeAcesso.validarCategoria(problema.getUsuario(), categoria);
+            problema.setCategoriaEquipamento(categoria);
+        }
 
         Problema salvo = problemaRepository.update(problema);
         if (dto.fotosExcluir() != null) {

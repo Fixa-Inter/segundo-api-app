@@ -2,10 +2,10 @@ package com.example.segundoapiappfixa.application.usecase.ModeloEquipamento;
 
 import com.example.segundoapiappfixa.domain.model.input.ModeloEquipamento.ModeloEquipamentoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.*;
 import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
 @UseCase
@@ -25,9 +25,7 @@ public class AtualizarModeloEquipamento {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        if (!modelo.getCategoriaEquipamento().getUsuario().getUnidade().getId()
-                .equals(usuario.getUnidade().getId())
-        ) throw new RegraProblemaException("exception.access.denied");
+        UnidadeAcesso.validarModelo(usuario, modelo);
 
         if (dto.marcaEquipamentoId() != null) {
             modelo.setMarcaEquipamento(
@@ -39,11 +37,7 @@ public class AtualizarModeloEquipamento {
             CategoriaEquipamento categoria = categoriaRepository.findById(dto.categoriaEquipamentoId())
                     .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.categoriaEquipamento.notFound"));
 
-            if (categoria.getUsuario() == null
-                    || categoria.getUsuario().getUnidade() == null
-                    || !categoria.getUsuario().getUnidade().getId().equals(usuario.getUnidade().getId())) {
-                throw new RegraProblemaException("exception.access.denied");
-            }
+            UnidadeAcesso.validarCategoria(usuario, categoria);
 
             modelo.setCategoriaEquipamento(categoria);
         }

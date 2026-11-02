@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.*;
 import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
@@ -41,6 +42,9 @@ public class CriarProblema {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("validation.usuario.required"));
+
+        UnidadeAcesso.validarLocal(usuario, localUnidade);
+        UnidadeAcesso.validarCategoria(usuario, categoriaEquipamento);
 
         problema.setUsuario(usuario);
         problema.setLocalUnidade(localUnidade);
