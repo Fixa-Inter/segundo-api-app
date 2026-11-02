@@ -19,11 +19,11 @@ import java.util.List;
 @SecurityRequirement(name = "bearerAuth")
 public abstract class ProblemaSwagger implements ProblemaControllerContract {
     public static List<SwaggerEndpoint> endpoints() {
-        return List.of(new SwaggerEndpoint("GET", "/api/v1/solicitacoes", "Problemas", "Listar problemas", "Lista problemas com filtros e período de criação."),
-                new SwaggerEndpoint("GET", "/api/v1/solicitacoes/minhas", "Problemas", "Listar meus problemas", "Lista problemas do usuário."),
-                new SwaggerEndpoint("GET", "/api/v1/solicitacoes/selecionar/{problemaId}", "Problemas", "Consultar problema", "Consulta um problema."),
-                new SwaggerEndpoint("POST", "/api/v1/solicitacoes", "Problemas", "Cadastrar problema", "Cria um problema."),
-                new SwaggerEndpoint("PATCH", "/api/v1/solicitacoes/status", "Problemas", "Atualizar status", "Atualiza o status de um problema."));
+        return List.of(new SwaggerEndpoint("GET", "/api/v1/solicitacoes", "Solicitações", "Listar problemas", "Lista problemas com filtros e período de criação."),
+                new SwaggerEndpoint("GET", "/api/v1/solicitacoes/minhas", "Solicitações", "Listar meus problemas", "Lista problemas do usuário."),
+                new SwaggerEndpoint("GET", "/api/v1/solicitacoes/selecionar/{problemaId}", "Solicitações", "Consultar problema", "Consulta um problema."),
+                new SwaggerEndpoint("POST", "/api/v1/solicitacoes", "Solicitações", "Cadastrar problema", "Cria um problema."),
+                new SwaggerEndpoint("PATCH", "/api/v1/solicitacoes/status", "Solicitações", "Atualizar status", "Atualiza o status de um problema."));
     }
 
     @Operation(summary = "Listar problemas")

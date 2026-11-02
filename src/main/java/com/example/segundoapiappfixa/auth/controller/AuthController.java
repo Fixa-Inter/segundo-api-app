@@ -38,12 +38,14 @@ public class AuthController implements AuthControllerContract {
         return ResponseEntity.status(201).body(toLoginResponse(resultado));
     }
 
+    @Override
     @GetMapping("/instituicoes")
     public ResponseEntity<List<CadastroNomeOutputDTO>> listarInstituicoes() {
         return ResponseEntity.ok(listarOpcoesCadastro.listarInstituicoes().stream()
                 .map(instituicao -> new CadastroNomeOutputDTO(instituicao.getId(), instituicao.getNome())).toList());
     }
 
+    @Override
     @GetMapping("/instituicoes/{instituicaoId}/unidades")
     public ResponseEntity<List<CadastroNomeOutputDTO>> listarUnidades(
             @PathVariable Long instituicaoId
@@ -79,6 +81,7 @@ public class AuthController implements AuthControllerContract {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PostMapping("/login/google")
     public ResponseEntity<GoogleLoginResponseDTO> loginGoogle(
             @Valid @RequestBody GoogleLoginRequestDTO requestDTO
@@ -89,6 +92,7 @@ public class AuthController implements AuthControllerContract {
                 tokens == null ? null : tokens.accessToken(), tokens == null ? null : tokens.refreshToken()));
     }
 
+    @Override
     @PostMapping("/esqueceu-senha/{email}")
     public ResponseEntity<RedefinirSenhaOutputDTO> esqueceuSenha(
             @PathVariable String email
@@ -97,6 +101,7 @@ public class AuthController implements AuthControllerContract {
         return ResponseEntity.ok(new RedefinirSenhaOutputDTO(resultado.nome(), resultado.email(), resultado.mensagem()));
     }
 
+    @Override
     @PostMapping("/redefinir-senha")
     public ResponseEntity<String> redefinirSenha(
             @RequestBody RedefinirSenhaRequestDTO requestDTO

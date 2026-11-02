@@ -1,10 +1,7 @@
 package com.example.segundoapiappfixa.auth.controller.contract;
 
 import com.example.segundoapiappfixa.auth.dto.*;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -16,7 +13,7 @@ public interface AuthControllerContract {
 
     ResponseEntity<Void> logout(RefreshTokenRequestDTO requestDTO);
 
-    public ResponseEntity<GoogleLoginResponseDTO> loginGoogle(GoogleLoginRequestDTO requestDTO);
+    ResponseEntity<GoogleLoginResponseDTO> loginGoogle(GoogleLoginRequestDTO requestDTO);
 
     ResponseEntity<LoginResponseDTO> cadastrar(CadastroUsuarioRequestDTO requestDTO);
 
@@ -24,7 +21,7 @@ public interface AuthControllerContract {
 
     ResponseEntity<Boolean> validarCodigo(ValidarCodigoRequestDTO requestDTO);
 
-    public ResponseEntity<RedefinirSenhaOutputDTO> esqueceuSenha(String email);
+    ResponseEntity<RedefinirSenhaOutputDTO> esqueceuSenha(String email);
 
     ResponseEntity<List<CadastroNomeOutputDTO>> listarInstituicoes();
 

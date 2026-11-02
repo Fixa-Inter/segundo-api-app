@@ -18,6 +18,8 @@ public class FixaOpenApiCustomizer implements OpenApiCustomizer {
 
         aplicar(openAPI, CategoriaEquipamentoSwagger.endpoints());
         aplicar(openAPI, AuthSwagger.endpoints());
+        AuthSwagger.complementar(openAPI);
+        AuthSchemaSwagger.complementar(openAPI);
         aplicar(openAPI, EquipamentoSwagger.endpoints());
         aplicar(openAPI, EventoSwagger.endpoints());
         aplicar(openAPI, MarcaEquipamentoSwagger.endpoints());
@@ -28,6 +30,9 @@ public class FixaOpenApiCustomizer implements OpenApiCustomizer {
         aplicar(openAPI, TarefaSwagger.endpoints());
         aplicar(openAPI, TecnicoSwagger.endpoints());
         aplicar(openAPI, PerfilSwagger.endpoints());
+        aplicar(openAPI, RotasAdicionaisSwagger.endpoints());
+        RotasAdicionaisSwagger.complementar(openAPI);
+        ErrosSwagger.complementar(openAPI);
     }
 
     private void aplicar(OpenAPI openAPI, List<SwaggerEndpoint> endpoints) {
