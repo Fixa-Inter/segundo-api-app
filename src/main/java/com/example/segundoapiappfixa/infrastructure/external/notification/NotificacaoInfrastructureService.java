@@ -58,10 +58,12 @@ public class NotificacaoInfrastructureService {
 
         try {
             notificacaoRepository.save(notificacao);
-            log.debug("Notificação {} persistida no Redis para usuário {}.", notificacao.getId(), usuarioId);
+            log.info("Notificação da referência {} ({}) persistida no Redis para usuário {}.",
+                    referenciaId, notificacao.getId(), usuarioId);
         } catch (Exception exception) {
             // Notificações são best-effort e não revertem a ação de negócio já confirmada.
-            log.warn("Não foi possível registrar a notificação {} no Redis.", notificacao.getId(), exception);
+            log.warn("Não foi possível registrar a notificação da referência {} ({}) no Redis para usuário {}.",
+                    referenciaId, notificacao.getId(), usuarioId, exception);
         }
 
         pushDispatcher.enviar(notificacao);

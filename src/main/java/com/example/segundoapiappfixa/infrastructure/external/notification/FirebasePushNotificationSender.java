@@ -33,13 +33,13 @@ public class FirebasePushNotificationSender implements PushNotificationSender {
     public void enviar(Notificacao notificacao) {
         Set<String> registeredTokens = tokenRepository.listarPorUsuario(notificacao.getUsuarioId());
         if (registeredTokens.isEmpty()) {
-            log.warn("Push {} não enviado: nenhum token FCM registrado para usuário {}.",
-                    notificacao.getId(), notificacao.getUsuarioId());
+            log.warn("Push da referência {} (notificação {}) não enviado: nenhum token FCM registrado para usuário {}.",
+                    notificacao.getReferenciaId(), notificacao.getId(), notificacao.getUsuarioId());
             return;
         }
 
-        log.info("Enviando push {} para usuário {} em {} dispositivo(s).",
-                notificacao.getId(), notificacao.getUsuarioId(), registeredTokens.size());
+        log.info("Enviando push da referência {} (notificação {}) para usuário {} em {} dispositivo(s).",
+                notificacao.getReferenciaId(), notificacao.getId(), notificacao.getUsuarioId(), registeredTokens.size());
 
         List<String> tokens = new ArrayList<>(registeredTokens);
         for (int start = 0; start < tokens.size(); start += MAX_TOKENS_PER_BATCH) {
@@ -68,8 +68,9 @@ public class FirebasePushNotificationSender implements PushNotificationSender {
                         .getInstance(firebaseAppProvider.getApp())
                         .sendEachForMulticast(message);
 
-                log.info("Resultado FCM da notificação {}: {} sucesso(s), {} falha(s).",
-                        notificacao.getId(), response.getSuccessCount(), response.getFailureCount());
+                log.info("Resultado FCM da referência {} (notificação {}), usuário {}: {} sucesso(s), {} falha(s).",
+                        notificacao.getReferenciaId(), notificacao.getId(), notificacao.getUsuarioId(),
+                        response.getSuccessCount(), response.getFailureCount());
 
                 for (int i = 0; i < response.getResponses().size(); i++) {
                     SendResponse send = response.getResponses().get(i);
@@ -78,12 +79,14 @@ public class FirebasePushNotificationSender implements PushNotificationSender {
                         MessagingErrorCode code = send.getException().getMessagingErrorCode();
 
                         if (code == MessagingErrorCode.UNREGISTERED || code == MessagingErrorCode.INVALID_ARGUMENT) {
+                            log.warn("Token FCM inválido removido para referência {} e usuário {} ({}).",
+                                    notificacao.getReferenciaId(), notificacao.getUsuarioId(), code);
                             tokenRepository.findByToken(batch.get(i))
                                     .filter(token -> notificacao.getUsuarioId().equals(token.getUsuarioId()))
                                     .ifPresent(token -> tokenRepository.remover(token.getToken()));
                         } else {
-                            log.warn("Falha FCM da notificação {} para usuário {} ({}): {}",
-                                    notificacao.getId(), notificacao.getUsuarioId(), code,
+                            log.warn("Falha FCM da referência {} (notificação {}) para usuário {} ({}): {}",
+                                    notificacao.getReferenciaId(), notificacao.getId(), notificacao.getUsuarioId(), code,
                                     send.getException().getMessage());
                         }
                     }
@@ -91,7 +94,8 @@ public class FirebasePushNotificationSender implements PushNotificationSender {
 
             } catch (Exception exception) {
                 log.warn(
-                        "Não foi possível enviar push da notificação {} para usuário {}.",
+                        "Não foi possível enviar push da referência {} (notificação {}) para usuário {}.",
+                        notificacao.getReferenciaId(),
                         notificacao.getId(),
                         notificacao.getUsuarioId(),
                         exception

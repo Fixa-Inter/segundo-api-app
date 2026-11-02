@@ -20,7 +20,7 @@ public class VerificarOrdensAtrasadas {
 
     public int executar() {
         LocalDateTime inicioDoDiaAtual = LocalDate.now(ZONE_ID).atStartOfDay();
-        List<OrdemServico> vencidas = repository.findAtrasadas(inicioDoDiaAtual);
+        List<OrdemServico> vencidas = repository.findVencidasNaoConcluidas(inicioDoDiaAtual);
 
         for (OrdemServico ordemServico : vencidas) {
             ordemServico.setStatusOrdemServico(StatusOrdemServico.ATRASADA);

@@ -7,17 +7,14 @@ import org.springframework.stereotype.Repository;
 
 import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 
 @Repository
 public interface JpaOrdemServicoRepository extends JpaRepository<OrdemServicoEntity, Long>, JpaSpecificationExecutor<OrdemServicoEntity> {
     boolean existsByProblema_Id(Long problemaId);
 
-    List<OrdemServicoEntity> findAllByDataPrevistaBeforeAndStatusOrdemServicoNotIn(
+    List<OrdemServicoEntity> findAllByDataPrevistaBeforeAndStatusOrdemServicoNot(
             LocalDateTime inicioDoDiaAtual,
-            List<StatusOrdemServico> statusIgnorados
+            StatusOrdemServico statusIgnorado
     );
-
-    List<OrdemServicoEntity> findAllByStatusOrdemServico(StatusOrdemServico statusOrdemServico);
 }
