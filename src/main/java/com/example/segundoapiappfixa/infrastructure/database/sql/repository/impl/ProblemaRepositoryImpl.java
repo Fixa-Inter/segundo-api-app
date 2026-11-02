@@ -5,13 +5,9 @@ import com.example.segundoapiappfixa.domain.filter.FiltrosProblema;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.ProblemaSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Problema;
-import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
-import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
-import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaProblemaRepositiory;
-import com.example.segundoapiappfixa.infrastructure.external.notification.NotificacaoInfrastructureService;
 import lombok.RequiredArgsConstructor;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -37,8 +33,6 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
     // Dependências
     private final JpaProblemaRepositiory repository;
     private final ProblemaMapper mapper;
-    private final NotificacaoInfrastructureService notificacoes;
-    private final UsuarioRepository usuarios;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -124,34 +118,12 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
             }
         });
 
-        Long unidadeId = problema.getLocalUnidade().getUnidade().getId();
-        String mensagem = "Nova solicitação registrada: " + problema.getTitulo() + ".";
-        usuarios.findGestoresAtivosByUnidadeId(unidadeId).forEach(gestor ->
-                notificacoes.notificarAposPersistencia(
-                        gestor.getId(),
-                        TipoNotificacao.SOLICITACAO.getId(),
-                        problemaId,
-                        mensagem
-                )
-        );
-
         return problemaId;
     }
 
     public Problema update(Problema problema) {
-        StatusProblema statusAnterior = repository.findById(problema.getId())
-                .map(ProblemaEntity::getStatus).orElse(null);
-
         ProblemaEntity entity = mapper.toEntity(problema);
-        Problema atualizado = mapper.toModel(repository.save(entity));
-
-        if (statusAnterior != null && statusAnterior != atualizado.getStatus() && atualizado.getUsuario() != null) {
-            notificacoes.notificarAposPersistencia(atualizado.getUsuario().getId(),
-                    TipoNotificacao.SOLICITACAO.getId(), atualizado.getId(),
-                    "O status da sua solicitação \"" + atualizado.getTitulo() + "\" foi atualizado para "
-                            + atualizado.getStatus().getNome() + ".");
-        }
-        return atualizado;
+        return mapper.toModel(repository.save(entity));
     }
 
     @Override

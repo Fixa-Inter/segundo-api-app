@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.infrastructure.external.notification;
 
 import com.example.segundoapiappfixa.domain.model.Notificacao;
 import com.example.segundoapiappfixa.domain.repository.NotificacaoRepository;
+import com.example.segundoapiappfixa.domain.service.NotificacaoSender;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +13,16 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/** Infraestrutura de notificações usada pelas implementações dos repositories. */
+/** Registra notificações e encaminha push após o commit da operação. */
 @Component
 @RequiredArgsConstructor
-public class NotificacaoInfrastructureService {
+public class NotificacaoInfrastructureService implements NotificacaoSender {
     private static final Logger log = LoggerFactory.getLogger(NotificacaoInfrastructureService.class);
 
     private final NotificacaoRepository notificacaoRepository;
     private final NotificacaoPushAsyncDispatcher pushDispatcher;
 
+    @Override
     public void notificarAposPersistencia(
             Long usuarioId,
             int tipo,

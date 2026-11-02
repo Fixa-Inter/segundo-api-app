@@ -5,7 +5,6 @@ import com.example.segundoapiappfixa.domain.filter.FiltrosOrdemServico;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.OrdemServicoSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
-import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
 import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OrdemServicoEntity;
@@ -15,7 +14,6 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaO
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaTarefaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaFotoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaObservacaoConclusaoRepository;
-import com.example.segundoapiappfixa.infrastructure.external.notification.NotificacaoInfrastructureService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +39,6 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
     private final JpaTarefaRepository jpaTarefaRepository;
     private final JpaFotoRepository jpaFotoRepository;
     private final JpaObservacaoConclusaoRepository jpaObservacaoConclusaoRepository;
-    private final NotificacaoInfrastructureService notificacoes;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -103,14 +100,6 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
     // Método de salvar no banco de dados
     @Override
     public OrdemServico save(OrdemServico ordemServico) {
-        boolean novaOs = ordemServico.getId() == null;
-        Long responsavelAnteriorId = novaOs
-                ? null
-                : jpaOrdemServicoRepository
-                    .findById(ordemServico.getId())
-                    .map(entity -> entity.usuario.getId())
-                    .orElse(null);
-
         OrdemServicoEntity entity = ordemServicoMapper.toEntity(ordemServico);
         entity.problema = entityManager.getReference(
                 ProblemaEntity.class,
@@ -123,18 +112,7 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
         );
 
         OrdemServicoEntity salvo = jpaOrdemServicoRepository.save(entity);
-        OrdemServico resultado = ordemServicoMapper.toModel(salvo);
-
-        if (novaOs || !salvo.usuario.getId().equals(responsavelAnteriorId)) {
-            notificacoes.notificarAposPersistencia(
-                    salvo.usuario.getId(),
-                    TipoNotificacao.ORDEM_SERVICO.getId(),
-                    salvo.getId(),
-                    "Uma nova OS foi atribuída a você: "
-                            + ordemServico.getProblema().getTitulo() + ".");
-        }
-
-        return resultado;
+        return ordemServicoMapper.toModel(salvo);
     }
 
     // Método de deletar dados persistidos no banco de dados

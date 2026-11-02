@@ -31,6 +31,8 @@ public interface UsuarioRepository {
 
     List<Usuario> findGestoresAtivosByUnidadeId(Long unidadeId);
 
+    List<Long> findIdsAtivosByUnidadeId(Long unidadeId);
+
     List<Usuario> findTecnicosRecomendados(
             Long unidadeId,
             CategoriaProblema categoriaProblema

@@ -3,6 +3,8 @@ package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.input.OrdemServico.OrdemServicoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
+import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
+import com.example.segundoapiappfixa.domain.service.NotificacaoSender;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
@@ -11,17 +13,21 @@ import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontrada
 import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 @UseCase
 @RequiredArgsConstructor
 public class AtualizarOrdemServico {
     private final OrdemServicoRepository ordemServicoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final NotificacaoSender notificacoes;
 
     @Transactional
     public OrdemServico atualizar(OrdemServicoAtualizarDados input, Long usuarioAutenticadoId, boolean isGestor) {
         OrdemServico ordemServico = ordemServicoRepository.findById(input.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
+
+        Long responsavelAnteriorId = ordemServico.getUsuario() == null ? null : ordemServico.getUsuario().getId();
 
         Usuario gestor = usuarioRepository.findById(usuarioAutenticadoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.notFound"));
@@ -57,7 +63,21 @@ public class AtualizarOrdemServico {
         if (input.prioridade() != null) ordemServico.setPrioridade(input.prioridade());
         if (input.dataPrevista() != null) ordemServico.setDataPrevista(input.dataPrevista().atStartOfDay());
 
-        return ordemServicoRepository.save(ordemServico);
+        OrdemServico salva = ordemServicoRepository.save(ordemServico);
+        Long responsavelAtualId = salva.getUsuario() == null ? null : salva.getUsuario().getId();
+
+        if (responsavelAtualId != null && !Objects.equals(responsavelAnteriorId, responsavelAtualId)) {
+            notificacoes.notificarAposPersistencia(
+                    responsavelAtualId,
+                    TipoNotificacao.ORDEM_SERVICO.getId(),
+                    salva.getId(),
+                    "Uma nova OS foi atribuída a você: "
+                    + ordemServico.getProblema().getTitulo()
+                    + "."
+            );
+        }
+
+        return salva;
     }
 
     private void validarAtualizacaoDoTecnico(

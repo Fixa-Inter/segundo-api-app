@@ -4,6 +4,8 @@ import com.example.segundoapiappfixa.domain.model.input.OrdemServico.OrdemServic
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
+import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
+import com.example.segundoapiappfixa.domain.service.NotificacaoSender;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.model.Usuario;
@@ -23,6 +25,7 @@ public class CadastrarOrdemServico {
     private final OrdemServicoRepository ordemServicoRepository;
     private final ProblemaRepository problemaRepository;
     private final UsuarioRepository usuarioRepository;
+    private final NotificacaoSender notificacoes;
 
     @Transactional
     public OrdemServico cadastrar(OrdemServicoCadastrarDados input, Long usuarioAutenticadoId) {
@@ -64,7 +67,17 @@ public class CadastrarOrdemServico {
                 input.dataPrevista().atStartOfDay()
         );
 
-        return ordemServicoRepository.save(ordemServico);
+        OrdemServico salva = ordemServicoRepository.save(ordemServico);
+        notificacoes.notificarAposPersistencia(
+                responsavel.getId(),
+                TipoNotificacao.ORDEM_SERVICO.getId(),
+                salva.getId(),
+                "Uma nova OS foi atribuída a você: "
+                + problema.getTitulo()
+                + "."
+        );
+
+        return salva;
     }
 
     private Usuario buscarUsuario(Long id) {

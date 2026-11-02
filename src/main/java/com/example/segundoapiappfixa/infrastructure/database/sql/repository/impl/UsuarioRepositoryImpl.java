@@ -97,6 +97,14 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Long> findIdsAtivosByUnidadeId(Long unidadeId) {
+        return repository.findAllByUnidade_IdAndEstaAtivoTrue(unidadeId).stream()
+                .map(UsuarioEntity::getId)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Usuario> findTecnicosRecomendados(Long unidadeId, CategoriaProblema categoriaProblema) {
         return repository.findTecnicosRecomendados(
                         unidadeId,
