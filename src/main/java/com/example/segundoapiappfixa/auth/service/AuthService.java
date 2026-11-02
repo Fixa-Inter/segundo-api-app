@@ -9,7 +9,7 @@ import com.example.segundoapiappfixa.domain.repository.UnidadeRepository;
 import com.example.segundoapiappfixa.domain.model.Unidade;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.security.JwtTokenProvider;
+import com.example.segundoapiappfixa.auth.dto.IssuedTokens;
 import com.example.segundoapiappfixa.infrastructure.external.email.EmailSender;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
 import com.example.segundoapiappfixa.infrastructure.security.FirebaseTokenVerifier;
@@ -22,7 +22,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,13 +33,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
     private final RecuperarSenhaCodigoRepository recuperarSenhaCodigoRepository;
     private final UsuarioRepository usuarioRepository;
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
     private final UnidadeRepository unidadeRepository;
     private final FirebaseTokenVerifier firebaseTokenVerifier;
+    private final TokenSessionService tokenSessionService;
 
     public LoginResponseDTO cadastrar(CadastroUsuarioRequestDTO dto) {
         String email = dto.email().trim().toLowerCase(Locale.ROOT);
@@ -79,14 +78,12 @@ public class AuthService {
         );
 
         Usuario salvo = usuarioRepository.save(usuario);
-        String token = jwtTokenProvider.generateAccessToken(
-                salvo.getId(),
+        IssuedTokens tokens = tokenSessionService.criarSessao(salvo);
+        return new LoginResponseDTO(
                 salvo.getEmail(),
-                TipoAcesso.SOLICITANTE.name(),
-                new Date()
+                tokens.accessToken(),
+                tokens.refreshToken()
         );
-
-        return new LoginResponseDTO(salvo.getEmail(), token);
     }
 
     public LoginResponseDTO login(LoginRequestDTO dto) {
@@ -108,23 +105,12 @@ public class AuthService {
             throw new DisabledException("Usuário inativo");
         }
 
-        String role = authentication
-                .getAuthorities()
-                .iterator()
-                .next()
-                .getAuthority()
-                .replace("ROLE_", "");
-
-        String token = jwtTokenProvider.generateAccessToken(
-                usuario.getId(),
-                authentication.getName(),
-                role,
-                new Date()
-        );
+        IssuedTokens tokens = tokenSessionService.criarSessao(usuario);
 
         return new LoginResponseDTO(
                 authentication.getName(),
-                token
+                tokens.accessToken(),
+                tokens.refreshToken()
         );
     }
 
@@ -150,18 +136,26 @@ public class AuthService {
             throw new DisabledException("Usuário inativo");
         }
 
-        String token = jwtTokenProvider.generateAccessToken(
-                usuario.getId(),
-                usuario.getEmail(),
-                usuario.getTipoAcesso().name(),
-                new Date()
-        );
+        IssuedTokens tokens = tokenSessionService.criarSessao(usuario);
 
         return GoogleLoginResponseDTO.authenticated(
                 usuario.getEmail(),
                 usuario.getNomeCompleto(),
-                token
+                tokens.accessToken(),
+                tokens.refreshToken()
         );
+    }
+
+    public RefreshTokenResponseDTO renovarToken(String refreshToken) {
+        IssuedTokens tokens = tokenSessionService.renovar(refreshToken);
+        return new RefreshTokenResponseDTO(
+                tokens.accessToken(),
+                tokens.refreshToken()
+        );
+    }
+
+    public void logout(String refreshToken) {
+        tokenSessionService.revogar(refreshToken);
     }
 
     public RedefinirSenhaOutputDTO esqueceuSenha(String email) {

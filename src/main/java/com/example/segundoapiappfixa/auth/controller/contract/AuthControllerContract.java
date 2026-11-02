@@ -12,6 +12,10 @@ public interface AuthControllerContract {
 
     ResponseEntity<LoginResponseDTO> login(LoginRequestDTO requestDTO);
 
+    ResponseEntity<RefreshTokenResponseDTO> refresh(RefreshTokenRequestDTO requestDTO);
+
+    ResponseEntity<Void> logout(RefreshTokenRequestDTO requestDTO);
+
     public ResponseEntity<GoogleLoginResponseDTO> loginGoogle(GoogleLoginRequestDTO requestDTO);
 
     ResponseEntity<LoginResponseDTO> cadastrar(CadastroUsuarioRequestDTO requestDTO);

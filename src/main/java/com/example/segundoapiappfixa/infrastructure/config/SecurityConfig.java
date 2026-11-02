@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 @AllArgsConstructor
@@ -67,6 +69,7 @@ public class SecurityConfig{
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/login/google",
                                 "/api/v1/auth/cadastro",
+                                "/api/v1/auth/logout",
                                 "/api/v1/auth/instituicoes",
                                 "/api/v1/auth/instituicoes/*/unidades",
                                 "/api/v1/auth/refresh",
@@ -74,7 +77,6 @@ public class SecurityConfig{
                                 "/api/v1/auth/validar-codigo",
                                 "/api/v1/auth/redefinir-senha"
                         ).permitAll()
-                        .requestMatchers("/api/v1/auth/logout").authenticated()
 
                         // GET
                         .requestMatchers(
@@ -153,7 +155,9 @@ public class SecurityConfig{
 
                 )
                .exceptionHandling(
-                       exception -> exception.accessDeniedHandler(customAcessDeniedHandler))
+                       exception -> exception
+                               .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                               .accessDeniedHandler(customAcessDeniedHandler))
                .build();
     }
 }

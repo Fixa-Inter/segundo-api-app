@@ -2,6 +2,7 @@ package com.example.segundoapiappfixa.adapters.exception;
 
 import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.infrastructure.exception.RefreshTokenInvalidoException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.convert.ConversionFailedException;
@@ -74,6 +75,12 @@ public class GlobalHandlerException {
         printError(e);
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
+                .body(Map.of("message", text(e.getMessage())));
+    }
+
+    @ExceptionHandler(RefreshTokenInvalidoException.class)
+    ResponseEntity<?> invalidRefreshToken(RefreshTokenInvalidoException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("message", text(e.getMessage())));
     }
 
