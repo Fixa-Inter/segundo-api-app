@@ -10,6 +10,8 @@ public record FiltrosOrdemServico(
         String prioridade,
         LocalDateTime dataPrevistaMin,
         LocalDateTime dataPrevistaMax,
+        LocalDateTime dataCriacaoMin,
+        LocalDateTime dataCriacaoMax,
         String statusOrdemServico,
         String nomeUsuario,
         String tipoAcesso,

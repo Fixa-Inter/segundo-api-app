@@ -15,6 +15,8 @@ public interface FotoRepository {
 
     void deleteByOcorrenciaId(Long ocorrenciaId);
 
+    void deleteByIdAndProblemaId(Long fotoId, Long problemaId);
+
     void deleteByIdAndOcorrenciaId(Long fotoId, Long ocorrenciaId);
 
     void deleteByOrdemServicoId(Long ordemServicoId);

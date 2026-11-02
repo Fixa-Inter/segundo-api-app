@@ -54,13 +54,13 @@ public class AtualizarProblema {
 
         Problema salvo = problemaRepository.update(problema);
         if (dto.fotosExcluir() != null) {
-            Long ocorrenciaId = salvo.getId();
+            Long problemaId = salvo.getId();
             List<Long> idsPertencentes = salvo.getFotos() == null ? List.of() : salvo.getFotos().stream()
                     .map(Foto::getId)
                     .filter(idFoto -> idFoto != null && dto.fotosExcluir().contains(idFoto))
                     .toList();
 
-            idsPertencentes.forEach(idFoto -> fotoRepository.deleteByIdAndOcorrenciaId(idFoto, ocorrenciaId));
+            idsPertencentes.forEach(idFoto -> fotoRepository.deleteByIdAndProblemaId(idFoto, problemaId));
 
             if (salvo.getFotos() != null) {
                 salvo.getFotos().removeIf(foto -> foto.getId() != null && idsPertencentes.contains(foto.getId()));
@@ -82,7 +82,7 @@ public class AtualizarProblema {
                         LocalDateTime.now()
                 );
 
-                salvo.getFotos().add(fotoRepository.save(foto, TipoFoto.OCORRENCIA));
+                salvo.getFotos().add(fotoRepository.save(foto, TipoFoto.PROBLEMA));
             }
         }
 
