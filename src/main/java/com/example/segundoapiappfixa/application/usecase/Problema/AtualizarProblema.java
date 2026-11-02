@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @UseCase
 @RequiredArgsConstructor
@@ -45,23 +46,37 @@ public class AtualizarProblema {
                     .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.categoriaEquipamento.notFound")));
 
         Problema salvo = problemaRepository.update(problema);
-        if (dto.fotosExcluir() != null) dto.fotosExcluir().forEach(fotoRepository::deleteById);
+        if (dto.fotosExcluir() != null) {
+            Long ocorrenciaId = salvo.getId();
+            List<Long> idsPertencentes = salvo.getFotos() == null ? List.of() : salvo.getFotos().stream()
+                    .map(Foto::getId)
+                    .filter(idFoto -> idFoto != null && dto.fotosExcluir().contains(idFoto))
+                    .toList();
 
-        if (dto.fotosAdicionar() != null) {
+            idsPertencentes.forEach(idFoto -> fotoRepository.deleteByIdAndOcorrenciaId(idFoto, ocorrenciaId));
+
+            if (salvo.getFotos() != null) {
+                salvo.getFotos().removeIf(foto -> foto.getId() != null && idsPertencentes.contains(foto.getId()));
+            }
+        }
+
+        if (dto.fotosAdicionar() != null && !dto.fotosAdicionar().isEmpty()) {
             if (salvo.getFotos() == null) salvo.setFotos(new ArrayList<>());
-            dto.fotosAdicionar().forEach(url -> salvo.getFotos().add(fotoRepository.save(
-                    new Foto(
+            for (String url : dto.fotosAdicionar()) {
+                Foto foto = new Foto(
                         null,
                         salvo,
                         null,
                         null,
                         null,
-                        null,
+                        salvo.getUsuario(),
                         url,
                         true,
-                        LocalDateTime.now()),
-                        TipoFoto.PROBLEMA
-            )));
+                        LocalDateTime.now()
+                );
+
+                salvo.getFotos().add(fotoRepository.save(foto, TipoFoto.OCORRENCIA));
+            }
         }
 
         return salvo;

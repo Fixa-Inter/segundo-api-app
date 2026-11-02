@@ -63,7 +63,9 @@ public class AtualizarOcorrencia {
                     .map(Foto::getId)
                     .filter(idFoto -> idFoto != null && dto.fotosExcluir().contains(idFoto))
                     .toList();
+
             idsPertencentes.forEach(idFoto -> fotoRepository.deleteByIdAndOcorrenciaId(idFoto, ocorrenciaId));
+
             if (atual.getFotos() != null) {
                 atual.getFotos().removeIf(foto -> foto.getId() != null && idsPertencentes.contains(foto.getId()));
             }
@@ -87,6 +89,7 @@ public class AtualizarOcorrencia {
                 atual.getFotos().add(fotoRepository.save(foto, TipoFoto.OCORRENCIA));
             }
         }
+
         return atual;
     }
 }
