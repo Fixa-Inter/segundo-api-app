@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
@@ -32,6 +33,18 @@ import java.time.LocalDateTime;
 @Transactional
 @RequiredArgsConstructor
 public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
+
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "titulo", "problema.titulo",
+            "descricao", "problema.descricaoProblema",
+            "categoria_problema", "categoriaProblema",
+            "categoria_equipamento", "problema.categoriaEquipamento.nome",
+            "prioridade", "prioridade",
+            "data_prevista", "dataPrevista",
+            "status", "statusOrdemServico.nome",
+            "nome_usuario", "usuario.nomeCompleto",
+            "tipo_acesso", "usuario.tipoAcesso"
+    );
 
     // Dependências
     private final JpaOrdemServicoRepository jpaOrdemServicoRepository;
@@ -67,7 +80,7 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
                 .and(OrdemServicoSpecs.findByTipoAcesso(filtros.tipoAcesso()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

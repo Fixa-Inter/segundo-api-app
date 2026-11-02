@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,13 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoRepository {
+
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "nome", "nome",
+            "descricao", "descricao",
+            "marca", "marcaEquipamento.nome",
+            "categoria", "categoriaEquipamento.nome"
+    );
     // Dependências
     private final JpaModeloEquipamentoRepository repository;
     private final ModeloEquipamentoMapper mapper;
@@ -41,7 +49,7 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
                 .and(ModeloEquipamentoSpecs.findByCategoria(filtros.categoria()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

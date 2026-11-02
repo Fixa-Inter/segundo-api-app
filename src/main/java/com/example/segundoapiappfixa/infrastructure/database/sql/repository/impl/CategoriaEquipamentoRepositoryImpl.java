@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import jakarta.persistence.EntityManager;
@@ -26,6 +27,12 @@ import jakarta.persistence.PersistenceContext;
 @Transactional
 @RequiredArgsConstructor
 public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoRepository {
+
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "nome", "nome",
+            "descricao", "descricao",
+            "nome_usuario", "usuario.nomeCompleto"
+    );
 
     // Dependências
     private final JpaCategoriaEquipamentoRepository repository;
@@ -79,7 +86,7 @@ public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoR
                 .and(CategoriaEquipamentoSpecs.findByNomeUsuario(filtros.nomeUsuario()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

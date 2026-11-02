@@ -4,16 +4,9 @@ import com.example.segundoapiappfixa.domain.filter.FiltrosCategoriaEquipamento;
 import com.example.segundoapiappfixa.domain.model.CategoriaEquipamento;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface CategoriaEquipamentoRepository {
-
-    Map<String, String> camposNormalizados = Map.of(
-            "nome", "nome",
-            "descricao", "descricao",
-            "nome_usuario", "usuario.nomeCompleto"
-    );
 
     CategoriaEquipamento save(CategoriaEquipamento categoriaEquipamento);
 

@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.sql.Array;
@@ -29,6 +30,16 @@ import java.sql.Types;
 @Transactional
 @RequiredArgsConstructor
 public class ProblemaRepositoryImpl implements ProblemaRepository {
+
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "titulo", "titulo",
+            "descricao_problema", "descricaoProblema",
+            "categoria_equipamento", "categoriaEquipamento.nome",
+            "local_unidade", "localUnidade.nome",
+            "descricao_local", "descricaoLocal",
+            "nome_usuario", "usuario.nomeCompleto",
+            "tipo_acesso", "usuario.tipoAcesso"
+    );
 
     // Dependências
     private final JpaProblemaRepositiory repository;
@@ -69,7 +80,7 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
                 .and(ProblemaSpecs.findByDataCriacaoMax(filtros.dataCriacaoMax()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

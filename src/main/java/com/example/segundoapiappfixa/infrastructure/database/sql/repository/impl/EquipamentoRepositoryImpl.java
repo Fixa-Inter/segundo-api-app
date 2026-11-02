@@ -33,6 +33,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EquipamentoRepositoryImpl implements EquipamentoRepository {
 
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "codigo", "codigo",
+            "local_unidade", "localUnidade.nome",
+            "usuario", "usuario.nomeCompleto"
+    );
+
     // Dependências
     private final JpaEquipamentoRepository repository;
     private final EquipamentoMapper mapper;
@@ -54,7 +60,7 @@ public class EquipamentoRepositoryImpl implements EquipamentoRepository {
                 .and(EquipamentoSpecs.findByUsuario(filtros.usuario()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

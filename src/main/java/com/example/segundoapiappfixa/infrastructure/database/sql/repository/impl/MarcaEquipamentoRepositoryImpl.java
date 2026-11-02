@@ -10,6 +10,7 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.entity.MarcaEqu
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaMarcaEquipamentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,12 @@ import org.springframework.data.jpa.domain.Specification;
 @Repository
 @RequiredArgsConstructor
 public class MarcaEquipamentoRepositoryImpl implements MarcaEquipamentoRepository {
+
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "nome", "nome",
+            "descricao", "descricao",
+            "esta_ativo", "estaAtivo"
+    );
     // Dependências
     private final JpaMarcaEquipamentoRepository repository;
     private final MarcaEquipamentoMapper mapper;
@@ -31,7 +38,7 @@ public class MarcaEquipamentoRepositoryImpl implements MarcaEquipamentoRepositor
                 .and(MarcaEquipamentoSpecs.findByEstaAtivo());
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

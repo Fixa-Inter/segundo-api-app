@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,15 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class EventoRepositoryImpl implements EventoRepository {
+
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "titulo", "titulo",
+            "descricao", "descricao",
+            "local_unidade", "localUnidade.nome",
+            "descricao_local", "descricaoLocal",
+            "observacao", "observacao",
+            "usuario", "usuario.nomeCompleto"
+    );
 
     // Dependências
     private final JpaEventoRepository repository;
@@ -49,7 +59,7 @@ public class EventoRepositoryImpl implements EventoRepository {
                 .and(EventoSpecs.findByUsuario(filtros.usuario()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(),camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(),CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

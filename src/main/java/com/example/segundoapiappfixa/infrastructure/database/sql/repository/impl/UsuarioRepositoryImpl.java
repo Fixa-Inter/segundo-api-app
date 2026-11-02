@@ -13,6 +13,7 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.repository.util
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaUsuarioRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
@@ -26,6 +27,14 @@ import org.springframework.data.jpa.domain.Specification;
 @Transactional
 @RequiredArgsConstructor
 public class UsuarioRepositoryImpl implements UsuarioRepository {
+
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "nome_completo", "nomeCompleto",
+            "email", "email",
+            "cargo", "cargo",
+            "cnpj_unidade", "unidade.cnpj",
+            "esta_ativo", "estaAtivo"
+    );
 
     // Dependências
     private final JpaUsuarioRepository repository;
@@ -66,7 +75,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
                 .and(UsuarioSpecs.findByEstaAtivo());
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

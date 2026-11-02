@@ -9,13 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TarefaRepository {
-    Map<String, String> camposNormalizados = Map.of(
-            "titulo", "titulo",
-            "descricao", "descricao",
-            "status", "statusOrdemServico.nome",
-            "usuario_responsavel", "ordemServico.usuario.nomeCompleto"
-    );
-
     List<Tarefa> findAllByOrdemServicoId(Long ordemServicoId, FiltrosTarefa filtros);
 
     Map<Long, Long> countEmAndamentoByTecnicoIds(Collection<Long> tecnicoIds);

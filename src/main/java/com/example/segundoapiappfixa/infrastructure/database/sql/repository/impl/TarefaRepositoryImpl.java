@@ -31,6 +31,13 @@ import org.springframework.data.jpa.domain.Specification;
 @RequiredArgsConstructor
 public class TarefaRepositoryImpl implements TarefaRepository {
 
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "titulo", "titulo",
+            "descricao", "descricao",
+            "status", "statusOrdemServico.nome",
+            "usuario_responsavel", "ordemServico.usuario.nomeCompleto"
+    );
+
     // Dependências
     private final JpaTarefaRepository jpaTarefaRepository;
     private final TarefaMapper tarefaMapper;
@@ -55,7 +62,7 @@ public class TarefaRepositoryImpl implements TarefaRepository {
                 .and(TarefaSpecs.findByUsuarioResponsavel(filtros.usuarioResponsavel()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 
