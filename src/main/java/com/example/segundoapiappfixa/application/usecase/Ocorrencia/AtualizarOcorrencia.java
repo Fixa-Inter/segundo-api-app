@@ -1,9 +1,7 @@
 package com.example.segundoapiappfixa.application.usecase.Ocorrencia;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Ocorrencia.OcorrenciaAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Ocorrencia.OcorrenciaAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
-import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
-import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
@@ -27,7 +25,7 @@ public class AtualizarOcorrencia {
     private final FotoRepository fotoRepository;
 
     @Transactional
-    public Ocorrencia atualizar(OcorrenciaAtualizarInputDTO dto, Long usuarioId) {
+    public Ocorrencia atualizar(OcorrenciaAtualizarDados dto, Long usuarioId) {
 
         Long id = dto.id();
         Ocorrencia atual = ocorrenciaRepository.findById(id)

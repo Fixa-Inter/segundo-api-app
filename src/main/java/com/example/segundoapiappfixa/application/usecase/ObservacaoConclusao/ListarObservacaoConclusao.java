@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.ObservacaoConclusao;
 
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosObservacaoConclusaoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosObservacaoConclusao;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
@@ -19,7 +19,7 @@ public class ListarObservacaoConclusao {
     private final ObservacaoConclusaoRepository repository;
     private final UsuarioRepository usuarioRepository;
 
-    public List<ObservacaoConclusao> listar(Long usuarioId, FiltrosObservacaoConclusaoQueryParam filtros) {
+    public List<ObservacaoConclusao> listar(Long usuarioId, FiltrosObservacaoConclusao filtros) {
         Usuario usuario = buscarUsuario(usuarioId);
 
         if (usuario.getUnidade() == null || usuario.getUnidade().getId() == null)
@@ -28,7 +28,7 @@ public class ListarObservacaoConclusao {
         return validarResultado(repository.findAllByUnidadeId(usuario.getUnidade().getId(), filtros));
     }
 
-    public List<ObservacaoConclusao> listarMinhas(Long usuarioId, FiltrosObservacaoConclusaoQueryParam filtros) {
+    public List<ObservacaoConclusao> listarMinhas(Long usuarioId, FiltrosObservacaoConclusao filtros) {
         return validarResultado(repository.findAllByResponsavelId(usuarioId, filtros));
     }
 

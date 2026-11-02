@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.input.OrdemServico;
 
+import com.example.segundoapiappfixa.domain.model.input.OrdemServico.OrdemServicoAtualizarDados;
+
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
@@ -18,4 +20,7 @@ public record OrdemServicoAtualizarInputDTO(
         LocalDate dataPrevista,
         Prioridade prioridade
 ) {
+    public OrdemServicoAtualizarDados toDomain() {
+        return new OrdemServicoAtualizarDados(id, usuarioId, statusOrdemServico, categoriaProblema, dataPrevista, prioridade);
+    }
 }

@@ -51,7 +51,7 @@ public class ModeloEquipamentoController implements ModeloEquipamentoControllerC
         return ResponseEntity.ok(mask(
                 toOutputDTO(listarModelosEquipamentos.listar(
                         ControllerUtils.usuarioId(authentication),
-                        filtros
+                        filtros.toDomain()
                 ))
                 , campos
         ));
@@ -86,7 +86,7 @@ public class ModeloEquipamentoController implements ModeloEquipamentoControllerC
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(mapper.toOutputDTO(cadastrarModeloEquipamento.cadastrar(
-                        dto,
+                        dto.toDomain(),
                         ControllerUtils.usuarioId(authentication))
                 ));
     }
@@ -101,7 +101,7 @@ public class ModeloEquipamentoController implements ModeloEquipamentoControllerC
             Authentication authentication
     ) {
         return ResponseEntity.ok(mapper.toOutputDTO(atualizarModeloEquipamento.atualizar(
-                dto,
+                dto.toDomain(),
                 ControllerUtils.usuarioId(authentication)
         )));
     }

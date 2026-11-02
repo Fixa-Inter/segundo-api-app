@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosProblema;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.ProblemaSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Problema;
@@ -46,13 +46,13 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Problema> findAllByUsuarioId(Long usuarioId, FiltrosProblemaQueryParam filtros) {
+    public List<Problema> findAllByUsuarioId(Long usuarioId, FiltrosProblema filtros) {
         return buscar(ProblemaSpecs.findByUsuarioId(usuarioId), filtros);
     }
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Problema> findAllByLocalUnidadeIds(List<Long> localUnidadeIds, FiltrosProblemaQueryParam filtros) {
+    public List<Problema> findAllByLocalUnidadeIds(List<Long> localUnidadeIds, FiltrosProblema filtros) {
 
         if (localUnidadeIds.isEmpty()) {
             return List.of();
@@ -61,7 +61,7 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
         return buscar(ProblemaSpecs.findByLocalUnidadeIds(localUnidadeIds), filtros);
     }
 
-    private List<Problema> buscar(Specification<ProblemaEntity> base, FiltrosProblemaQueryParam filtros) {
+    private List<Problema> buscar(Specification<ProblemaEntity> base, FiltrosProblema filtros) {
         Specification<ProblemaEntity> specification = base
                 .and(ProblemaSpecs.findByTitulo(filtros.titulo()))
                 .and(ProblemaSpecs.findByDescricaoProblema(filtros.descricaoProblema()))

@@ -1,7 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Perfil;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Usuario.UsuarioAtualizarInputDTO;
-import com.example.segundoapiappfixa.adapters.mapper.UsuarioMapper;
+import com.example.segundoapiappfixa.domain.model.input.Usuario.UsuarioAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.domain.model.Foto;
@@ -20,7 +19,7 @@ public class AtualizarPerfil {
     private final UsuarioRepository usuarioRepository;
     private final FotoRepository fotoRepository;
 
-    public Usuario atualizar(UsuarioAtualizarInputDTO dto, Long usuarioId) {
+    public Usuario atualizar(UsuarioAtualizarDados dto, Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("validation.usuario.required"));
 

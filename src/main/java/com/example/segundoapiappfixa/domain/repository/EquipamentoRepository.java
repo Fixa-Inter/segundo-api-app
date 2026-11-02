@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.domain.repository;
 
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEquipamentoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosEquipamento;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 
 import java.util.Map;
@@ -18,7 +18,7 @@ public interface EquipamentoRepository {
 
     List<Equipamento> findByModeloEquipamentoId(
             Long modeloEquipamentoId,
-            FiltrosEquipamentoQueryParam filtros
+            FiltrosEquipamento filtros
     );
 
     Optional<Equipamento> findById(Long equipamentoId);

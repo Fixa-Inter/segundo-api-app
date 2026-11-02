@@ -3,7 +3,7 @@ package com.example.segundoapiappfixa.application.usecase.Tarefa;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosTarefa;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
@@ -27,7 +27,7 @@ public class ListarTarefas {
             Long ordemServicoId,
             Boolean isGestor,
             Long usuarioId,
-            FiltrosTarefaQueryParam filtros
+            FiltrosTarefa filtros
     ) {
         OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));

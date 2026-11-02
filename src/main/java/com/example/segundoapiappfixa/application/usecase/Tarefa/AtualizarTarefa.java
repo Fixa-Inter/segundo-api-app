@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Tarefa;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Tarefa.TarefaAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
 import com.example.segundoapiappfixa.domain.model.Usuario;
@@ -19,7 +19,7 @@ public class AtualizarTarefa {
     private final UsuarioRepository usuarioRepository;
 
     public Tarefa atualizar(
-            TarefaAtualizarInputDTO tarefaAtualizarInputDTO,
+            TarefaAtualizarDados tarefaAtualizarInputDTO,
             Long usuarioId,
             boolean isGestor
     ) {

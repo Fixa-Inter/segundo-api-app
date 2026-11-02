@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosCategoriaEquipamentoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosCategoriaEquipamento;
 import com.example.segundoapiappfixa.adapters.mapper.CategoriaEquipamentoMapper;
 import com.example.segundoapiappfixa.domain.model.CategoriaEquipamento;
 import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
@@ -70,7 +70,7 @@ public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoR
     }
 
     // Método de listar os registros persistidos no banco de dados
-    public List<CategoriaEquipamento> findByUnidadeId(Long usuarioUnidadeId, FiltrosCategoriaEquipamentoQueryParam filtros) {
+    public List<CategoriaEquipamento> findByUnidadeId(Long usuarioUnidadeId, FiltrosCategoriaEquipamento filtros) {
 
         Specification<CategoriaEquipamentoEntity> specification = Specification.where(CategoriaEquipamentoSpecs.findByEstaAtivo())
                 .and(CategoriaEquipamentoSpecs.findByUnidadeId(usuarioUnidadeId))

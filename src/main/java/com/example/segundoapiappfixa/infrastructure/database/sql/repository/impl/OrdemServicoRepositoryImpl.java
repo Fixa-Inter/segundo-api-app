@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.OrdemServicoMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOrdemServicoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosOrdemServico;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.OrdemServicoSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
@@ -48,7 +48,7 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<OrdemServico> findAllByProblemaIds(List<Long> problemaIds, FiltrosOrdemServicoQueryParam filtros) {
+    public List<OrdemServico> findAllByProblemaIds(List<Long> problemaIds, FiltrosOrdemServico filtros) {
         if (problemaIds.isEmpty()) {
             return List.of();
         }
@@ -56,7 +56,7 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
         return buscar(OrdemServicoSpecs.findByProblemaIds(problemaIds), filtros);
     }
 
-    private List<OrdemServico> buscar(Specification<OrdemServicoEntity> base, FiltrosOrdemServicoQueryParam filtros) {
+    private List<OrdemServico> buscar(Specification<OrdemServicoEntity> base, FiltrosOrdemServico filtros) {
         Specification<OrdemServicoEntity> specification = base
                 .and(OrdemServicoSpecs.findByTitulo(filtros.titulo()))
                 .and(OrdemServicoSpecs.findByDescricao(filtros.descricao()))
@@ -145,7 +145,7 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<OrdemServico> findByUsuarioId(Long usuarioId, FiltrosOrdemServicoQueryParam filtros) {
+    public List<OrdemServico> findByUsuarioId(Long usuarioId, FiltrosOrdemServico filtros) {
         return buscar(OrdemServicoSpecs.findByUsuarioId(usuarioId), filtros);
 
 

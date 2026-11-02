@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Evento;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Evento.EventoCadastrarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Evento.EventoCadastrarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Evento;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
@@ -20,7 +20,7 @@ public class CadastrarEvento {
     private final UsuarioRepository usuarioRepository;
     private final LocalUnidadeRepository localRepository;
 
-    public Evento cadastrar(EventoCadastrarInputDTO dto, Long usuarioId) {
+    public Evento cadastrar(EventoCadastrarDados dto, Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 

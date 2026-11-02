@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Evento;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Evento.EventoAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Evento.EventoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Evento;
 import com.example.segundoapiappfixa.domain.repository.EventoRepository;
@@ -15,7 +15,7 @@ public class AtualizarEvento {
     private final EventoRepository repository;
     private final LocalUnidadeRepository localRepository;
 
-    public Evento atualizar(EventoAtualizarInputDTO dto, Long usuarioId) {
+    public Evento atualizar(EventoAtualizarDados dto, Long usuarioId) {
         Evento evento = repository.findById(dto.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.evento.notFound"));
 

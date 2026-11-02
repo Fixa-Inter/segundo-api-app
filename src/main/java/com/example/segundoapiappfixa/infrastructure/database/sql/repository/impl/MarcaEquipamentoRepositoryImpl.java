@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.MarcaEquipamentoMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosMarcaEquipamentoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosMarcaEquipamento;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.MarcaEquipamentoSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.MarcaEquipamento;
@@ -25,7 +25,7 @@ public class MarcaEquipamentoRepositoryImpl implements MarcaEquipamentoRepositor
     private final MarcaEquipamentoMapper mapper;
 
     // Método de listar os registros persistidos no banco de dados
-    public List<MarcaEquipamento> findAll(FiltrosMarcaEquipamentoQueryParam filtros) {
+    public List<MarcaEquipamento> findAll(FiltrosMarcaEquipamento filtros) {
         Specification<MarcaEquipamentoEntity> specification = Specification.where(MarcaEquipamentoSpecs.findByNome(filtros.nome()))
                 .and(MarcaEquipamentoSpecs.findByDescricao(filtros.descricao()))
                 .and(MarcaEquipamentoSpecs.findByEstaAtivo());

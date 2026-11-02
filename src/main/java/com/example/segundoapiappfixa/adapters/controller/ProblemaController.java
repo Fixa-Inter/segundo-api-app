@@ -51,7 +51,7 @@ public class ProblemaController implements ProblemaControllerContract {
     ) {
         return ResponseEntity.ok(
                 mask(toOutputDTO(listarProblemas.listar(
-                        ControllerUtils.usuarioId(authentication), filtros
+                        ControllerUtils.usuarioId(authentication), filtros.toDomain()
                 )), campos)
         );
     }
@@ -68,7 +68,7 @@ public class ProblemaController implements ProblemaControllerContract {
     ) {
         return ResponseEntity.ok(
                 mask(toOutputDTO(listarProblemas.listarMinhas(
-                        ControllerUtils.usuarioId(authentication), filtros
+                        ControllerUtils.usuarioId(authentication), filtros.toDomain()
                 )), campos)
         );
     }
@@ -120,7 +120,7 @@ public class ProblemaController implements ProblemaControllerContract {
             Authentication authentication
     ) {
         return ResponseEntity.ok(mapper.toOutputDTO(atualizarProblema.atualizar(
-                dto, ControllerUtils.usuarioId(authentication))));
+                dto.toDomain(), ControllerUtils.usuarioId(authentication))));
     }
 
     @PatchMapping("/status")
@@ -130,7 +130,7 @@ public class ProblemaController implements ProblemaControllerContract {
 
             Authentication authentication
     ) {
-        return ResponseEntity.ok(mapper.toOutputDTO(atualizarStatus.atualizar(input)));
+        return ResponseEntity.ok(mapper.toOutputDTO(atualizarStatus.atualizar(input.toDomain())));
     }
 
     @DeleteMapping("/{problemaId}")

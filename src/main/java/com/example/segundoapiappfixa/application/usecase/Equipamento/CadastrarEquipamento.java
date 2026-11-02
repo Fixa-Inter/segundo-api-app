@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Equipamento;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Equipamento.EquipamentoCadastrarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Equipamento.EquipamentoCadastrarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
@@ -24,7 +24,7 @@ public class CadastrarEquipamento {
     private final ModeloEquipamentoRepository modeloRepository;
     private final LocalUnidadeRepository localRepository;
 
-    public Equipamento cadastrar(EquipamentoCadastrarInputDTO dto, Long usuarioId) {
+    public Equipamento cadastrar(EquipamentoCadastrarDados dto, Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 

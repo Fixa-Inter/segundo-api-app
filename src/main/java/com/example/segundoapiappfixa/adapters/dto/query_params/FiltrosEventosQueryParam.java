@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.query_params;
 
+import com.example.segundoapiappfixa.domain.filter.FiltrosEventos;
+
 import org.springframework.web.bind.annotation.BindParam;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -33,4 +35,7 @@ public record FiltrosEventosQueryParam(
         @BindParam("direcao_ordenacao")
         Integer direcaoOrdenacao
 ) {
+    public FiltrosEventos toDomain() {
+        return new FiltrosEventos(titulo, descricao, localUnidade, descricaoLocal, dataHoraInicio, dataHoraFim, observacao, usuario, limite, campoOrdenacao, direcaoOrdenacao);
+    }
 }

@@ -7,7 +7,7 @@ import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.model.Aptidao;
 import com.example.segundoapiappfixa.domain.repository.AptidaoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosUsuario;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class ListarTecnicos {
 
     public List<TecnicoResumo> listar(
             Long usuarioId,
-            FiltrosUsuarioQueryParam filtros,
+            FiltrosUsuario filtros,
             boolean incluirGestores
     ) {
         Usuario usuario = usuarioRepository.findById(usuarioId)

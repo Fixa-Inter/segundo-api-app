@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Equipamento;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Equipamento.EquipamentoAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Equipamento.EquipamentoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 import com.example.segundoapiappfixa.domain.model.Usuario;
@@ -21,7 +21,7 @@ public class AtualizarEquipamento {
     private final ModeloEquipamentoRepository modeloRepository;
     private final LocalUnidadeRepository localRepository;
 
-    public Equipamento atualizar(EquipamentoAtualizarInputDTO dto, Long usuarioId) {
+    public Equipamento atualizar(EquipamentoAtualizarDados dto, Long usuarioId) {
 
         Equipamento equipamento = repository.findById(dto.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.equipamento.notFound"));

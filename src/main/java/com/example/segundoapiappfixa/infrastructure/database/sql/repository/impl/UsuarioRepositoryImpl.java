@@ -7,7 +7,7 @@ import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.adapters.mapper.UsuarioMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosUsuario;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.UsuarioSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaUsuarioRepository;
@@ -54,7 +54,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     public List<Usuario> findByUnidadeIdAndTipoAcesso(
             Long unidadeId,
             TipoAcesso tipoAcesso,
-            FiltrosUsuarioQueryParam filtros
+            FiltrosUsuario filtros
     ) {
         Specification<UsuarioEntity> specification = Specification.where(UsuarioSpecs.findByEstaAtivo())
                 .and(UsuarioSpecs.findByUnidadeId(unidadeId))

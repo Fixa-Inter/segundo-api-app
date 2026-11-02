@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.query_params;
 
+import com.example.segundoapiappfixa.domain.filter.FiltrosModeloEquipamento;
+
 import org.springframework.web.bind.annotation.BindParam;
 
 public record FiltrosModeloEquipamentoQueryParam(
@@ -15,4 +17,7 @@ public record FiltrosModeloEquipamentoQueryParam(
         @BindParam("direcao_ordenacao")
         Integer direcaoOrdenacao
 ) {
+    public FiltrosModeloEquipamento toDomain() {
+        return new FiltrosModeloEquipamento(nome, descricao, marca, categoria, limite, campoOrdenacao, direcaoOrdenacao);
+    }
 }

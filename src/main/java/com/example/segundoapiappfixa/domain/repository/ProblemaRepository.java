@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.domain.repository;
 
 import com.example.segundoapiappfixa.domain.model.Problema;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosProblema;
 
 import java.util.Map;
 
@@ -21,12 +21,12 @@ public interface ProblemaRepository {
 
     List<Problema> findAllByUsuarioId(
             Long usuarioId,
-            FiltrosProblemaQueryParam filtros
+            FiltrosProblema filtros
     );
 
     List<Problema> findAllByLocalUnidadeIds(
             List<Long> localUnidadeIds,
-            FiltrosProblemaQueryParam filtros
+            FiltrosProblema filtros
     );
 
     Optional<Problema> findById(Long problemaId);

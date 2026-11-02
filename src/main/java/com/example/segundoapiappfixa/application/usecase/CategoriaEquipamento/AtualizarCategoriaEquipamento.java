@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.CategoriaEquipamento;
 
-import com.example.segundoapiappfixa.adapters.dto.input.CategoriaEquipamento.CategoriaEquipamentoAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.CategoriaEquipamento.CategoriaEquipamentoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.CategoriaEquipamento;
 import com.example.segundoapiappfixa.domain.model.Usuario;
@@ -18,7 +18,7 @@ public class AtualizarCategoriaEquipamento {
     private final UsuarioRepository usuarioRepository;
 
     public CategoriaEquipamento atualizar(
-            CategoriaEquipamentoAtualizarInputDTO dto,
+            CategoriaEquipamentoAtualizarDados dto,
             Long usuarioId
     ) {
         CategoriaEquipamento categoriaEquipamento = categoriaEquipamentoRepository.findById(dto.id())

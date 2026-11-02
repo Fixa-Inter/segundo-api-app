@@ -3,7 +3,7 @@ package com.example.segundoapiappfixa.domain.repository;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.model.Usuario;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosUsuario;
 
 import java.util.Map;
 
@@ -26,7 +26,7 @@ public interface UsuarioRepository {
     List<Usuario> findByUnidadeIdAndTipoAcesso(
             Long unidadeId,
             TipoAcesso tipoAcesso,
-            FiltrosUsuarioQueryParam filtros
+            FiltrosUsuario filtros
     );
 
     List<Usuario> findGestoresAtivosByUnidadeId(Long unidadeId);

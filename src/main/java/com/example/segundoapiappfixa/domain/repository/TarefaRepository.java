@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.domain.repository;
 
 import com.example.segundoapiappfixa.domain.model.Tarefa;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosTarefa;
 import java.util.Map;
 import java.util.Collection;
 
@@ -16,7 +16,7 @@ public interface TarefaRepository {
             "usuario_responsavel", "ordemServico.usuario.nomeCompleto"
     );
 
-    List<Tarefa> findAllByOrdemServicoId(Long ordemServicoId, FiltrosTarefaQueryParam filtros);
+    List<Tarefa> findAllByOrdemServicoId(Long ordemServicoId, FiltrosTarefa filtros);
 
     Map<Long, Long> countEmAndamentoByTecnicoIds(Collection<Long> tecnicoIds);
 

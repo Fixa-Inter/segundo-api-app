@@ -52,7 +52,7 @@ public class CategoriaEquipamentoController implements CategoriaEquipamentoContr
         return ResponseEntity.ok(mask(
                 toOutputDTO(listarCategoriasEquipamento.listar(
                         ControllerUtils.usuarioId(authentication),
-                        filtros
+                        filtros.toDomain()
                 )),
 
                 campos
@@ -91,7 +91,7 @@ public class CategoriaEquipamentoController implements CategoriaEquipamentoContr
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(mapper.toOutputDTO(
-                        cadastrarCategoriaEquipamento.cadastrar(dto,ControllerUtils.usuarioId(authentication))
+                        cadastrarCategoriaEquipamento.cadastrar(dto.toDomain(),ControllerUtils.usuarioId(authentication))
                 ));
     }
 
@@ -105,7 +105,7 @@ public class CategoriaEquipamentoController implements CategoriaEquipamentoContr
             Authentication authentication
     ) {
         return ResponseEntity.ok(mapper.toOutputDTO(
-                        atualizarCategoriaEquipamento.atualizar(dto,ControllerUtils.usuarioId(authentication))
+                        atualizarCategoriaEquipamento.atualizar(dto.toDomain(),ControllerUtils.usuarioId(authentication))
                 ));
     }
 

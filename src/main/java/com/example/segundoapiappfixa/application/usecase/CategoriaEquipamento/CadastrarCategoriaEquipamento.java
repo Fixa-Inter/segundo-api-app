@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.CategoriaEquipamento;
 
-import com.example.segundoapiappfixa.adapters.dto.input.CategoriaEquipamento.CategoriaEquipamentoCadastrarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.CategoriaEquipamento.CategoriaEquipamentoCadastrarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.CategoriaEquipamento;
 import com.example.segundoapiappfixa.domain.model.Usuario;
@@ -21,7 +21,7 @@ public class CadastrarCategoriaEquipamento {
 
     @Transactional
     public CategoriaEquipamento cadastrar(
-            CategoriaEquipamentoCadastrarInputDTO dto,
+            CategoriaEquipamentoCadastrarDados dto,
             Long usuarioId
     ) {
         Usuario usuario = usuarioRepository.findById(usuarioId)

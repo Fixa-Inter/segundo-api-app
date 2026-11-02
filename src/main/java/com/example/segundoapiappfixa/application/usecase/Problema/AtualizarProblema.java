@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Problema.ProblemaAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
@@ -23,7 +23,7 @@ public class AtualizarProblema {
     private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
 
     @Transactional
-    public Problema atualizar(ProblemaAtualizarInputDTO dto, Long usuarioId) {
+    public Problema atualizar(ProblemaAtualizarDados dto, Long usuarioId) {
         Problema problema = problemaRepository.findById(dto.problemaId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.problema.notFound"));
 

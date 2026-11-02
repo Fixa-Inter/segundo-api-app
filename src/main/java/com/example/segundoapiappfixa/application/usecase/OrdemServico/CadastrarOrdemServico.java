@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
-import com.example.segundoapiappfixa.adapters.dto.input.OrdemServico.OrdemServicoCadastrarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.OrdemServico.OrdemServicoCadastrarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
@@ -25,7 +25,7 @@ public class CadastrarOrdemServico {
     private final UsuarioRepository usuarioRepository;
 
     @Transactional
-    public OrdemServico cadastrar(OrdemServicoCadastrarInputDTO input, Long usuarioAutenticadoId) {
+    public OrdemServico cadastrar(OrdemServicoCadastrarDados input, Long usuarioAutenticadoId) {
 
         Usuario gestor = buscarUsuario(usuarioAutenticadoId);
         Usuario responsavel = buscarUsuario(input.usuarioId());

@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.application.usecase.ModeloEquipamento;
 
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.ModeloEquipamento;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosModeloEquipamentoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosModeloEquipamento;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.ModeloEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
@@ -19,7 +19,7 @@ public class ListarModelosEquipamentos {
     private final EquipamentoRepository equipamentoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public List<ModeloEquipamentoResumo> listar(Long usuarioId, FiltrosModeloEquipamentoQueryParam filtros) {
+    public List<ModeloEquipamentoResumo> listar(Long usuarioId, FiltrosModeloEquipamento filtros) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));

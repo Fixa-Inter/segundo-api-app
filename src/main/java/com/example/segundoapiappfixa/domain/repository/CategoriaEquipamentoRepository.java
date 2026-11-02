@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.domain.repository;
 
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosCategoriaEquipamentoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosCategoriaEquipamento;
 import com.example.segundoapiappfixa.domain.model.CategoriaEquipamento;
 
 import java.util.List;
@@ -23,6 +23,6 @@ public interface CategoriaEquipamentoRepository {
 
     List<CategoriaEquipamento> findByUnidadeId(
             Long categoriaEquipamentoId,
-            FiltrosCategoriaEquipamentoQueryParam filtros
+            FiltrosCategoriaEquipamento filtros
     );
 }

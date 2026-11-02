@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.EventoMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEventosQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosEventos;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.EventoSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Evento;
@@ -42,7 +42,7 @@ public class EventoRepositoryImpl implements EventoRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Evento> findByUsuarioId(Long usuarioId, FiltrosEventosQueryParam filtros) {
+    public List<Evento> findByUsuarioId(Long usuarioId, FiltrosEventos filtros) {
         Specification<EventoEntity> specification = Specification.where(EventoSpecs.findByUsuarioId(usuarioId))
                 .and(EventoSpecs.findByTitulo(filtros.titulo()))
                 .and(EventoSpecs.findByDescricao(filtros.descricao()))

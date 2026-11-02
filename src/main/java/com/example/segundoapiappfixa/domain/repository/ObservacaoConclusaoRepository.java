@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.domain.repository;
 
 import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosObservacaoConclusaoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosObservacaoConclusao;
 import java.util.List;
 import java.util.List;
 import java.util.Optional;
@@ -18,12 +18,12 @@ public interface ObservacaoConclusaoRepository {
 
     List<ObservacaoConclusao> findAllByUnidadeId(
             Long unidadeId,
-            FiltrosObservacaoConclusaoQueryParam filtros
+            FiltrosObservacaoConclusao filtros
     );
 
     List<ObservacaoConclusao> findAllByResponsavelId(
             Long responsavelId,
-            FiltrosObservacaoConclusaoQueryParam filtros
+            FiltrosObservacaoConclusao filtros
     );
 
     void delete(Long id);

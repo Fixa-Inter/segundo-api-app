@@ -51,7 +51,7 @@ public class OcorrenciaController implements OcorrenciaControllerContract {
     ) {
         return ResponseEntity.ok(mask(
                 toOutputDTO(listarOcorrencias.listar(
-                        ControllerUtils.usuarioId(authentication), filtros
+                        ControllerUtils.usuarioId(authentication), filtros.toDomain()
                 )),
                 campos
         ));
@@ -69,7 +69,7 @@ public class OcorrenciaController implements OcorrenciaControllerContract {
     ) {
         return ResponseEntity.ok(mask(
                 toOutputDTO(listarOcorrencias.listarMinhas(
-                        ControllerUtils.usuarioId(authentication), filtros
+                        ControllerUtils.usuarioId(authentication), filtros.toDomain()
                 )),
                 campos
         ));
@@ -123,7 +123,7 @@ public class OcorrenciaController implements OcorrenciaControllerContract {
     ) {
         return ResponseEntity.ok(mapper.toOutputDTO(
                 atualizarOcorrencia.atualizar(
-                        input,
+                        input.toDomain(),
                         ControllerUtils.usuarioId(authentication)
                 )
         ));

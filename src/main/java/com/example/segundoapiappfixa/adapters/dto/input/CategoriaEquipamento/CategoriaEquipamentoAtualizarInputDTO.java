@@ -1,7 +1,8 @@
 package com.example.segundoapiappfixa.adapters.dto.input.CategoriaEquipamento;
 
+import com.example.segundoapiappfixa.domain.model.input.CategoriaEquipamento.CategoriaEquipamentoAtualizarDados;
+
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 public record CategoriaEquipamentoAtualizarInputDTO(
         @NotNull(message = "{validation.categoriaEquipamento.required}")
@@ -11,4 +12,7 @@ public record CategoriaEquipamentoAtualizarInputDTO(
         String descricao,
         Boolean estaAtivo
 ) {
+    public CategoriaEquipamentoAtualizarDados toDomain() {
+        return new CategoriaEquipamentoAtualizarDados(id, nome, descricao, estaAtivo);
+    }
 }

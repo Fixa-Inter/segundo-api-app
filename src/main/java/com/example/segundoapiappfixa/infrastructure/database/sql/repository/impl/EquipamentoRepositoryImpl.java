@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEquipamentoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosEquipamento;
 import com.example.segundoapiappfixa.adapters.mapper.EquipamentoMapper;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
@@ -44,7 +44,7 @@ public class EquipamentoRepositoryImpl implements EquipamentoRepository {
     @Override
     public List<Equipamento> findByModeloEquipamentoId(
             Long modeloEquipamentoId,
-            FiltrosEquipamentoQueryParam filtros
+            FiltrosEquipamento filtros
     ) {
 
         Specification<EquipamentoEntity> specification = Specification.where(EquipamentoSpecs.findByEstaAtivo())

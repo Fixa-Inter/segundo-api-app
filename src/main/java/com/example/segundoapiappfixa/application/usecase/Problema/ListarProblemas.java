@@ -3,7 +3,7 @@ package com.example.segundoapiappfixa.application.usecase.Problema;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.Problema;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosProblema;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
@@ -21,7 +21,7 @@ public class ListarProblemas {
     private final LocalUnidadeRepository localUnidadeRepository;
     private final ProblemaRepository problemaRepository;
 
-    public List<Problema> listarMinhas(Long usuarioId, FiltrosProblemaQueryParam filtros) {
+    public List<Problema> listarMinhas(Long usuarioId, FiltrosProblema filtros) {
         List<Problema> problemas = problemaRepository.findAllByUsuarioId(usuarioId, filtros);
 
         if (problemas.isEmpty()) throw new com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException("exception.problema.notFound");
@@ -29,7 +29,7 @@ public class ListarProblemas {
         return problemas;
     }
 
-    public List<Problema> listar(Long usuarioId, FiltrosProblemaQueryParam filtros) {
+    public List<Problema> listar(Long usuarioId, FiltrosProblema filtros) {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || usuario.getUnidade() == null || usuario.getUnidade().getId() == null) {

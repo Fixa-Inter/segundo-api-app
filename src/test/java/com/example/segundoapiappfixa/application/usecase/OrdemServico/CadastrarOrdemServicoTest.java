@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
-import com.example.segundoapiappfixa.adapters.dto.input.OrdemServico.OrdemServicoCadastrarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.OrdemServico.OrdemServicoCadastrarDados;
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
@@ -110,8 +110,8 @@ class CadastrarOrdemServicoTest {
         when(problemaRepository.findById(3L)).thenReturn(Optional.of(problema));
     }
 
-    private OrdemServicoCadastrarInputDTO input() {
-        return new OrdemServicoCadastrarInputDTO(
+    private OrdemServicoCadastrarDados input() {
+        return new OrdemServicoCadastrarDados(
                 3L, 2L, StatusOrdemServico.NAO_INICIADA, CategoriaProblema.ELETRICA,
                 LocalDate.of(2026, 10, 20), Prioridade.MEDIA);
     }

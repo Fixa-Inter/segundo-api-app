@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.domain.repository;
 
 
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOrdemServicoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosOrdemServico;
 import java.util.Map;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface OrdemServicoRepository {
 
     List<OrdemServico> findAllByProblemaIds(
             List<Long> problemaIds,
-            FiltrosOrdemServicoQueryParam filtros
+            FiltrosOrdemServico filtros
     );
 
     Optional<OrdemServico> findById(Long ordemServicoId);
@@ -37,7 +37,7 @@ public interface OrdemServicoRepository {
 
     List<OrdemServico> findByUsuarioId(
             Long usuarioId,
-            FiltrosOrdemServicoQueryParam filtros
+            FiltrosOrdemServico filtros
     );
 
     List<OrdemServico> findVencidasNaoConcluidas(LocalDateTime inicioDoDiaAtual);

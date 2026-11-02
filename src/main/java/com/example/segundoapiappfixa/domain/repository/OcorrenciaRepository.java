@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.domain.repository;
 
 import com.example.segundoapiappfixa.domain.model.Ocorrencia;
 import java.util.List;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOcorrenciaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosOcorrencia;
 import java.util.Map;
 
 import java.util.List;
@@ -23,12 +23,12 @@ public interface OcorrenciaRepository {
 
     List<Ocorrencia> findAllByUsuarioId(
             Long usuarioId,
-            FiltrosOcorrenciaQueryParam filtros
+            FiltrosOcorrencia filtros
     );
 
     List<Ocorrencia> findAllByLocalUnidadeIds(
             List<Long> localUnidadeIds,
-            FiltrosOcorrenciaQueryParam filtros
+            FiltrosOcorrencia filtros
     );
 
     Optional<Ocorrencia> findById(Long ocorrenciaId);

@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.input.Equipamento;
 
+import com.example.segundoapiappfixa.domain.model.input.Equipamento.EquipamentoAtualizarDados;
+
 import jakarta.validation.constraints.NotNull;
 
 public record EquipamentoAtualizarInputDTO (
@@ -10,4 +12,7 @@ public record EquipamentoAtualizarInputDTO (
         Long localUnidadeId,
         String codigo
 ) {
+    public EquipamentoAtualizarDados toDomain() {
+        return new EquipamentoAtualizarDados(id, modeloEquipamentoId, localUnidadeId, codigo);
+    }
 }

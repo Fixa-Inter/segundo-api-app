@@ -52,7 +52,7 @@ public class PerfilController implements PerfilControllerContract {
             Authentication authentication
     ) {
         return ResponseEntity.ok(mapper.toOutputDTO(atualizarPerfil.atualizar(
-                dto,
+                dto.toDomain(),
                 ControllerUtils.usuarioId(authentication)
         )));
     }

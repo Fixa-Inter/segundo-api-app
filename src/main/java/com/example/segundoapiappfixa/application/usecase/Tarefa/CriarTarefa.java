@@ -1,7 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Tarefa;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaCriarInputDTO;
-import com.example.segundoapiappfixa.adapters.mapper.TarefaMapper;
+import com.example.segundoapiappfixa.domain.model.input.Tarefa.TarefaCriarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
@@ -27,7 +26,7 @@ public class CriarTarefa {
 
     @Transactional
     public List<Tarefa> criarTarefas(
-            List<TarefaCriarInputDTO> tarefaCriarInputDTOS,
+            List<TarefaCriarDados> tarefaCriarInputDTOS,
             Long usuarioId
     ) {
 

@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
+import com.example.segundoapiappfixa.domain.model.input.Problema.ProblemaAtualizarStatusDados;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
 import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
@@ -9,14 +9,12 @@ import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 @UseCase
 @RequiredArgsConstructor
 public class AtualizarStatus {
 
     private final ProblemaRepository problemaRepository;
-    public Problema atualizar(ProblemaAtualizarStatusDTO dto) {
+    public Problema atualizar(ProblemaAtualizarStatusDados dto) {
 
         Problema problema = problemaRepository.findById(dto.problemaId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.problema.notFound"));

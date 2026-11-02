@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Problema.ProblemaAtualizarStatusDTO;
+import com.example.segundoapiappfixa.domain.model.input.Problema.ProblemaAtualizarStatusDados;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
@@ -31,7 +31,7 @@ class AtualizarStatusTest {
         Problema problema = problemaPendente();
         when(problemaRepository.findById(1L)).thenReturn(Optional.of(problema));
 
-        ProblemaAtualizarStatusDTO dto = new ProblemaAtualizarStatusDTO(
+        ProblemaAtualizarStatusDados dto = new ProblemaAtualizarStatusDados(
                 1L, StatusProblema.REPROVADO, "   ");
 
         RegraProblemaException exception = assertThrows(
@@ -47,7 +47,7 @@ class AtualizarStatusTest {
         Problema problema = problemaPendente();
         when(problemaRepository.findById(1L)).thenReturn(Optional.of(problema));
 
-        ProblemaAtualizarStatusDTO dto = new ProblemaAtualizarStatusDTO(
+        ProblemaAtualizarStatusDados dto = new ProblemaAtualizarStatusDados(
                 1L, StatusProblema.APROVADO, "motivo indevido");
 
         RegraProblemaException exception = assertThrows(

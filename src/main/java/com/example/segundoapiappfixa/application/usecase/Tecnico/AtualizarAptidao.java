@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Tecnico;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Aptidao.AptidaoAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Aptidao.AptidaoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.Aptidao;
@@ -18,7 +18,7 @@ public class AtualizarAptidao {
     private final AptidaoRepository aptidaoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public Aptidao atualizar(AptidaoAtualizarInputDTO dto, Long usuarioId) {
+    public Aptidao atualizar(AptidaoAtualizarDados dto, Long usuarioId) {
         Aptidao aptidao = aptidaoRepository.findById(dto.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.aptidao.notFound"));
 

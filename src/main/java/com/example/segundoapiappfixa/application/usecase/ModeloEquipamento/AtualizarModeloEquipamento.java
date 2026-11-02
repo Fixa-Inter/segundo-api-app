@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.ModeloEquipamento;
 
-import com.example.segundoapiappfixa.adapters.dto.input.ModeloEquipamento.ModeloEquipamentoAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.ModeloEquipamento.ModeloEquipamentoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.*;
@@ -17,7 +17,7 @@ public class AtualizarModeloEquipamento {
     private final MarcaEquipamentoRepository marcaRepository;
     private final CategoriaEquipamentoRepository categoriaRepository;
 
-    public ModeloEquipamento atualizar(ModeloEquipamentoAtualizarInputDTO dto, Long usuarioId) {
+    public ModeloEquipamento atualizar(ModeloEquipamentoAtualizarDados dto, Long usuarioId) {
 
         ModeloEquipamento modelo = repository.findById(dto.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.modeloEquipamento.notFound"));

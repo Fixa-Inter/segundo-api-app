@@ -50,7 +50,7 @@ public class EventoController implements EventoControllerContract {
             Authentication authentication
     ) {
         return ResponseEntity.ok(mask(
-                toOutputDTO(listarEventos.listar(ControllerUtils.usuarioId(authentication), filtros)),
+                toOutputDTO(listarEventos.listar(ControllerUtils.usuarioId(authentication), filtros.toDomain())),
                 campos
         ));
     }
@@ -84,7 +84,7 @@ public class EventoController implements EventoControllerContract {
             Authentication authentication
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toOutputDTO(
-                cadastrarEvento.cadastrar(dto, ControllerUtils.usuarioId(authentication))
+                cadastrarEvento.cadastrar(dto.toDomain(), ControllerUtils.usuarioId(authentication))
         ));
     }
 
@@ -98,7 +98,7 @@ public class EventoController implements EventoControllerContract {
             Authentication authentication
     ) {
         return ResponseEntity.ok(mapper.toOutputDTO(
-                atualizarEvento.atualizar(dto, ControllerUtils.usuarioId(authentication))
+                atualizarEvento.atualizar(dto.toDomain(), ControllerUtils.usuarioId(authentication))
         ));
     }
 

@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.OcorrenciaMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOcorrenciaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosOcorrencia;
 import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.*;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.OcorrenciaSpecs;
@@ -37,7 +37,7 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private List<Ocorrencia> buscar(Specification<OcorrenciaEntity> base, FiltrosOcorrenciaQueryParam filtros) {
+    private List<Ocorrencia> buscar(Specification<OcorrenciaEntity> base, FiltrosOcorrencia filtros) {
         Specification<OcorrenciaEntity> specification = OcorrenciaSpecs.findByEstaAtivo()
                 .and(base)
                 .and(OcorrenciaSpecs.findByTitulo(filtros.titulo()))
@@ -72,13 +72,13 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Ocorrencia> findAllByUsuarioId(Long usuarioId, FiltrosOcorrenciaQueryParam filtros) {
+    public List<Ocorrencia> findAllByUsuarioId(Long usuarioId, FiltrosOcorrencia filtros) {
         return buscar(OcorrenciaSpecs.findByUsuarioId(usuarioId), filtros);
     }
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Ocorrencia> findAllByLocalUnidadeIds(List<Long> localUnidadeIds, FiltrosOcorrenciaQueryParam filtros) {
+    public List<Ocorrencia> findAllByLocalUnidadeIds(List<Long> localUnidadeIds, FiltrosOcorrencia filtros) {
         if (localUnidadeIds == null || localUnidadeIds.isEmpty()) {
             return List.of();
         }

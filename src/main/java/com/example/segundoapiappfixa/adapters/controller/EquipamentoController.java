@@ -56,7 +56,7 @@ public class EquipamentoController implements EquipamentoControllerContract {
                 toOutputDTO(listarEquipamentos.listar(
                         modeloEquipamentoId,
                         ControllerUtils.usuarioId(authentication),
-                        filtros
+                        filtros.toDomain()
                 )),
                 campos
         ));
@@ -93,7 +93,7 @@ public class EquipamentoController implements EquipamentoControllerContract {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(mapper.toOutputDTO(cadastrarEquipamento.cadastrar(
-                        dto,
+                        dto.toDomain(),
                         ControllerUtils.usuarioId(authentication)
                 )
         ));
@@ -109,7 +109,7 @@ public class EquipamentoController implements EquipamentoControllerContract {
             Authentication authentication
     ) {
         return ResponseEntity.ok(mapper.toOutputDTO(atualizarEquipamento.atualizar(
-                        dto,
+                        dto.toDomain(),
                         ControllerUtils.usuarioId(authentication)
                 ))
         );

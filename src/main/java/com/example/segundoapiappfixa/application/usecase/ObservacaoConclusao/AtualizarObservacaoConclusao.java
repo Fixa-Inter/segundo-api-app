@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.ObservacaoConclusao;
 
-import com.example.segundoapiappfixa.adapters.dto.input.ObservacaoConclusao.ObservacaoConclusaoAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.ObservacaoConclusao.ObservacaoConclusaoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
 import com.example.segundoapiappfixa.domain.model.*;
@@ -19,7 +19,7 @@ public class AtualizarObservacaoConclusao {
     private final UsuarioRepository usuarioRepository;
     private final FotoRepository fotoRepository;
 
-    public ObservacaoConclusao atualizar(ObservacaoConclusaoAtualizarInputDTO dto, Long usuarioId, boolean gestor) {
+    public ObservacaoConclusao atualizar(ObservacaoConclusaoAtualizarDados dto, Long usuarioId, boolean gestor) {
         if (dto.observacao() != null && dto.observacao().isBlank())
             throw new RegraProblemaException("validation.observacaoConclusao.observacao.invalid");
 

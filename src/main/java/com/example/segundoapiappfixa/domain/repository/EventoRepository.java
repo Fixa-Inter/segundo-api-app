@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.domain.repository;
 
 import com.example.segundoapiappfixa.domain.model.Evento;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEventosQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosEventos;
 import java.util.Map;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public interface EventoRepository {
 
     List<Evento> findByUsuarioId(
             Long usuarioId,
-            FiltrosEventosQueryParam filtros
+            FiltrosEventos filtros
     );
 
     Optional<Evento> findById(Long eventoId);

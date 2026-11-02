@@ -3,7 +3,7 @@ package com.example.segundoapiappfixa.application.usecase.Ocorrencia;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.Ocorrencia;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOcorrenciaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosOcorrencia;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
@@ -21,7 +21,7 @@ public class ListarOcorrencias {
     private final UsuarioRepository usuarioRepository;
     private final LocalUnidadeRepository localUnidadeRepository;
 
-    public List<Ocorrencia> listar(Long usuarioId, FiltrosOcorrenciaQueryParam filtros) {
+    public List<Ocorrencia> listar(Long usuarioId, FiltrosOcorrencia filtros) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.notFound"));
 
@@ -50,7 +50,7 @@ public class ListarOcorrencias {
         return ocorrencia;
     }
 
-    public List<Ocorrencia> listarMinhas(Long usuarioId, FiltrosOcorrenciaQueryParam filtros) {
+    public List<Ocorrencia> listarMinhas(Long usuarioId, FiltrosOcorrencia filtros) {
         return ocorrenciaRepository.findAllByUsuarioId(usuarioId, filtros);
     }
 

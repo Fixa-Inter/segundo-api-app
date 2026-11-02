@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Tarefa;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Tarefa.TarefaAtualizarDados;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
@@ -46,7 +46,7 @@ class AtualizarTarefaTest {
         when(usuarioRepository.findById(2L)).thenReturn(Optional.of(usuario));
 
         RegraProblemaException exception = assertThrows(RegraProblemaException.class,
-                () -> atualizarTarefa.atualizar(new TarefaAtualizarInputDTO(1L, "novo", null, null), 2L, false));
+                () -> atualizarTarefa.atualizar(new TarefaAtualizarDados(1L, "novo", null, null), 2L, false));
 
         assertEquals("exception.access.denied", exception.getMessage());
     }

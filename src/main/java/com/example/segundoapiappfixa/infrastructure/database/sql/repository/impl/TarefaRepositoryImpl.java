@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.TarefaMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosTarefa;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.TarefaSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
@@ -47,7 +47,7 @@ public class TarefaRepositoryImpl implements TarefaRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Tarefa> findAllByOrdemServicoId(Long id, FiltrosTarefaQueryParam filtros) {
+    public List<Tarefa> findAllByOrdemServicoId(Long id, FiltrosTarefa filtros) {
         Specification<TarefaEntity> specification = Specification.where(TarefaSpecs.findByOrdemServicoId(id))
                 .and(TarefaSpecs.findByTituloTarefa(filtros.titulo()))
                 .and(TarefaSpecs.findByDescricao(filtros.descricao()))

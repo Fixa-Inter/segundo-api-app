@@ -2,7 +2,7 @@ package com.example.segundoapiappfixa.application.usecase.Tecnico;
 
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOrdemServicoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosOrdemServico;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
@@ -35,7 +35,7 @@ public class ListarOrdensServicoTecnico {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        List<OrdemServico> ordensServico = ordemServicoRepository.findByUsuarioId(tecnicoId, new FiltrosOrdemServicoQueryParam(null, null, null, null, null, null, null, null, null, null, null, null, null));
+        List<OrdemServico> ordensServico = ordemServicoRepository.findByUsuarioId(tecnicoId, new FiltrosOrdemServico(null, null, null, null, null, null, null, null, null, null, null, null, null));
         if (ordensServico.isEmpty()) {
             throw new EntidadeNaoEncontradaException("exception.ordemServico.notFound");
         }

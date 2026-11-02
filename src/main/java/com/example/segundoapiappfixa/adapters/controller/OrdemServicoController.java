@@ -52,7 +52,7 @@ public class OrdemServicoController implements OrdemServicoControllerContract {
     ) {
        return ResponseEntity.ok(
                 mask(toOutputDTO(listarOrdensServico.listar(
-                        ControllerUtils.usuarioId(authentication), filtros
+                        ControllerUtils.usuarioId(authentication), filtros.toDomain()
                 )), campos)
         );
     }
@@ -69,7 +69,7 @@ public class OrdemServicoController implements OrdemServicoControllerContract {
     ) {
         return ResponseEntity.ok(
                 mask(toOutputDTO(listarOrdensServico.listarMinhas(
-                        ControllerUtils.usuarioId(authentication), filtros
+                        ControllerUtils.usuarioId(authentication), filtros.toDomain()
                 )), campos)
         );
     }
@@ -104,7 +104,7 @@ public class OrdemServicoController implements OrdemServicoControllerContract {
     ) {
        return ResponseEntity.status(HttpStatus.CREATED).body(
                 mapper.toOutputDTO(cadastrarOrdemServico.cadastrar(
-                        input,
+                        input.toDomain(),
                         ControllerUtils.usuarioId(authentication)
                 ))
         );
@@ -120,7 +120,7 @@ public class OrdemServicoController implements OrdemServicoControllerContract {
             Authentication authentication
     ) {
        return ResponseEntity.ok(mapper.toOutputDTO(atualizarOrdemServico.atualizar(
-                input,
+                input.toDomain(),
                 ControllerUtils.usuarioId(authentication),
                 ControllerUtils.isGestor(authentication)
         )));

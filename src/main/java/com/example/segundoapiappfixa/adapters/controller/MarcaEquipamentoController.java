@@ -47,7 +47,7 @@ public class MarcaEquipamentoController implements MarcaEquipamentoControllerCon
             FiltrosMarcaEquipamentoQueryParam filtros
     ) {
         return ResponseEntity.ok(mask(
-                toOutputDTO(listarMarcasEquipamento.listar(filtros)),
+                toOutputDTO(listarMarcasEquipamento.listar(filtros.toDomain())),
                 campos
         ));
     }
@@ -75,7 +75,7 @@ public class MarcaEquipamentoController implements MarcaEquipamentoControllerCon
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(mapper.toOutputDTO(cadastrarMarcaEquipamento.cadastrar(dto))
+                .body(mapper.toOutputDTO(cadastrarMarcaEquipamento.cadastrar(dto.toDomain()))
         );
     }
 
@@ -87,7 +87,7 @@ public class MarcaEquipamentoController implements MarcaEquipamentoControllerCon
             MarcaEquipamentoAtualizarInputDTO dto
     ) {
         return ResponseEntity.ok(
-                mapper.toOutputDTO(atualizarMarcaEquipamento.atualizar(dto))
+                mapper.toOutputDTO(atualizarMarcaEquipamento.atualizar(dto.toDomain()))
         );
     }
 

@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
-import com.example.segundoapiappfixa.adapters.dto.input.OrdemServico.OrdemServicoAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.OrdemServico.OrdemServicoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
@@ -19,7 +19,7 @@ public class AtualizarOrdemServico {
     private final UsuarioRepository usuarioRepository;
 
     @Transactional
-    public OrdemServico atualizar(OrdemServicoAtualizarInputDTO input, Long usuarioAutenticadoId, boolean isGestor) {
+    public OrdemServico atualizar(OrdemServicoAtualizarDados input, Long usuarioAutenticadoId, boolean isGestor) {
         OrdemServico ordemServico = ordemServicoRepository.findById(input.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
 
@@ -61,7 +61,7 @@ public class AtualizarOrdemServico {
     }
 
     private void validarAtualizacaoDoTecnico(
-            OrdemServicoAtualizarInputDTO input,
+            OrdemServicoAtualizarDados input,
             OrdemServico ordemServico,
             Long usuarioAutenticadoId
     ) {
