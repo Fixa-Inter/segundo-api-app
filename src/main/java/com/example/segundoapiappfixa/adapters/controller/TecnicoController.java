@@ -66,7 +66,7 @@ public class TecnicoController implements TecnicoControllerContract {
                 toTecnicoOutputDTO(listarTecnicos.listar(
                         ControllerUtils.usuarioId(authentication),
                         filtros.toDomain(),
-                        ControllerUtils.isAdministrador(authentication)
+                        ControllerUtils.tipoAcesso(authentication)
                 )),
 
                 campos
@@ -107,8 +107,8 @@ public class TecnicoController implements TecnicoControllerContract {
         return ResponseEntity.ok(maskAptidoes(
                 toAptidaoOutputDTO(listarAptidoes.listar(
                         usuarioId,
-                        ControllerUtils.usuarioId(authentication)
-                )),
+                        ControllerUtils.usuarioId(authentication),
+                        ControllerUtils.tipoAcesso(authentication))),
 
                 campos
         ));
@@ -146,8 +146,8 @@ public class TecnicoController implements TecnicoControllerContract {
         return ResponseEntity.ok(aptidaoMapper.toOutputDTO(
                 atualizarAptidao.atualizar(
                         dto.toDomain(),
-                        ControllerUtils.usuarioId(authentication)
-                )
+                        ControllerUtils.usuarioId(authentication),
+                        ControllerUtils.tipoAcesso(authentication))
         ));
     }
 

@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
@@ -59,7 +61,8 @@ public class ListarOrdensServico {
         return ordensServico;
     }
 
-    public OrdemServico listar(Long ordemServicoId, Long usuarioId, boolean isGestor) {
+    public OrdemServico listar(Long ordemServicoId, Long usuarioId, TipoAcesso permissao) {
+        Permissoes.validarOperacional(permissao);
         OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
 
@@ -74,7 +77,7 @@ public class ListarOrdensServico {
         boolean tecnicoVinculado = ordemServico.getUsuario() != null
                 && usuarioId.equals(ordemServico.getUsuario().getId());
 
-        if (!mesmoUnidade || (!isGestor && !tecnicoVinculado)) {
+        if (!mesmoUnidade || (!Permissoes.gestor(permissao) && !tecnicoVinculado)) {
             throw new com.example.segundoapiappfixa.application.exception.RegraProblemaException(
                     "exception.access.denied"
             );

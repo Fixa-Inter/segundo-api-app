@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.application.usecase.Problema;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.Problema;
@@ -49,7 +51,8 @@ public class ListarProblemas {
         return problemas;
     }
 
-    public Problema listar(Long id, Long usuarioId, boolean isGestor) {
+    public Problema listar(Long id, Long usuarioId, TipoAcesso permissao) {
+        Permissoes.validar(permissao);
 
         Problema problema = problemaRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.problema.notFound"));
@@ -66,7 +69,7 @@ public class ListarProblemas {
         boolean donoDoProblema = problema.getUsuario() != null
                 && usuarioId.equals(problema.getUsuario().getId());
 
-        if (!mesmoUnidade || (!donoDoProblema && !isGestor)) {
+        if (!mesmoUnidade || (!donoDoProblema && !Permissoes.gestor(permissao))) {
             throw new RegraProblemaException("exception.access.denied");
         }
 

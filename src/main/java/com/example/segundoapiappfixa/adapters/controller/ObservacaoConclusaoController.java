@@ -66,7 +66,7 @@ public class ObservacaoConclusaoController implements ObservacaoConclusaoControl
                 mapper.toOutputDTO(listar.listarDetalhes(
                         id,
                         ControllerUtils.usuarioId(authentication),
-                        ControllerUtils.isGestor(authentication))
+                        ControllerUtils.tipoAcesso(authentication))
                 ),
                 campos
         ));
@@ -84,7 +84,7 @@ public class ObservacaoConclusaoController implements ObservacaoConclusaoControl
                         mapper.toModel(dto),
                         dto.fotos(),
                         ControllerUtils.usuarioId(authentication),
-                        ControllerUtils.isGestor(authentication)
+                        ControllerUtils.tipoAcesso(authentication)
                 )));
     }
 
@@ -97,7 +97,7 @@ public class ObservacaoConclusaoController implements ObservacaoConclusaoControl
         return ResponseEntity.ok(mapper.toOutputDTO(atualizar.atualizar(
                 dto.toDomain(),
                 ControllerUtils.usuarioId(authentication),
-                ControllerUtils.isGestor(authentication)
+                ControllerUtils.tipoAcesso(authentication)
         )));
     }
 
@@ -110,7 +110,7 @@ public class ObservacaoConclusaoController implements ObservacaoConclusaoControl
         return ResponseEntity.ok(mapper.toOutputDTO(deletar.deletar(
                 id,
                 ControllerUtils.usuarioId(a),
-                ControllerUtils.isGestor(a)
+                ControllerUtils.tipoAcesso(a)
         )));
     }
 

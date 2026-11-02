@@ -140,9 +140,9 @@ class NotificacaoFluxosTest {
         when(ordens.save(any())).thenAnswer(call -> call.getArgument(0));
         AtualizarOrdemServico atualizar = new AtualizarOrdemServico(ordens, usuarios, sender);
 
-        atualizar.atualizar(new OrdemServicoAtualizarDados(8L, 2L, null, null, null, null), 1L, true);
+        atualizar.atualizar(new OrdemServicoAtualizarDados(8L, 2L, null, null, null, null), 1L, TipoAcesso.GESTOR);
         verifyNoInteractions(sender);
-        atualizar.atualizar(new OrdemServicoAtualizarDados(8L, 3L, null, null, null, null), 1L, true);
+        atualizar.atualizar(new OrdemServicoAtualizarDados(8L, 3L, null, null, null, null), 1L, TipoAcesso.GESTOR);
         verify(sender).notificarAposPersistencia(3L, TipoNotificacao.ORDEM_SERVICO.getId(), 8L,
                 "Uma nova OS foi atribuída a você: Luz.");
     }

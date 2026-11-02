@@ -87,7 +87,7 @@ public class OrdemServicoController implements OrdemServicoControllerContract {
         OrdemServicoOutputDTO dto = mapper.toOutputDTO(listarOrdensServico.listar(
                 ordemServicoId,
                 ControllerUtils.usuarioId(authentication),
-                ControllerUtils.isGestor(authentication)
+                ControllerUtils.tipoAcesso(authentication)
         ));
 
         return ResponseEntity.ok(mask(dto, campos));
@@ -122,7 +122,7 @@ public class OrdemServicoController implements OrdemServicoControllerContract {
        return ResponseEntity.ok(mapper.toOutputDTO(atualizarOrdemServico.atualizar(
                 input.toDomain(),
                 ControllerUtils.usuarioId(authentication),
-                ControllerUtils.isGestor(authentication)
+                ControllerUtils.tipoAcesso(authentication)
         )));
     }
 
@@ -137,7 +137,7 @@ public class OrdemServicoController implements OrdemServicoControllerContract {
         return ResponseEntity.ok(
                 mapper.toOutputDTO(deletarOrdemServico.deletar(
                         ordemServicoId,
-                        ControllerUtils.isGestor(authentication),
+                        ControllerUtils.tipoAcesso(authentication),
                         ControllerUtils.usuarioId(authentication)
                 ))
         );

@@ -32,7 +32,7 @@ class CadastrarObservacaoConclusaoTest {
         observacao.setObservacao("   ");
 
         RegraProblemaException exception = assertThrows(RegraProblemaException.class,
-                () -> cadastrar.cadastrar(observacao, List.of("foto.jpg"), 10L, false));
+                () -> cadastrar.cadastrar(observacao, List.of("foto.jpg"), 10L, com.example.segundoapiappfixa.domain.enums.TipoAcesso.TECNICO));
 
         assertEquals("validation.observacaoConclusao.observacao.invalid", exception.getMessage());
         verify(usuarioRepository, never()).findById(10L);

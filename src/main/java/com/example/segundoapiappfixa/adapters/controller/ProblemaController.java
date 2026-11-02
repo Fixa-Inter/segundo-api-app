@@ -87,7 +87,7 @@ public class ProblemaController implements ProblemaControllerContract {
                 listarProblemas.listar(
                         problemaId,
                         ControllerUtils.usuarioId(authentication),
-                        ControllerUtils.isGestor(authentication)
+                        ControllerUtils.tipoAcesso(authentication)
                 )
         );
 

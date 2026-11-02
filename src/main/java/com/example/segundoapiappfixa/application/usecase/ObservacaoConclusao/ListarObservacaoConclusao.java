@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.ObservacaoConclusao;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
 import com.example.segundoapiappfixa.domain.filter.FiltrosObservacaoConclusao;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
@@ -32,19 +33,21 @@ public class ListarObservacaoConclusao {
         return validarResultado(repository.findAllByResponsavelId(usuarioId, filtros));
     }
 
-    public ObservacaoConclusao listarDetalhes(Long id, Long usuarioId, boolean gestor) {
+    public ObservacaoConclusao listarDetalhes(Long id, Long usuarioId, TipoAcesso permissao) {
+        Permissoes.validarOperacional(permissao);
         ObservacaoConclusao observacao = repository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.observacaoConclusao.notFound"));
 
-        validarPermissao(observacao.getOrdemServico(), buscarUsuario(usuarioId), gestor);
+        validarPermissao(observacao.getOrdemServico(), buscarUsuario(usuarioId), permissao);
         return observacao;
     }
 
-    public void validarPermissao(OrdemServico ordemServico, Usuario usuario, boolean gestor) {
+    public void validarPermissao(OrdemServico ordemServico, Usuario usuario, TipoAcesso permissao) {
+        Permissoes.validarOperacional(permissao);
         boolean mesmoUnidade = usuario.getUnidade().getId().equals(
                 ordemServico.getProblema().getLocalUnidade().getUnidade().getId());
 
-        if (gestor && mesmoUnidade) return;
+        if (Permissoes.gestor(permissao) && mesmoUnidade) return;
 
         boolean tecnicoResponsavel = usuario.getId().equals(ordemServico.getUsuario().getId());
 

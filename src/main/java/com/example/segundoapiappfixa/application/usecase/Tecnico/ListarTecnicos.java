@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Tecnico;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
@@ -27,8 +28,9 @@ public class ListarTecnicos {
     public List<TecnicoResumo> listar(
             Long usuarioId,
             FiltrosUsuario filtros,
-            boolean incluirGestores
+            TipoAcesso permissao
     ) {
+        Permissoes.validarGestao(permissao);
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
@@ -38,7 +40,7 @@ public class ListarTecnicos {
                 filtros
         );
 
-        if (incluirGestores) {
+        if (Permissoes.administrador(permissao)) {
             usuarios = new ArrayList<>(usuarios);
             usuarios.addAll(usuarioRepository.findByUnidadeIdAndTipoAcesso(
                     usuario.getUnidade().getId(),

@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.ObservacaoConclusao;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
@@ -22,8 +23,9 @@ public class DeletarObservacaoConclusao {
     public ObservacaoConclusao deletar(
             Long observacaoConclusaoId,
             Long usuarioId,
-            Boolean gestor
+            TipoAcesso permissao
     ) {
+        Permissoes.validarOperacional(permissao);
         ObservacaoConclusao observacao = observacaoConclusaoRepository.findById(observacaoConclusaoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException(
                         "exception.observacaoConclusao.notFound"));
@@ -31,18 +33,19 @@ public class DeletarObservacaoConclusao {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.notFound"));
 
-        validarPermissao(observacao.getOrdemServico(), usuario, Boolean.TRUE.equals(gestor));
+        validarPermissao(observacao.getOrdemServico(), usuario, permissao);
 
         observacaoConclusaoRepository.delete(observacaoConclusaoId);
 
         return observacao;
     }
 
-    public void validarPermissao(OrdemServico ordemServico, Usuario usuario, boolean gestor) {
+    public void validarPermissao(OrdemServico ordemServico, Usuario usuario, TipoAcesso permissao) {
+        Permissoes.validarOperacional(permissao);
         boolean mesmoUnidade = usuario.getUnidade().getId().equals(
                 ordemServico.getProblema().getLocalUnidade().getUnidade().getId());
 
-        if (gestor && mesmoUnidade) return;
+        if (Permissoes.gestor(permissao) && mesmoUnidade) return;
 
         boolean tecnicoResponsavel = usuario.getId().equals(ordemServico.getUsuario().getId());
 

@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.application.usecase.Tarefa;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.input.Tarefa.TarefaAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
@@ -21,8 +23,9 @@ public class AtualizarTarefa {
     public Tarefa atualizar(
             TarefaAtualizarDados tarefaAtualizarInputDTO,
             Long usuarioId,
-            boolean isGestor
+            TipoAcesso permissao
     ) {
+        Permissoes.validarOperacional(permissao);
         Tarefa tarefa = tarefaRepository.findById(tarefaAtualizarInputDTO.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.tarefa.notFound"));
 
@@ -39,13 +42,13 @@ public class AtualizarTarefa {
         boolean tecnicoResponsavel = tarefa.getOrdemServico().getUsuario() != null
                 && Objects.equals(tarefa.getOrdemServico().getUsuario().getId(), usuarioId);
 
-        if (!mesmaUnidade || (!isGestor && !tecnicoResponsavel)) {
+        if (!mesmaUnidade || (!Permissoes.gestor(permissao) && !tecnicoResponsavel)) {
             throw new RegraProblemaException("exception.access.denied");
         }
 
-        if (isGestor && tarefaAtualizarInputDTO.titulo() != null) tarefa.setTitulo(tarefaAtualizarInputDTO.titulo());
+        if (Permissoes.gestor(permissao) && tarefaAtualizarInputDTO.titulo() != null) tarefa.setTitulo(tarefaAtualizarInputDTO.titulo());
 
-        if (isGestor && tarefaAtualizarInputDTO.descricao() != null) tarefa.setDescricao(tarefaAtualizarInputDTO.descricao());
+        if (Permissoes.gestor(permissao) && tarefaAtualizarInputDTO.descricao() != null) tarefa.setDescricao(tarefaAtualizarInputDTO.descricao());
 
         if (tarefaAtualizarInputDTO.statusOrdemServico() != null) tarefa.setStatusOrdemServico(tarefaAtualizarInputDTO.statusOrdemServico());
 

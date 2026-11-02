@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.application.usecase.Tarefa;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
@@ -19,12 +21,13 @@ public class DeletarTarefa {
 
     public Tarefa deletarTarefa(
             Long tarefaId,
-            Boolean isGestor,
+            TipoAcesso permissao,
             Long usuarioId
     ) {
+        Permissoes.validarOperacional(permissao);
         Tarefa tarefa = tarefaRepository.findById(tarefaId).orElse(null);
 
-        if (!isGestor) throw new RegraProblemaException("exception.gestor.required");
+        if (!Permissoes.gestor(permissao)) throw new RegraProblemaException("exception.gestor.required");
 
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 

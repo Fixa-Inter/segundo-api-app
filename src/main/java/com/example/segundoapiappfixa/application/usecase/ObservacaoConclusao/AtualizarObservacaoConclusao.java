@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.application.usecase.ObservacaoConclusao;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.input.ObservacaoConclusao.ObservacaoConclusaoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
@@ -19,7 +21,9 @@ public class AtualizarObservacaoConclusao {
     private final UsuarioRepository usuarioRepository;
     private final FotoRepository fotoRepository;
 
-    public ObservacaoConclusao atualizar(ObservacaoConclusaoAtualizarDados dto, Long usuarioId, boolean gestor) {
+    public ObservacaoConclusao atualizar(ObservacaoConclusaoAtualizarDados dto, Long usuarioId, TipoAcesso permissao) {
+        Permissoes.validarOperacional(permissao);
+
         if (dto.observacao() != null && dto.observacao().isBlank())
             throw new RegraProblemaException("validation.observacaoConclusao.observacao.invalid");
 
@@ -27,7 +31,7 @@ public class AtualizarObservacaoConclusao {
 
         Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.notFound"));
 
-        validarPermissao(atual.getOrdemServico(), usuario, gestor);
+        validarPermissao(atual.getOrdemServico(), usuario, permissao);
 
         if (dto.dificuldade() != null) atual.setDificuldade(dto.dificuldade());
         if (dto.observacao() != null) atual.setObservacao(dto.observacao());
@@ -58,11 +62,12 @@ public class AtualizarObservacaoConclusao {
         return atual;
     }
 
-    public void validarPermissao(OrdemServico ordemServico, Usuario usuario, boolean gestor) {
+    public void validarPermissao(OrdemServico ordemServico, Usuario usuario, TipoAcesso permissao) {
+        Permissoes.validarOperacional(permissao);
         boolean mesmoUnidade = usuario.getUnidade().getId().equals(
                 ordemServico.getProblema().getLocalUnidade().getUnidade().getId());
 
-        if (gestor && mesmoUnidade) return;
+        if (Permissoes.gestor(permissao) && mesmoUnidade) return;
 
         boolean tecnicoResponsavel = usuario.getId().equals(ordemServico.getUsuario().getId());
 

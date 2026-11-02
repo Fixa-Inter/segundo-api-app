@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
 import com.example.segundoapiappfixa.domain.model.input.OrdemServico.OrdemServicoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
@@ -23,7 +24,8 @@ public class AtualizarOrdemServico {
     private final NotificacaoSender notificacoes;
 
     @Transactional
-    public OrdemServico atualizar(OrdemServicoAtualizarDados input, Long usuarioAutenticadoId, boolean isGestor) {
+    public OrdemServico atualizar(OrdemServicoAtualizarDados input, Long usuarioAutenticadoId, TipoAcesso permissao) {
+        Permissoes.validarOperacional(permissao);
         OrdemServico ordemServico = ordemServicoRepository.findById(input.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
 
@@ -32,7 +34,7 @@ public class AtualizarOrdemServico {
         Usuario gestor = usuarioRepository.findById(usuarioAutenticadoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.notFound"));
 
-        if (!isGestor) {
+        if (!Permissoes.gestor(permissao)) {
             validarAtualizacaoDoTecnico(input, ordemServico, usuarioAutenticadoId);
         }
 
