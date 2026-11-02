@@ -76,6 +76,8 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
                 .and(OrdemServicoSpecs.findByStatusOrdemServico(filtros.statusOrdemServico()))
                 .and(OrdemServicoSpecs.findByDataPrevistaMin(filtros.dataPrevistaMin()))
                 .and(OrdemServicoSpecs.findByDataPrevistaMax(filtros.dataPrevistaMax()))
+                .and(OrdemServicoSpecs.findByDataCriacaoMin(filtros.dataCriacaoMin()))
+                .and(OrdemServicoSpecs.findByDataCriacaoMax(filtros.dataCriacaoMax()))
                 .and(OrdemServicoSpecs.findByNomeUsuario(filtros.nomeUsuario()))
                 .and(OrdemServicoSpecs.findByTipoAcesso(filtros.tipoAcesso()));
 

@@ -27,6 +27,14 @@ public record FiltrosOrdemServicoQueryParam(
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         LocalDateTime dataPrevistaMax,
 
+        @BindParam("data_criacao_min")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        LocalDateTime dataCriacaoMin,
+
+        @BindParam("data_criacao_max")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        LocalDateTime dataCriacaoMax,
+
         @BindParam("status_ordem_servico")
         String statusOrdemServico,
 
@@ -45,6 +53,6 @@ public record FiltrosOrdemServicoQueryParam(
         Integer direcaoOrdenacao
 ) {
     public FiltrosOrdemServico toDomain() {
-        return new FiltrosOrdemServico(titulo, descricao, categoriaProblema, categoriaEquipamento, prioridade, dataPrevistaMin, dataPrevistaMax, statusOrdemServico, nomeUsuario, tipoAcesso, limite, campoOrdenacao, direcaoOrdenacao);
+        return new FiltrosOrdemServico(titulo, descricao, categoriaProblema, categoriaEquipamento, prioridade, dataPrevistaMin, dataPrevistaMax, dataCriacaoMin, dataCriacaoMax, statusOrdemServico, nomeUsuario, tipoAcesso, limite, campoOrdenacao, direcaoOrdenacao);
     }
 }

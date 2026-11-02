@@ -66,6 +66,16 @@ public final class OrdemServicoSpecs {
         return (r, q, c) -> c.lessThanOrEqualTo(r.get("dataPrevista"), v);
     }
 
+    public static Specification<OrdemServicoEntity> findByDataCriacaoMin(LocalDateTime v) {
+        if (v == null) return Specification.unrestricted();
+        return (r, q, c) -> c.greaterThanOrEqualTo(r.get("dataCriacao"), v);
+    }
+
+    public static Specification<OrdemServicoEntity> findByDataCriacaoMax(LocalDateTime v) {
+        if (v == null) return Specification.unrestricted();
+        return (r, q, c) -> c.lessThanOrEqualTo(r.get("dataCriacao"), v);
+    }
+
     public static Specification<OrdemServicoEntity> findByNomeUsuario(String v) {
         return relationLike("usuario", "nomeCompleto", v);
     }
