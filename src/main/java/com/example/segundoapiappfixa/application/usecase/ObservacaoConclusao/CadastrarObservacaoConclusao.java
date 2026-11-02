@@ -1,14 +1,17 @@
 package com.example.segundoapiappfixa.application.usecase.ObservacaoConclusao;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.ObservacaoConclusaoRepository;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,12 +23,14 @@ public class CadastrarObservacaoConclusao {
     private final OrdemServicoRepository ordemServicoRepository;
     private final UsuarioRepository usuarioRepository;
 
+    @Transactional
     public ObservacaoConclusao cadastrar(
             ObservacaoConclusao observacaoConclusao,
             List<String> fotos,
             Long usuarioId,
-            boolean gestor
+            TipoAcesso permissao
     ) {
+        Permissoes.validarOperacional(permissao);
         if (observacaoConclusao == null) {
             throw new RegraProblemaException("exception.observacaoConclusao.required");
         }
@@ -44,7 +49,7 @@ public class CadastrarObservacaoConclusao {
         if (observacaoConclusaoRepository.existsByOrdemServicoId(ordemServico.getId()))
             throw new RegraProblemaException("exception.observacaoConclusao.alreadyExists");
 
-        validarPermissao(usuario, ordemServico, gestor);
+        validarPermissao(usuario, ordemServico, permissao);
 
         observacaoConclusao.setOrdemServico(ordemServico);
         ordemServico.setStatusOrdemServico(StatusOrdemServico.CONCLUIDA);
@@ -56,11 +61,11 @@ public class CadastrarObservacaoConclusao {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.observacaoConclusao.notFound"));
     }
 
-    private void validarPermissao(Usuario usuario, OrdemServico ordemServico, boolean gestor) {
+    private void validarPermissao(Usuario usuario, OrdemServico ordemServico, TipoAcesso permissao) {
         boolean mesmoUnidade = usuario.getUnidade().getId().equals(
                 ordemServico.getProblema().getLocalUnidade().getUnidade().getId());
 
-        if (gestor && mesmoUnidade) return;
+        if (Permissoes.gestor(permissao) && mesmoUnidade) return;
 
         boolean tecnicoResponsavel = usuario.getId().equals(ordemServico.getUsuario().getId());
 

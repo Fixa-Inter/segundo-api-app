@@ -1,17 +1,13 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.ProblemaMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosProblema;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.ProblemaSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Problema;
-import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
-import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
-import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.ProblemaEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaProblemaRepositiory;
-import com.example.segundoapiappfixa.infrastructure.external.notification.NotificacaoInfrastructureService;
 import lombok.RequiredArgsConstructor;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -23,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.sql.Array;
@@ -34,11 +31,19 @@ import java.sql.Types;
 @RequiredArgsConstructor
 public class ProblemaRepositoryImpl implements ProblemaRepository {
 
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "titulo", "titulo",
+            "descricao_problema", "descricaoProblema",
+            "categoria_equipamento", "categoriaEquipamento.nome",
+            "local_unidade", "localUnidade.nome",
+            "descricao_local", "descricaoLocal",
+            "nome_usuario", "usuario.nomeCompleto",
+            "tipo_acesso", "usuario.tipoAcesso"
+    );
+
     // Dependências
     private final JpaProblemaRepositiory repository;
     private final ProblemaMapper mapper;
-    private final NotificacaoInfrastructureService notificacoes;
-    private final UsuarioRepository usuarios;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -46,13 +51,13 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Problema> findAllByUsuarioId(Long usuarioId, FiltrosProblemaQueryParam filtros) {
+    public List<Problema> findAllByUsuarioId(Long usuarioId, FiltrosProblema filtros) {
         return buscar(ProblemaSpecs.findByUsuarioId(usuarioId), filtros);
     }
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Problema> findAllByLocalUnidadeIds(List<Long> localUnidadeIds, FiltrosProblemaQueryParam filtros) {
+    public List<Problema> findAllByLocalUnidadeIds(List<Long> localUnidadeIds, FiltrosProblema filtros) {
 
         if (localUnidadeIds.isEmpty()) {
             return List.of();
@@ -61,7 +66,7 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
         return buscar(ProblemaSpecs.findByLocalUnidadeIds(localUnidadeIds), filtros);
     }
 
-    private List<Problema> buscar(Specification<ProblemaEntity> base, FiltrosProblemaQueryParam filtros) {
+    private List<Problema> buscar(Specification<ProblemaEntity> base, FiltrosProblema filtros) {
         Specification<ProblemaEntity> specification = base
                 .and(ProblemaSpecs.findByTitulo(filtros.titulo()))
                 .and(ProblemaSpecs.findByDescricaoProblema(filtros.descricaoProblema()))
@@ -75,7 +80,7 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
                 .and(ProblemaSpecs.findByDataCriacaoMax(filtros.dataCriacaoMax()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 
@@ -124,34 +129,12 @@ public class ProblemaRepositoryImpl implements ProblemaRepository {
             }
         });
 
-        Long unidadeId = problema.getLocalUnidade().getUnidade().getId();
-        String mensagem = "Nova solicitação registrada: " + problema.getTitulo() + ".";
-        usuarios.findGestoresAtivosByUnidadeId(unidadeId).forEach(gestor ->
-                notificacoes.notificarAposPersistencia(
-                        gestor.getId(),
-                        TipoNotificacao.SOLICITACAO.getId(),
-                        problemaId,
-                        mensagem
-                )
-        );
-
         return problemaId;
     }
 
     public Problema update(Problema problema) {
-        StatusProblema statusAnterior = repository.findById(problema.getId())
-                .map(ProblemaEntity::getStatus).orElse(null);
-
         ProblemaEntity entity = mapper.toEntity(problema);
-        Problema atualizado = mapper.toModel(repository.save(entity));
-
-        if (statusAnterior != null && statusAnterior != atualizado.getStatus() && atualizado.getUsuario() != null) {
-            notificacoes.notificarAposPersistencia(atualizado.getUsuario().getId(),
-                    TipoNotificacao.SOLICITACAO.getId(), atualizado.getId(),
-                    "O status da sua solicitação \"" + atualizado.getTitulo() + "\" foi atualizado para "
-                            + atualizado.getStatus().getNome() + ".");
-        }
-        return atualizado;
+        return mapper.toModel(repository.save(entity));
     }
 
     @Override

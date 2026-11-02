@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.OcorrenciaMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOcorrenciaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosOcorrencia;
 import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.*;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.OcorrenciaSpecs;
@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.sql.Array;
@@ -30,6 +31,18 @@ import java.sql.Types;
 @RequiredArgsConstructor
 public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
 
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "titulo", "titulo",
+            "descricao_ocorrencia", "descricaoOcorrencia",
+            "categoria_problema", "categoriaProblema",
+            "prioridade", "prioridade",
+            "local_unidade", "localUnidade.nome",
+            "descricao_local", "descricaoLocal",
+            "categoria_equipamento", "categoriaEquipamento.nome",
+            "nome_usuario", "usuario.nomeCompleto",
+            "tipo_acesso", "usuario.tipoAcesso"
+    );
+
     // Dependências
     private final JpaOcorrenciaRepository jpaRepository;
     private final OcorrenciaMapper mapper;
@@ -37,7 +50,7 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private List<Ocorrencia> buscar(Specification<OcorrenciaEntity> base, FiltrosOcorrenciaQueryParam filtros) {
+    private List<Ocorrencia> buscar(Specification<OcorrenciaEntity> base, FiltrosOcorrencia filtros) {
         Specification<OcorrenciaEntity> specification = OcorrenciaSpecs.findByEstaAtivo()
                 .and(base)
                 .and(OcorrenciaSpecs.findByTitulo(filtros.titulo()))
@@ -53,7 +66,7 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
                 .and(OcorrenciaSpecs.findByDataCriacaoMax(filtros.dataCriacaoMax()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 
@@ -72,13 +85,13 @@ public class OcorrenciaRepositoryImpl implements OcorrenciaRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Ocorrencia> findAllByUsuarioId(Long usuarioId, FiltrosOcorrenciaQueryParam filtros) {
+    public List<Ocorrencia> findAllByUsuarioId(Long usuarioId, FiltrosOcorrencia filtros) {
         return buscar(OcorrenciaSpecs.findByUsuarioId(usuarioId), filtros);
     }
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Ocorrencia> findAllByLocalUnidadeIds(List<Long> localUnidadeIds, FiltrosOcorrenciaQueryParam filtros) {
+    public List<Ocorrencia> findAllByLocalUnidadeIds(List<Long> localUnidadeIds, FiltrosOcorrencia filtros) {
         if (localUnidadeIds == null || localUnidadeIds.isEmpty()) {
             return List.of();
         }

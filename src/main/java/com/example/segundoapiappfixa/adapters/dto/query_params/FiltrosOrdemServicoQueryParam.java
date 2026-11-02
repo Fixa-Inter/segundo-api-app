@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.query_params;
 
+import com.example.segundoapiappfixa.domain.filter.FiltrosOrdemServico;
+
 import org.springframework.web.bind.annotation.BindParam;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -42,4 +44,7 @@ public record FiltrosOrdemServicoQueryParam(
         @BindParam("direcao_ordenacao")
         Integer direcaoOrdenacao
 ) {
+    public FiltrosOrdemServico toDomain() {
+        return new FiltrosOrdemServico(titulo, descricao, categoriaProblema, categoriaEquipamento, prioridade, dataPrevistaMin, dataPrevistaMax, statusOrdemServico, nomeUsuario, tipoAcesso, limite, campoOrdenacao, direcaoOrdenacao);
+    }
 }

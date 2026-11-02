@@ -1,17 +1,16 @@
 package com.example.segundoapiappfixa.application.usecase.Ocorrencia;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Ocorrencia.OcorrenciaAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Ocorrencia.OcorrenciaAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
-import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
-import com.example.segundoapiappfixa.domain.enums.Prioridade;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.domain.enums.TipoFoto;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
@@ -27,7 +26,7 @@ public class AtualizarOcorrencia {
     private final FotoRepository fotoRepository;
 
     @Transactional
-    public Ocorrencia atualizar(OcorrenciaAtualizarInputDTO dto, Long usuarioId) {
+    public Ocorrencia atualizar(OcorrenciaAtualizarDados dto, Long usuarioId) {
 
         Long id = dto.id();
         Ocorrencia atual = ocorrenciaRepository.findById(id)
@@ -38,13 +37,17 @@ public class AtualizarOcorrencia {
         }
 
         if (dto.localUnidadeId() != null) {
-            atual.setLocalUnidade(localUnidadeRepository.findById(dto.localUnidadeId())
-                    .orElseThrow(() -> new RegraProblemaException("exception.local.required")));
+            LocalUnidade local = localUnidadeRepository.findById(dto.localUnidadeId())
+                    .orElseThrow(() -> new RegraProblemaException("exception.local.required"));
+            UnidadeAcesso.validarLocal(atual.getUsuario(), local);
+            atual.setLocalUnidade(local);
         }
 
         if (dto.categoriaEquipamentoId() != null) {
-            atual.setCategoriaEquipamento(categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
-                    .orElseThrow(() -> new RegraProblemaException("exception.categoriaEquipamento.required")));
+            CategoriaEquipamento categoria = categoriaEquipamentoRepository.findById(dto.categoriaEquipamentoId())
+                    .orElseThrow(() -> new RegraProblemaException("exception.categoriaEquipamento.required"));
+            UnidadeAcesso.validarCategoria(atual.getUsuario(), categoria);
+            atual.setCategoriaEquipamento(categoria);
         }
 
         if (dto.categoriaProblemaId() != null) atual.setCategoriaProblema(dto.categoriaProblemaId());
@@ -65,7 +68,9 @@ public class AtualizarOcorrencia {
                     .map(Foto::getId)
                     .filter(idFoto -> idFoto != null && dto.fotosExcluir().contains(idFoto))
                     .toList();
+
             idsPertencentes.forEach(idFoto -> fotoRepository.deleteByIdAndOcorrenciaId(idFoto, ocorrenciaId));
+
             if (atual.getFotos() != null) {
                 atual.getFotos().removeIf(foto -> foto.getId() != null && idsPertencentes.contains(foto.getId()));
             }
@@ -89,6 +94,7 @@ public class AtualizarOcorrencia {
                 atual.getFotos().add(fotoRepository.save(foto, TipoFoto.OCORRENCIA));
             }
         }
+
         return atual;
     }
 }

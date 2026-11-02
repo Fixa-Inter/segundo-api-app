@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosCategoriaEquipamentoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosCategoriaEquipamento;
 import com.example.segundoapiappfixa.adapters.mapper.CategoriaEquipamentoMapper;
 import com.example.segundoapiappfixa.domain.model.CategoriaEquipamento;
 import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import jakarta.persistence.EntityManager;
@@ -26,6 +27,12 @@ import jakarta.persistence.PersistenceContext;
 @Transactional
 @RequiredArgsConstructor
 public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoRepository {
+
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "nome", "nome",
+            "descricao", "descricao",
+            "nome_usuario", "usuario.nomeCompleto"
+    );
 
     // Dependências
     private final JpaCategoriaEquipamentoRepository repository;
@@ -70,7 +77,7 @@ public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoR
     }
 
     // Método de listar os registros persistidos no banco de dados
-    public List<CategoriaEquipamento> findByUnidadeId(Long usuarioUnidadeId, FiltrosCategoriaEquipamentoQueryParam filtros) {
+    public List<CategoriaEquipamento> findByUnidadeId(Long usuarioUnidadeId, FiltrosCategoriaEquipamento filtros) {
 
         Specification<CategoriaEquipamentoEntity> specification = Specification.where(CategoriaEquipamentoSpecs.findByEstaAtivo())
                 .and(CategoriaEquipamentoSpecs.findByUnidadeId(usuarioUnidadeId))
@@ -79,7 +86,7 @@ public class CategoriaEquipamentoRepositoryImpl implements CategoriaEquipamentoR
                 .and(CategoriaEquipamentoSpecs.findByNomeUsuario(filtros.nomeUsuario()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

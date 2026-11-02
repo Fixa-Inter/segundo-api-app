@@ -1,17 +1,19 @@
 package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
-import com.example.segundoapiappfixa.adapters.dto.input.OrdemServico.OrdemServicoCadastrarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.OrdemServico.OrdemServicoCadastrarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
+import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
+import com.example.segundoapiappfixa.domain.service.NotificacaoSender;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +25,10 @@ public class CadastrarOrdemServico {
     private final OrdemServicoRepository ordemServicoRepository;
     private final ProblemaRepository problemaRepository;
     private final UsuarioRepository usuarioRepository;
+    private final NotificacaoSender notificacoes;
 
     @Transactional
-    public OrdemServico cadastrar(OrdemServicoCadastrarInputDTO input, Long usuarioAutenticadoId) {
+    public OrdemServico cadastrar(OrdemServicoCadastrarDados input, Long usuarioAutenticadoId) {
 
         Usuario gestor = buscarUsuario(usuarioAutenticadoId);
         Usuario responsavel = buscarUsuario(input.usuarioId());
@@ -64,7 +67,17 @@ public class CadastrarOrdemServico {
                 input.dataPrevista().atStartOfDay()
         );
 
-        return ordemServicoRepository.save(ordemServico);
+        OrdemServico salva = ordemServicoRepository.save(ordemServico);
+        notificacoes.notificarAposPersistencia(
+                responsavel.getId(),
+                TipoNotificacao.ORDEM_SERVICO.getId(),
+                salva.getId(),
+                "Uma nova OS foi atribuída a você: "
+                + problema.getTitulo()
+                + "."
+        );
+
+        return salva;
     }
 
     private Usuario buscarUsuario(Long id) {

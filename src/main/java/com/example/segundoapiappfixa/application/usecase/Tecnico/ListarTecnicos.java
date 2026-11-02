@@ -1,5 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Tecnico;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
@@ -7,9 +8,9 @@ import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.model.Aptidao;
 import com.example.segundoapiappfixa.domain.repository.AptidaoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosUsuario;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -26,9 +27,10 @@ public class ListarTecnicos {
 
     public List<TecnicoResumo> listar(
             Long usuarioId,
-            FiltrosUsuarioQueryParam filtros,
-            boolean incluirGestores
+            FiltrosUsuario filtros,
+            TipoAcesso permissao
     ) {
+        Permissoes.validarGestao(permissao);
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
@@ -38,7 +40,7 @@ public class ListarTecnicos {
                 filtros
         );
 
-        if (incluirGestores) {
+        if (Permissoes.administrador(permissao)) {
             usuarios = new ArrayList<>(usuarios);
             usuarios.addAll(usuarioRepository.findByUnidadeIdAndTipoAcesso(
                     usuario.getUnidade().getId(),

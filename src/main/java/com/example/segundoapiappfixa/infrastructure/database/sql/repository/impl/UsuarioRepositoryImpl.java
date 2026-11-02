@@ -7,12 +7,13 @@ import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.adapters.mapper.UsuarioMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosUsuarioQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosUsuario;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.UsuarioSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaUsuarioRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
@@ -26,6 +27,14 @@ import org.springframework.data.jpa.domain.Specification;
 @Transactional
 @RequiredArgsConstructor
 public class UsuarioRepositoryImpl implements UsuarioRepository {
+
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "nome_completo", "nomeCompleto",
+            "email", "email",
+            "cargo", "cargo",
+            "cnpj_unidade", "unidade.cnpj",
+            "esta_ativo", "estaAtivo"
+    );
 
     // Dependências
     private final JpaUsuarioRepository repository;
@@ -54,7 +63,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     public List<Usuario> findByUnidadeIdAndTipoAcesso(
             Long unidadeId,
             TipoAcesso tipoAcesso,
-            FiltrosUsuarioQueryParam filtros
+            FiltrosUsuario filtros
     ) {
         Specification<UsuarioEntity> specification = Specification.where(UsuarioSpecs.findByEstaAtivo())
                 .and(UsuarioSpecs.findByUnidadeId(unidadeId))
@@ -66,7 +75,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
                 .and(UsuarioSpecs.findByEstaAtivo());
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 
@@ -92,6 +101,14 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 
         return repository.findAll(specification).stream()
                 .map(mapper::toModel)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Long> findIdsAtivosByUnidadeId(Long unidadeId) {
+        return repository.findAllByUnidade_IdAndEstaAtivoTrue(unidadeId).stream()
+                .map(UsuarioEntity::getId)
                 .toList();
     }
 

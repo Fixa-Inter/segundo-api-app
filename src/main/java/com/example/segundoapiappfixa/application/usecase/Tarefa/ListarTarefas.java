@@ -1,15 +1,17 @@
 package com.example.segundoapiappfixa.application.usecase.Tarefa;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosTarefaQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosTarefa;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -25,10 +27,11 @@ public class ListarTarefas {
 
     public List<Tarefa> listar(
             Long ordemServicoId,
-            Boolean isGestor,
+            TipoAcesso permissao,
             Long usuarioId,
-            FiltrosTarefaQueryParam filtros
+            FiltrosTarefa filtros
     ) {
+        Permissoes.validarOperacional(permissao);
         OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
 
@@ -37,7 +40,7 @@ public class ListarTarefas {
 
         if (!usuario.getUnidade().getId()
                 .equals(ordemServico.getProblema().getLocalUnidade().getUnidade().getId()) ||
-                (!isGestor && !Objects.equals(ordemServico.getUsuario().getId(), usuarioId))
+                (!Permissoes.gestor(permissao) && !Objects.equals(ordemServico.getUsuario().getId(), usuarioId))
         ) {
             throw new RegraProblemaException("exception.access.denied");
         }
@@ -45,7 +48,8 @@ public class ListarTarefas {
         return tarefaRepository.findAllByOrdemServicoId(ordemServicoId, filtros);
     }
 
-    public Tarefa listarDetalhes(Long tarefaId, boolean isGestor, Long usuarioId) {
+    public Tarefa listarDetalhes(Long tarefaId, TipoAcesso permissao, Long usuarioId) {
+        Permissoes.validarOperacional(permissao);
         Tarefa tarefa = tarefaRepository.findById(tarefaId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.tarefa.notFound"));
 
@@ -56,7 +60,7 @@ public class ListarTarefas {
 
         if (!usuario.getUnidade().getId()
                 .equals(ordemServico.getProblema().getLocalUnidade().getUnidade().getId()) ||
-                (!isGestor && !Objects.equals(ordemServico.getUsuario().getId(), usuarioId))
+                (!Permissoes.gestor(permissao) && !Objects.equals(ordemServico.getUsuario().getId(), usuarioId))
         ) {
             throw new RegraProblemaException("exception.access.denied");
         }

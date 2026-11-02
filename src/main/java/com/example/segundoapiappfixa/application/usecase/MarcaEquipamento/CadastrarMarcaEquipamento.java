@@ -1,10 +1,10 @@
 package com.example.segundoapiappfixa.application.usecase.MarcaEquipamento;
 
-import com.example.segundoapiappfixa.adapters.dto.input.MarcaEquipamento.MarcaEquipamentoCadastrarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.MarcaEquipamento.MarcaEquipamentoCadastrarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.MarcaEquipamento;
 import com.example.segundoapiappfixa.domain.repository.MarcaEquipamentoRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -15,7 +15,7 @@ public class CadastrarMarcaEquipamento {
 
     private final MarcaEquipamentoRepository repository;
 
-    public MarcaEquipamento cadastrar(MarcaEquipamentoCadastrarInputDTO dto) {
+    public MarcaEquipamento cadastrar(MarcaEquipamentoCadastrarDados dto) {
 
         if (repository.existsByNomeIgnoreCase(
                 dto.nome().trim().toLowerCase(Locale.ROOT)

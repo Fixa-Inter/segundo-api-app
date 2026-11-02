@@ -3,7 +3,7 @@ package com.example.segundoapiappfixa.infrastructure.database.sql.repository.imp
 import com.example.segundoapiappfixa.adapters.mapper.ObservacaoConclusaoMapper;
 import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.ObservacaoConclusaoRepository;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosObservacaoConclusaoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosObservacaoConclusao;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.ObservacaoConclusaoSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.*;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaObservacaoConclusaoRepository;
@@ -72,12 +72,12 @@ public class ObservacaoConclusaoRepositoryImpl implements ObservacaoConclusaoRep
     }
 
     @Override
-    public List<ObservacaoConclusao> findAllByUnidadeId(Long id, FiltrosObservacaoConclusaoQueryParam f) {
+    public List<ObservacaoConclusao> findAllByUnidadeId(Long id, FiltrosObservacaoConclusao f) {
         return buscar(ObservacaoConclusaoSpecs.findByUnidadeId(id), f);
     }
 
     @Override
-    public List<ObservacaoConclusao> findAllByResponsavelId(Long id, FiltrosObservacaoConclusaoQueryParam f) {
+    public List<ObservacaoConclusao> findAllByResponsavelId(Long id, FiltrosObservacaoConclusao f) {
         return buscar(ObservacaoConclusaoSpecs.findByResponsavelId(id), f);
     }
 
@@ -86,7 +86,7 @@ public class ObservacaoConclusaoRepositoryImpl implements ObservacaoConclusaoRep
         repository.deleteById(id);
     }
 
-    private List<ObservacaoConclusao> buscar(org.springframework.data.jpa.domain.Specification<ObservacaoConclusaoEntity> base, FiltrosObservacaoConclusaoQueryParam f) {
+    private List<ObservacaoConclusao> buscar(org.springframework.data.jpa.domain.Specification<ObservacaoConclusaoEntity> base, FiltrosObservacaoConclusao f) {
         if (f != null) {
             base = base.and(ObservacaoConclusaoSpecs.equalId(f.id()))
                     .and(ObservacaoConclusaoSpecs.categoriaProblema(f.categoriaProblema()))

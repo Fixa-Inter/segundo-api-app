@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.query_params;
 
+import com.example.segundoapiappfixa.domain.filter.FiltrosProblema;
+
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import org.springframework.web.bind.annotation.BindParam;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -48,4 +50,7 @@ public record FiltrosProblemaQueryParam(
         @BindParam("direcao_ordenacao")
         Integer direcaoOrdenacao
 ) {
+    public FiltrosProblema toDomain() {
+        return new FiltrosProblema(titulo, descricaoProblema, categoriaEquipamento, localUnidade, descricaoLocal, equipamentoCodigo, nomeUsuario, tipoAcesso, statusProblema, dataCriacaoMin, dataCriacaoMax, limite, campoOrdenacao, direcaoOrdenacao);
+    }
 }

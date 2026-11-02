@@ -1,17 +1,19 @@
 package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
+import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosProblemaQueryParam;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOrdemServicoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosProblema;
+import com.example.segundoapiappfixa.domain.filter.FiltrosOrdemServico;
 import com.example.segundoapiappfixa.domain.model.Problema;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class ListarOrdensServico {
     private final ProblemaRepository problemaRepository;
     private final OrdemServicoRepository ordemServicoRepository;
 
-    public List<OrdemServico> listar(Long usuarioId, FiltrosOrdemServicoQueryParam filtros) {
+    public List<OrdemServico> listar(Long usuarioId, FiltrosOrdemServico filtros) {
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
 
         if (usuario == null || usuario.getUnidade() == null || usuario.getUnidade().getId() == null) {
@@ -39,7 +41,7 @@ public class ListarOrdensServico {
                 .toList();
 
         List<Long> problemasIds = problemaRepository
-                .findAllByLocalUnidadeIds(localUnidadeIds, new FiltrosProblemaQueryParam(null, null, null, null, null, null, null, null, null, null, null, null, null, null))
+                .findAllByLocalUnidadeIds(localUnidadeIds, new FiltrosProblema(null, null, null, null, null, null, null, null, null, null, null, null, null, null))
                 .stream()
                 .map(Problema::getId)
                 .toList();
@@ -51,7 +53,7 @@ public class ListarOrdensServico {
         return ordensServico;
     }
 
-    public List<OrdemServico> listarMinhas(Long usuarioId, FiltrosOrdemServicoQueryParam filtros) {
+    public List<OrdemServico> listarMinhas(Long usuarioId, FiltrosOrdemServico filtros) {
 
         List<OrdemServico> ordensServico = ordemServicoRepository.findByUsuarioId(usuarioId, filtros);
         if (ordensServico.isEmpty()) throw new EntidadeNaoEncontradaException("exception.ordemServico.notFound");
@@ -59,7 +61,8 @@ public class ListarOrdensServico {
         return ordensServico;
     }
 
-    public OrdemServico listar(Long ordemServicoId, Long usuarioId, boolean isGestor) {
+    public OrdemServico listar(Long ordemServicoId, Long usuarioId, TipoAcesso permissao) {
+        Permissoes.validarOperacional(permissao);
         OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.ordemServico.notFound"));
 
@@ -74,8 +77,8 @@ public class ListarOrdensServico {
         boolean tecnicoVinculado = ordemServico.getUsuario() != null
                 && usuarioId.equals(ordemServico.getUsuario().getId());
 
-        if (!mesmoUnidade || (!isGestor && !tecnicoVinculado)) {
-            throw new com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException(
+        if (!mesmoUnidade || (!Permissoes.gestor(permissao) && !tecnicoVinculado)) {
+            throw new com.example.segundoapiappfixa.application.exception.RegraProblemaException(
                     "exception.access.denied"
             );
         }

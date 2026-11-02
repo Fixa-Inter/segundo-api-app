@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.query_params;
 
+import com.example.segundoapiappfixa.domain.filter.FiltrosOcorrencia;
+
 import org.springframework.web.bind.annotation.BindParam;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
@@ -46,4 +48,7 @@ public record FiltrosOcorrenciaQueryParam(
         @BindParam("direcao_ordenacao")
         Integer direcaoOrdenacao
 ) {
+    public FiltrosOcorrencia toDomain() {
+        return new FiltrosOcorrencia(titulo, descricaoOcorrencia, categoriaProblema, prioridade, localUnidade, descricaoLocal, categoriaEquipamento, nomeUsuario, tipoAcesso, dataCriacaoMin, dataCriacaoMax, limite, campoOrdenacao, direcaoOrdenacao);
+    }
 }

@@ -1,18 +1,15 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.EventoMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEventosQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosEventos;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.EventoSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.Evento;
-import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
 import com.example.segundoapiappfixa.domain.repository.EventoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.EventoEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.LocalUnidadeEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.UsuarioEntity;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaEventoRepository;
-import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaUsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.external.notification.NotificacaoInfrastructureService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,18 +29,25 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EventoRepositoryImpl implements EventoRepository {
 
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "titulo", "titulo",
+            "descricao", "descricao",
+            "local_unidade", "localUnidade.nome",
+            "descricao_local", "descricaoLocal",
+            "observacao", "observacao",
+            "usuario", "usuario.nomeCompleto"
+    );
+
     // Dependências
     private final JpaEventoRepository repository;
     private final EventoMapper mapper;
-    private final JpaUsuarioRepository usuarios;
-    private final NotificacaoInfrastructureService notificacoes;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<Evento> findByUsuarioId(Long usuarioId, FiltrosEventosQueryParam filtros) {
+    public List<Evento> findByUsuarioId(Long usuarioId, FiltrosEventos filtros) {
         Specification<EventoEntity> specification = Specification.where(EventoSpecs.findByUsuarioId(usuarioId))
                 .and(EventoSpecs.findByTitulo(filtros.titulo()))
                 .and(EventoSpecs.findByDescricao(filtros.descricao()))
@@ -54,7 +59,7 @@ public class EventoRepositoryImpl implements EventoRepository {
                 .and(EventoSpecs.findByUsuario(filtros.usuario()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(),camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(),CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 
@@ -94,21 +99,7 @@ public class EventoRepositoryImpl implements EventoRepository {
         );
 
         EventoEntity salvo = repository.save(entity);
-        Evento criado = mapper.toModel(salvo);
-
-        if (evento.getId() == null) {
-            String mensagem = "Novo evento: " + criado.getTitulo() + ".";
-            usuarios.findAllByUnidade_IdAndEstaAtivoTrue(criado.getLocalUnidade().getUnidade().getId())
-                    .forEach(destinatario ->
-                    notificacoes.notificarAposPersistencia(
-                            destinatario.getId(),
-                            TipoNotificacao.EVENTO.getId(),
-                            criado.getId(),
-                            mensagem)
-                    );
-        }
-
-        return criado;
+        return mapper.toModel(salvo);
     }
 
     // Método de deletar dados persistidos no banco de dados

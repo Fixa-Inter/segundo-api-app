@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.input.Aptidao;
 
+import com.example.segundoapiappfixa.domain.model.input.Aptidao.AptidaoAtualizarDados;
+
 import java.math.BigDecimal;
 
 
@@ -13,4 +15,7 @@ public record AptidaoAtualizarInputDTO(
         BigDecimal nota,
         Boolean estaAtivo
 ) {
+    public AptidaoAtualizarDados toDomain() {
+        return new AptidaoAtualizarDados(id, nota, estaAtivo);
+    }
 }

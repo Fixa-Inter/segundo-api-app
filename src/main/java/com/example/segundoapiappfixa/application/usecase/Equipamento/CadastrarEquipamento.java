@@ -1,7 +1,8 @@
 package com.example.segundoapiappfixa.application.usecase.Equipamento;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Equipamento.EquipamentoCadastrarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.Equipamento.EquipamentoCadastrarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
+import com.example.segundoapiappfixa.application.security.UnidadeAcesso;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 import com.example.segundoapiappfixa.domain.model.LocalUnidade;
 import com.example.segundoapiappfixa.domain.model.ModeloEquipamento;
@@ -10,7 +11,7 @@ import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.ModeloEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class CadastrarEquipamento {
     private final ModeloEquipamentoRepository modeloRepository;
     private final LocalUnidadeRepository localRepository;
 
-    public Equipamento cadastrar(EquipamentoCadastrarInputDTO dto, Long usuarioId) {
+    public Equipamento cadastrar(EquipamentoCadastrarDados dto, Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
@@ -33,6 +34,9 @@ public class CadastrarEquipamento {
 
         LocalUnidade local = localRepository.findById(dto.localUnidadeId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.local.required"));
+
+        UnidadeAcesso.validarModelo(usuario, modelo);
+        UnidadeAcesso.validarLocal(usuario, local);
 
         Equipamento equipamento = new Equipamento(
                 null,

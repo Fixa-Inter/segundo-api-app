@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.query_params;
 
+import com.example.segundoapiappfixa.domain.filter.FiltrosObservacaoConclusao;
+
 import org.springframework.web.bind.annotation.BindParam;
 
 public record FiltrosObservacaoConclusaoQueryParam(
@@ -35,4 +37,7 @@ public record FiltrosObservacaoConclusaoQueryParam(
         @BindParam("data_criacao")
         String dataCriacao
 ) {
+    public FiltrosObservacaoConclusao toDomain() {
+        return new FiltrosObservacaoConclusao(id, titulo, descricaoProblema, categoriaProblema, categoriaEquipamento, localUnidade, descricaoLocal, statusProblema, prioridade, nomeResponsavel, dificuldade, observacao, dataCriacao);
+    }
 }

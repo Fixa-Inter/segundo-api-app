@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.adapters.mapper.dynamic;
 
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 
 import java.lang.reflect.RecordComponent;
 import java.util.Arrays;

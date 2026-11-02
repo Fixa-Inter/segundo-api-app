@@ -1,8 +1,9 @@
 package com.example.segundoapiappfixa.adapters.dto.input.ObservacaoConclusao;
 
+import com.example.segundoapiappfixa.domain.model.input.ObservacaoConclusao.ObservacaoConclusaoAtualizarDados;
+
 import com.example.segundoapiappfixa.domain.enums.Dificuldade;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -13,4 +14,8 @@ public record ObservacaoConclusaoAtualizarInputDTO(
         Dificuldade dificuldade,
         String observacao,
         List<@NotBlank(message = "{validation.observacaoConclusao.foto.required}") String> fotos
-) {}
+) {
+    public ObservacaoConclusaoAtualizarDados toDomain() {
+        return new ObservacaoConclusaoAtualizarDados(id, dificuldade, observacao, fotos);
+    }
+}

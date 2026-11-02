@@ -57,8 +57,8 @@ public class TarefaController implements TarefaControllerContract {
         return ResponseEntity.ok(
                 mask(toOutputDTO(listarTarefas.listar(
                         ordemServicoId,
-                        ControllerUtils.isGestor(authentication),
-                        ControllerUtils.usuarioId(authentication), filtros
+                        ControllerUtils.tipoAcesso(authentication),
+                        ControllerUtils.usuarioId(authentication), filtros.toDomain()
                 )), campos
         ));
     }
@@ -75,7 +75,7 @@ public class TarefaController implements TarefaControllerContract {
     ) {
         TarefaOutputDTO dto = mapper.toOutputDTO(listarTarefas.listarDetalhes(
                 tarefaId,
-                ControllerUtils.isGestor(authentication),
+                ControllerUtils.tipoAcesso(authentication),
                 ControllerUtils.usuarioId(authentication)
         ));
 
@@ -92,7 +92,7 @@ public class TarefaController implements TarefaControllerContract {
        return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(toOutputDTO(criarTarefa.criarTarefas(
-                                request.tarefas(),
+                                request.tarefas().stream().map(TarefaCriarInputDTO::toDomain).toList(),
                                 ControllerUtils.usuarioId(authentication)
                         ))
                 );
@@ -109,9 +109,9 @@ public class TarefaController implements TarefaControllerContract {
     ) {
         return ResponseEntity.ok(
                         mapper.toOutputDTO(atualizarTarefa.atualizar(
-                        atualizarInputDTO,
+                        atualizarInputDTO.toDomain(),
                         ControllerUtils.usuarioId(authentication),
-                        ControllerUtils.isGestor(authentication)
+                        ControllerUtils.tipoAcesso(authentication)
                 ))
         );
     }
@@ -128,7 +128,7 @@ public class TarefaController implements TarefaControllerContract {
         return ResponseEntity.ok(
                 mapper.toOutputDTO(deletarTarefa.deletarTarefa(
                         tarefaId,
-                        ControllerUtils.isGestor(authentication),
+                        ControllerUtils.tipoAcesso(authentication),
                         ControllerUtils.usuarioId(authentication)
                 ))
         );

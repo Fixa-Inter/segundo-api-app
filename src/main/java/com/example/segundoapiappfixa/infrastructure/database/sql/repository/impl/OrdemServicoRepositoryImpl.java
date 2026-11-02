@@ -1,11 +1,10 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.OrdemServicoMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosOrdemServicoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosOrdemServico;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.OrdemServicoSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
-import com.example.segundoapiappfixa.domain.enums.TipoNotificacao;
 import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.entity.OrdemServicoEntity;
@@ -15,7 +14,6 @@ import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaO
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaTarefaRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaFotoRepository;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.JpaObservacaoConclusaoRepository;
-import com.example.segundoapiappfixa.infrastructure.external.notification.NotificacaoInfrastructureService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
@@ -35,20 +34,31 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
 
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "titulo", "problema.titulo",
+            "descricao", "problema.descricaoProblema",
+            "categoria_problema", "categoriaProblema",
+            "categoria_equipamento", "problema.categoriaEquipamento.nome",
+            "prioridade", "prioridade",
+            "data_prevista", "dataPrevista",
+            "status", "statusOrdemServico.nome",
+            "nome_usuario", "usuario.nomeCompleto",
+            "tipo_acesso", "usuario.tipoAcesso"
+    );
+
     // Dependências
     private final JpaOrdemServicoRepository jpaOrdemServicoRepository;
     private final OrdemServicoMapper ordemServicoMapper;
     private final JpaTarefaRepository jpaTarefaRepository;
     private final JpaFotoRepository jpaFotoRepository;
     private final JpaObservacaoConclusaoRepository jpaObservacaoConclusaoRepository;
-    private final NotificacaoInfrastructureService notificacoes;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<OrdemServico> findAllByProblemaIds(List<Long> problemaIds, FiltrosOrdemServicoQueryParam filtros) {
+    public List<OrdemServico> findAllByProblemaIds(List<Long> problemaIds, FiltrosOrdemServico filtros) {
         if (problemaIds.isEmpty()) {
             return List.of();
         }
@@ -56,7 +66,7 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
         return buscar(OrdemServicoSpecs.findByProblemaIds(problemaIds), filtros);
     }
 
-    private List<OrdemServico> buscar(Specification<OrdemServicoEntity> base, FiltrosOrdemServicoQueryParam filtros) {
+    private List<OrdemServico> buscar(Specification<OrdemServicoEntity> base, FiltrosOrdemServico filtros) {
         Specification<OrdemServicoEntity> specification = base
                 .and(OrdemServicoSpecs.findByTitulo(filtros.titulo()))
                 .and(OrdemServicoSpecs.findByDescricao(filtros.descricao()))
@@ -70,7 +80,7 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
                 .and(OrdemServicoSpecs.findByTipoAcesso(filtros.tipoAcesso()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 
@@ -103,14 +113,6 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
     // Método de salvar no banco de dados
     @Override
     public OrdemServico save(OrdemServico ordemServico) {
-        boolean novaOs = ordemServico.getId() == null;
-        Long responsavelAnteriorId = novaOs
-                ? null
-                : jpaOrdemServicoRepository
-                    .findById(ordemServico.getId())
-                    .map(entity -> entity.usuario.getId())
-                    .orElse(null);
-
         OrdemServicoEntity entity = ordemServicoMapper.toEntity(ordemServico);
         entity.problema = entityManager.getReference(
                 ProblemaEntity.class,
@@ -123,18 +125,7 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
         );
 
         OrdemServicoEntity salvo = jpaOrdemServicoRepository.save(entity);
-        OrdemServico resultado = ordemServicoMapper.toModel(salvo);
-
-        if (novaOs || !salvo.usuario.getId().equals(responsavelAnteriorId)) {
-            notificacoes.notificarAposPersistencia(
-                    salvo.usuario.getId(),
-                    TipoNotificacao.ORDEM_SERVICO.getId(),
-                    salvo.getId(),
-                    "Uma nova OS foi atribuída a você: "
-                            + ordemServico.getProblema().getTitulo() + ".");
-        }
-
-        return resultado;
+        return ordemServicoMapper.toModel(salvo);
     }
 
     // Método de deletar dados persistidos no banco de dados
@@ -145,7 +136,7 @@ public class OrdemServicoRepositoryImpl implements OrdemServicoRepository {
 
     // Método de listar os registros persistidos no banco de dados
     @Override
-    public List<OrdemServico> findByUsuarioId(Long usuarioId, FiltrosOrdemServicoQueryParam filtros) {
+    public List<OrdemServico> findByUsuarioId(Long usuarioId, FiltrosOrdemServico filtros) {
         return buscar(OrdemServicoSpecs.findByUsuarioId(usuarioId), filtros);
 
 

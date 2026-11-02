@@ -1,7 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
 import com.example.segundoapiappfixa.adapters.mapper.ModeloEquipamentoMapper;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosModeloEquipamentoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosModeloEquipamento;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.specs.ModeloEquipamentoSpecs;
 import com.example.segundoapiappfixa.infrastructure.database.sql.repository.utils.SortUtils;
 import com.example.segundoapiappfixa.domain.model.ModeloEquipamento;
@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,13 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoRepository {
+
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "nome", "nome",
+            "descricao", "descricao",
+            "marca", "marcaEquipamento.nome",
+            "categoria", "categoriaEquipamento.nome"
+    );
     // Dependências
     private final JpaModeloEquipamentoRepository repository;
     private final ModeloEquipamentoMapper mapper;
@@ -32,7 +40,7 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
     private EntityManager entityManager;
 
     // Método de listar os registros persistidos no banco de dados
-    public List<ModeloEquipamento> findByUnidadeId(Long unidadeId, FiltrosModeloEquipamentoQueryParam filtros) {
+    public List<ModeloEquipamento> findByUnidadeId(Long unidadeId, FiltrosModeloEquipamento filtros) {
         Specification<ModeloEquipamentoEntity> specification = Specification.where(ModeloEquipamentoSpecs.findByEstaAtivo())
                 .and(ModeloEquipamentoSpecs.findByUnidadeId(unidadeId))
                 .and(ModeloEquipamentoSpecs.findByNome(filtros.nome()))
@@ -41,7 +49,7 @@ public class ModeloEquipamentoRepositoryImpl implements ModeloEquipamentoReposit
                 .and(ModeloEquipamentoSpecs.findByCategoria(filtros.categoria()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

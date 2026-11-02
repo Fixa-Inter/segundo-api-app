@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.input.Tarefa;
 
+import com.example.segundoapiappfixa.domain.model.input.Tarefa.TarefaCriarDados;
+
 import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,4 +19,7 @@ public record TarefaCriarInputDTO(
         @NotBlank(message = "{validation.tarefa.descricao.required}")
         String descricao
 ) {
+    public TarefaCriarDados toDomain() {
+        return new TarefaCriarDados(ordemServicoId, statusOrdemServico, titulo, descricao);
+    }
 }

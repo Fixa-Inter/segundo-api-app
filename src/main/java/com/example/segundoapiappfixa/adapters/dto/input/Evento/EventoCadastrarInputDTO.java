@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.input.Evento;
 
+import com.example.segundoapiappfixa.domain.model.input.Evento.EventoCadastrarDados;
+
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,4 +21,7 @@ public record EventoCadastrarInputDTO (
         LocalDateTime dataHoraInicio,
         LocalDateTime dataHoraFim
 ) {
+    public EventoCadastrarDados toDomain() {
+        return new EventoCadastrarDados(usuarioId, localUnidadeId, titulo, descricao, descricaoLocal, observacao, dataHoraInicio, dataHoraFim);
+    }
 }

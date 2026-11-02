@@ -28,7 +28,10 @@ public class SortUtils {
         return sort;
     }
 
-    public static String normalizarCampoOrdenacao(String campoOrdenacao, Map<String, String> camposNormalizados) {
+    public static String normalizarCampoOrdenacao(
+            String campoOrdenacao,
+            Map<String, String> camposNormalizados
+    ) {
         if (campoOrdenacao == null || campoOrdenacao.isBlank()) {
             return null;
         }

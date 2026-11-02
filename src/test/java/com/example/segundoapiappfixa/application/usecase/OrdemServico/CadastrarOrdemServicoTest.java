@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.OrdemServico;
 
-import com.example.segundoapiappfixa.adapters.dto.input.OrdemServico.OrdemServicoCadastrarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.OrdemServico.OrdemServicoCadastrarDados;
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
@@ -10,7 +10,7 @@ import com.example.segundoapiappfixa.domain.model.*;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.ProblemaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -110,8 +110,8 @@ class CadastrarOrdemServicoTest {
         when(problemaRepository.findById(3L)).thenReturn(Optional.of(problema));
     }
 
-    private OrdemServicoCadastrarInputDTO input() {
-        return new OrdemServicoCadastrarInputDTO(
+    private OrdemServicoCadastrarDados input() {
+        return new OrdemServicoCadastrarDados(
                 3L, 2L, StatusOrdemServico.NAO_INICIADA, CategoriaProblema.ELETRICA,
                 LocalDate.of(2026, 10, 20), Prioridade.MEDIA);
     }

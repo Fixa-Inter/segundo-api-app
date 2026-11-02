@@ -4,7 +4,7 @@ import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Notificacao;
 import com.example.segundoapiappfixa.domain.repository.NotificacaoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

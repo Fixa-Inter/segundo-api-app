@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.security;
 
 import com.example.segundoapiappfixa.infrastructure.config.JwtProperties;
+import com.example.segundoapiappfixa.domain.service.auth.EmissorAccessToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -14,10 +15,11 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-public class JwtTokenProvider {
+public class JwtTokenProvider implements EmissorAccessToken {
 
     private final JwtProperties jwtProperties;
 
+    @Override
     public String generateAccessToken(Long id, String email, String role, Date issuedAt) {
 
         return Jwts.builder()

@@ -11,7 +11,7 @@ import com.example.segundoapiappfixa.domain.repository.FotoRepository;
 import com.example.segundoapiappfixa.domain.repository.LocalUnidadeRepository;
 import com.example.segundoapiappfixa.domain.repository.OcorrenciaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,7 +33,7 @@ class CriarOcorrenciaTest {
     @Test
     void deveExigirPayloadNoCadastro() {
         RegraProblemaException exception = assertThrows(RegraProblemaException.class,
-                () -> criarOcorrencia.cadastrar(null, 1L));
+                () -> criarOcorrencia.cadastrar(null, java.util.List.of(), 1L));
 
         assertEquals("exception.ocorrencia.required", exception.getMessage());
     }

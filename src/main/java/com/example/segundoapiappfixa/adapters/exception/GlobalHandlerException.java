@@ -1,8 +1,8 @@
 package com.example.segundoapiappfixa.adapters.exception;
 
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RefreshTokenInvalidoException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.RefreshTokenInvalidoException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.convert.ConversionFailedException;

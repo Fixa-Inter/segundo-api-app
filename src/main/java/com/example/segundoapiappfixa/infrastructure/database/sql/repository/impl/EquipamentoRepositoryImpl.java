@@ -1,6 +1,6 @@
 package com.example.segundoapiappfixa.infrastructure.database.sql.repository.impl;
 
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEquipamentoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosEquipamento;
 import com.example.segundoapiappfixa.adapters.mapper.EquipamentoMapper;
 import com.example.segundoapiappfixa.domain.model.Equipamento;
 import com.example.segundoapiappfixa.domain.repository.EquipamentoRepository;
@@ -33,6 +33,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EquipamentoRepositoryImpl implements EquipamentoRepository {
 
+    private static final Map<String, String> CAMPOS_ORDENACAO = Map.of(
+            "codigo", "codigo",
+            "local_unidade", "localUnidade.nome",
+            "usuario", "usuario.nomeCompleto"
+    );
+
     // Dependências
     private final JpaEquipamentoRepository repository;
     private final EquipamentoMapper mapper;
@@ -44,7 +50,7 @@ public class EquipamentoRepositoryImpl implements EquipamentoRepository {
     @Override
     public List<Equipamento> findByModeloEquipamentoId(
             Long modeloEquipamentoId,
-            FiltrosEquipamentoQueryParam filtros
+            FiltrosEquipamento filtros
     ) {
 
         Specification<EquipamentoEntity> specification = Specification.where(EquipamentoSpecs.findByEstaAtivo())
@@ -54,7 +60,7 @@ public class EquipamentoRepositoryImpl implements EquipamentoRepository {
                 .and(EquipamentoSpecs.findByUsuario(filtros.usuario()));
 
         Sort sort = SortUtils.definirSort(
-                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), camposNormalizados),
+                SortUtils.normalizarCampoOrdenacao(filtros.campoOrdenacao(), CAMPOS_ORDENACAO),
                 filtros.direcaoOrdenacao()
         );
 

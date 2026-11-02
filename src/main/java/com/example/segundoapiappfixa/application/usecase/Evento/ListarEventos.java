@@ -2,11 +2,11 @@ package com.example.segundoapiappfixa.application.usecase.Evento;
 
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.Evento;
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosEventosQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosEventos;
 import com.example.segundoapiappfixa.domain.repository.EventoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class ListarEventos {
     private final EventoRepository repository;
     private final UsuarioRepository usuarioRepository;
 
-    public List<Evento> listar(Long usuarioId, FiltrosEventosQueryParam filtros) {
+    public List<Evento> listar(Long usuarioId, FiltrosEventos filtros) {
         usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 

@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.input.OrdemServico;
 
+import com.example.segundoapiappfixa.domain.model.input.OrdemServico.OrdemServicoCadastrarDados;
+
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import com.example.segundoapiappfixa.domain.enums.StatusOrdemServico;
@@ -27,4 +29,7 @@ public record OrdemServicoCadastrarInputDTO(
         @NotNull(message = "{validation.ordemServico.prioridade.required}")
         Prioridade prioridade
 ) {
+    public OrdemServicoCadastrarDados toDomain() {
+        return new OrdemServicoCadastrarDados(problemaId, usuarioId, statusOrdemServico, categoriaProblema, dataPrevista, prioridade);
+    }
 }

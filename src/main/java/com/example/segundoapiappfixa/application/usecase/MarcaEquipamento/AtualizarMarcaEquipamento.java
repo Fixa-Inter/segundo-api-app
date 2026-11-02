@@ -1,11 +1,11 @@
 package com.example.segundoapiappfixa.application.usecase.MarcaEquipamento;
 
-import com.example.segundoapiappfixa.adapters.dto.input.MarcaEquipamento.MarcaEquipamentoAtualizarInputDTO;
+import com.example.segundoapiappfixa.domain.model.input.MarcaEquipamento.MarcaEquipamentoAtualizarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.MarcaEquipamento;
 import com.example.segundoapiappfixa.domain.repository.MarcaEquipamentoRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import java.util.Locale;
 
@@ -13,7 +13,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class AtualizarMarcaEquipamento {
     private final MarcaEquipamentoRepository repository;
-    public MarcaEquipamento atualizar(MarcaEquipamentoAtualizarInputDTO dto) {
+    public MarcaEquipamento atualizar(MarcaEquipamentoAtualizarDados dto) {
 
         MarcaEquipamento marca = repository.findById(dto.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.marcaEquipamento.notFound"));

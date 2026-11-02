@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.input.Ocorrencia;
 
+import com.example.segundoapiappfixa.domain.model.input.Ocorrencia.OcorrenciaAtualizarDados;
+
 import com.example.segundoapiappfixa.domain.enums.CategoriaProblema;
 import com.example.segundoapiappfixa.domain.enums.Prioridade;
 import jakarta.validation.constraints.NotNull;
@@ -25,4 +27,7 @@ public record OcorrenciaAtualizarInputDTO(
         List<Long> fotosExcluir,
         List<@NotBlank(message = "{validation.foto.required}") String> fotosAdicionar
 ) {
+    public OcorrenciaAtualizarDados toDomain() {
+        return new OcorrenciaAtualizarDados(id, localUnidadeId, categoriaEquipamentoId, categoriaProblemaId, titulo, descricaoOcorrencia, descricaoLocal, prioridade, fotosExcluir, fotosAdicionar);
+    }
 }

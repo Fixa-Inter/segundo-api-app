@@ -1,13 +1,13 @@
 package com.example.segundoapiappfixa.application.usecase.CategoriaEquipamento;
 
-import com.example.segundoapiappfixa.adapters.dto.query_params.FiltrosCategoriaEquipamentoQueryParam;
+import com.example.segundoapiappfixa.domain.filter.FiltrosCategoriaEquipamento;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.CategoriaEquipamento;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.CategoriaEquipamentoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class ListarCategoriasEquipamento {
     private final CategoriaEquipamentoRepository categoriaEquipamentoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public List<CategoriaEquipamento> listar(Long usuarioId, FiltrosCategoriaEquipamentoQueryParam filtros) {
+    public List<CategoriaEquipamento> listar(Long usuarioId, FiltrosCategoriaEquipamento filtros) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));

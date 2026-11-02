@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.input.ModeloEquipamento;
 
+import com.example.segundoapiappfixa.domain.model.input.ModeloEquipamento.ModeloEquipamentoCadastrarDados;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,4 +21,7 @@ public record ModeloEquipamentoCadastrarInputDTO (
         @NotBlank(message = "{validation.descricao.required}")
         String descricao
 ) {
+    public ModeloEquipamentoCadastrarDados toDomain() {
+        return new ModeloEquipamentoCadastrarDados(id, marcaEquipamentoId, categoriaEquipamentoId, nome, descricao);
+    }
 }

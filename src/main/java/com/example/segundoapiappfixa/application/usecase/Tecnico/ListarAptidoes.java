@@ -1,13 +1,14 @@
 package com.example.segundoapiappfixa.application.usecase.Tecnico;
 
+import com.example.segundoapiappfixa.application.security.Permissoes;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.enums.TipoAcesso;
 import com.example.segundoapiappfixa.domain.model.Aptidao;
 import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.AptidaoRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -19,7 +20,8 @@ public class ListarAptidoes {
     private final AptidaoRepository aptidaoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public List<Aptidao> listar(Long tecnicoId, Long usuarioId) {
+    public List<Aptidao> listar(Long tecnicoId, Long usuarioId, TipoAcesso permissao) {
+        Permissoes.validarGestao(permissao);
 
         Usuario tecnico = usuarioRepository.findById(tecnicoId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
@@ -27,7 +29,7 @@ public class ListarAptidoes {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("exception.usuario.required"));
 
-        boolean administrador = TipoAcesso.ADMINISTRADOR.equals(usuario.getTipoAcesso());
+        boolean administrador = Permissoes.administrador(permissao);
         boolean alvoPermitido = TipoAcesso.TECNICO.equals(tecnico.getTipoAcesso())
                 || (administrador && TipoAcesso.GESTOR.equals(tecnico.getTipoAcesso()));
 
@@ -35,7 +37,7 @@ public class ListarAptidoes {
             throw new RegraProblemaException("exception.tecnico.required");
         }
 
-        if (!TipoAcesso.GESTOR.equals(usuario.getTipoAcesso()) && !administrador) {
+        if (!TipoAcesso.GESTOR.equals(permissao) && !administrador) {
             throw new RegraProblemaException("exception.gestor.required");
         }
 

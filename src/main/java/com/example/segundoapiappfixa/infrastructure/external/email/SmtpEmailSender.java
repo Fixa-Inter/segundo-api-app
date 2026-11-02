@@ -1,6 +1,7 @@
 package com.example.segundoapiappfixa.infrastructure.external.email;
 
 import lombok.RequiredArgsConstructor;
+import com.example.segundoapiappfixa.domain.service.auth.EmailRecuperacaoSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 @Component
 @RequiredArgsConstructor
-public class SmtpEmailSender implements EmailSender {
+public class SmtpEmailSender implements EmailRecuperacaoSender {
 
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;

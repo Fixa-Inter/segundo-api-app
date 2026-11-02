@@ -33,7 +33,7 @@ public class OpenApiConfig {
 
                 .tags(List.of(
                         new Tag()
-                                .name("Autenticação").description("Login, renovação e encerramento de sessões."),
+                                .name("Autenticação").description("Cadastro, login, gerenciamento de sessão e recuperação de senha."),
 
                         new Tag()
                                 .name("Perfil")
@@ -79,9 +79,14 @@ public class OpenApiConfig {
                                 .name("Técnicos")
                                 .description("Consulta de técnicos, competências e ordens de serviço atribuídas."),
 
-                        new Tag()
-                                .name("Erros")
-                                .description("Respostas padronizadas para validação, autenticação e falhas da API.")
+                        new Tag().name("Locais da unidade")
+                                .description("Consulta dos locais da unidade do usuário."),
+
+                        new Tag().name("Notificações")
+                                .description("Consulta de notificações e gerenciamento dos dispositivos do usuário."),
+
+                        new Tag().name("Observações de conclusão")
+                                .description("Registro e consulta das observações de conclusão de serviço.")
                 ))
 
                 .components(new Components()

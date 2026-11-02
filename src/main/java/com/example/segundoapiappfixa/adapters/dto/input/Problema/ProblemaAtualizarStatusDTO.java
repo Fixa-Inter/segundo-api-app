@@ -1,5 +1,7 @@
 package com.example.segundoapiappfixa.adapters.dto.input.Problema;
 
+import com.example.segundoapiappfixa.domain.model.input.Problema.ProblemaAtualizarStatusDados;
+
 import com.example.segundoapiappfixa.domain.enums.StatusProblema;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,4 +14,7 @@ public record ProblemaAtualizarStatusDTO(
 
         String motivoRecusa
 ) {
+    public ProblemaAtualizarStatusDados toDomain() {
+        return new ProblemaAtualizarStatusDados(problemaId, statusProblema, motivoRecusa);
+    }
 }

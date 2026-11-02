@@ -1,9 +1,9 @@
 package com.example.segundoapiappfixa.application.usecase.ObservacaoConclusao;
 
-import com.example.segundoapiappfixa.adapters.dto.input.ObservacaoConclusao.ObservacaoConclusaoCriarInputDTO;
+import com.example.segundoapiappfixa.domain.model.ObservacaoConclusao;
 import com.example.segundoapiappfixa.domain.enums.Dificuldade;
 import com.example.segundoapiappfixa.domain.repository.*;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,11 +27,12 @@ class CadastrarObservacaoConclusaoTest {
 
     @Test
     void deveRecusarObservacaoEmBrancoAntesDeAcessarPersistencia() {
-        ObservacaoConclusaoCriarInputDTO dto = new ObservacaoConclusaoCriarInputDTO(
-                1L, Dificuldade.FACIL, "   ", List.of("foto.jpg"));
+        ObservacaoConclusao observacao = new ObservacaoConclusao();
+        observacao.setDificuldade(Dificuldade.FACIL);
+        observacao.setObservacao("   ");
 
         RegraProblemaException exception = assertThrows(RegraProblemaException.class,
-                () -> cadastrar.cadastrar(dto, 10L, false));
+                () -> cadastrar.cadastrar(observacao, List.of("foto.jpg"), 10L, com.example.segundoapiappfixa.domain.enums.TipoAcesso.TECNICO));
 
         assertEquals("validation.observacaoConclusao.observacao.invalid", exception.getMessage());
         verify(usuarioRepository, never()).findById(10L);

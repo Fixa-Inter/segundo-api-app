@@ -1,7 +1,6 @@
 package com.example.segundoapiappfixa.application.usecase.Tarefa;
 
-import com.example.segundoapiappfixa.adapters.dto.input.Tarefa.TarefaCriarInputDTO;
-import com.example.segundoapiappfixa.adapters.mapper.TarefaMapper;
+import com.example.segundoapiappfixa.domain.model.input.Tarefa.TarefaCriarDados;
 import com.example.segundoapiappfixa.application.annotation.UseCase;
 import com.example.segundoapiappfixa.domain.model.OrdemServico;
 import com.example.segundoapiappfixa.domain.model.Tarefa;
@@ -9,8 +8,8 @@ import com.example.segundoapiappfixa.domain.model.Usuario;
 import com.example.segundoapiappfixa.domain.repository.OrdemServicoRepository;
 import com.example.segundoapiappfixa.domain.repository.TarefaRepository;
 import com.example.segundoapiappfixa.domain.repository.UsuarioRepository;
-import com.example.segundoapiappfixa.infrastructure.exception.EntidadeNaoEncontradaException;
-import com.example.segundoapiappfixa.infrastructure.exception.RegraProblemaException;
+import com.example.segundoapiappfixa.application.exception.EntidadeNaoEncontradaException;
+import com.example.segundoapiappfixa.application.exception.RegraProblemaException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,7 @@ public class CriarTarefa {
 
     @Transactional
     public List<Tarefa> criarTarefas(
-            List<TarefaCriarInputDTO> tarefaCriarInputDTOS,
+            List<TarefaCriarDados> tarefaCriarInputDTOS,
             Long usuarioId
     ) {
 
