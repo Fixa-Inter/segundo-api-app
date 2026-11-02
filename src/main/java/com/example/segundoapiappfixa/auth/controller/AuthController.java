@@ -47,6 +47,24 @@ public class AuthController implements AuthControllerContract {
         return ResponseEntity.ok(service.login(requestDTO));
     }
 
+    @Override
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenResponseDTO> refresh(
+            @Valid @RequestBody RefreshTokenRequestDTO requestDTO
+    ) {
+        return ResponseEntity.ok(service.renovarToken(requestDTO.refreshToken()));
+    }
+
+    @Override
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @RequestBody(required = false)
+            RefreshTokenRequestDTO requestDTO
+    ) {
+        service.logout(requestDTO == null ? null : requestDTO.refreshToken());
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/login/google")
     public ResponseEntity<GoogleLoginResponseDTO> loginGoogle(
             @Valid @RequestBody GoogleLoginRequestDTO requestDTO

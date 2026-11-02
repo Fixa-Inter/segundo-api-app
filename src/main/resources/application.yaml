@@ -44,7 +44,6 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   access-token-expiration: 3600000
-  refresh-token-expiration: 7776000000
 
 firebase:
   project-id: ${FIREBASE_PROJECT_ID:fixa-fead2}
@@ -54,8 +53,8 @@ firebase:
 app:
   jobs:
     os-atrasadas:
-      cron: ${JOB_OS_ATRASADAS_CRON:0 0 9 * * *}
-      segundo-cron: ${JOB_OS_ATRASADAS_SEGUNDO_CRON:0 40 20 * * *}
+      cron: 0 0 9 * * *
+      segundo-cron: 0 0 15 * * *
 
 management:
   health:

@@ -27,6 +27,20 @@ public abstract class AuthSwagger implements AuthControllerContract {
                         "Autenticação",
                         "Realizar login",
                         "Autentica o usuário e retorna um token JWT para acesso aos recursos protegidos."
+                ),
+                new SwaggerEndpoint(
+                        "POST",
+                        "/api/v1/auth/refresh",
+                        "Autenticação",
+                        "Renovar tokens",
+                        "Rotaciona um refresh token válido e emite novo access token e refresh token."
+                ),
+                new SwaggerEndpoint(
+                        "POST",
+                        "/api/v1/auth/logout",
+                        "Autenticação",
+                        "Encerrar sessão",
+                        "Revoga a família de refresh tokens da sessão atual."
                 )
         );
     }
